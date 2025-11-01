@@ -39,6 +39,7 @@
 - **Swiper.js** (用于实现高度自定义的卡片轮播)
 - **SCSS (CSS Modules)** (用于编写组件化、可维护的样式)
 - **react-icons** (用于头部导航的图标)
+- **Next.js + TypeScipt** (全栈框架)
 
 
 
