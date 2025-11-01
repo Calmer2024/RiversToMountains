@@ -1,0 +1,50 @@
+.header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 1.5rem 2.5rem;
+    z-index: 10;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    color: #ffffff;
+}
+
+// 左侧按钮
+.logo {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+// 右侧按钮
+.headerRight {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+// 单个图标按钮
+.iconButton {
+    color: #ffffff;
+    font-size: 1.3rem;
+    line-height: 1;
+    transition: opacity 0.3s ease;
+
+    &:hover {
+        opacity: 0.7;
+    }
+}
+
+// (可选) 汉堡菜单按钮的特殊样式
+.menuButton {
+    font-size: 1.5rem; // 汉堡菜单通常更大
+    // 在桌面端可以隐藏
+    // @media (min-width: 769px) {
+    //   display: none;
+    // }
+}

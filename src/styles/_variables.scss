@@ -1,0 +1,21 @@
+/* ========================================================================
+   Design Variables (网站设计规范)
+   ======================================================================== */
+
+// 1. 字体 
+$font-primary: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol";
+
+// 2. 颜色
+$color-background: #ffffff; // 纯白背景
+$color-text: #1a1a1a; // 柔和的黑色
+$color-text-secondary: #5a5a5a; // 次要/副标题灰色
+$color-border: #e6e6e6; // 浅灰色边框
+
+// 3. 布局与间距
+$spacing-base: 1rem; // 16px
+$spacing-medium: 2rem; // 32px
+$spacing-large: 4rem; // 64px
+$content-width: 1200px; // 版心最大宽度
+$border-radius: 4px; // 全局圆角

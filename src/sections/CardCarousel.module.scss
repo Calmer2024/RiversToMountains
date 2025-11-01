@@ -1,0 +1,91 @@
+// 卡片组版块容器
+.carouselSection {
+    position: relative;
+    width: 100%;
+    background-color: #fff;
+    padding: 4rem 0;
+    // margin-top: -15vh;
+    overflow: hidden;
+}
+
+// Swiper 容器
+.swiperContainer {
+    width: 100%;
+    height: 600px;
+    overflow: visible !important;
+    padding: 0 10vw;
+}
+
+// 单个卡片 (SwiperSlide)
+.swiperSlide {
+    width: 700px;
+    height: 400px;
+
+    background-color: #333;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+
+    // 响应式调整
+    @media (max-width: 1024px) {
+        width: 60vw; // 中等屏幕下调整宽度
+        height: 35vw; // 保持比例
+        max-width: 600px;
+        max-height: 350px;
+    }
+
+    @media (max-width: 768px) {
+        width: 80vw; // 小屏幕下卡片更宽
+        height: 45vw; // 保持比例
+        max-width: 500px;
+        max-height: 280px;
+    }
+}
+
+// 卡片内容 (背景图和文字)
+.cardContent {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.5rem;
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 50%;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+        z-index: 1;
+    }
+}
+
+.cardText {
+    color: white;
+    z-index: 2;
+    position: relative;
+
+    h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    p {
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.8);
+        margin: 0;
+    }
+}
+
+/* 隐藏 Swiper 的前进/后退按钮 */
+:global(.swiper-button-next),
+:global(.swiper-button-prev) {
+    display: none !important;
+}

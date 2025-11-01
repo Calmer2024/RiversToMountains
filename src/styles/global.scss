@@ -1,0 +1,74 @@
+/* ========================================================================
+   Global Stylesheet
+   ======================================================================== */
+
+@use "variables" as *;
+
+/* 现代 CSS 重置 (Reset)
+   ------------------------------------------------------------------------ */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: $font-primary;
+    background-color: $color-background;
+    color: $color-text;
+    line-height: 1.6;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    overflow-x: hidden;
+}
+
+img,
+video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+ul,
+ol {
+    list-style: none;
+}
+
+a {
+    color: $color-text;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+
+    &:hover {
+        opacity: 0.7;
+    }
+}
+
+/* 全局字体排版 (Typography)
+   ------------------------------------------------------------------------ */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    line-height: 1.2;
+    font-weight: 500;
+}
+
+p {
+    margin-bottom: $spacing-base;
+    max-width: 65ch;
+    color: $color-text-secondary;
+}
