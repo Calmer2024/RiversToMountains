@@ -1,4 +1,4 @@
-/* components/OpeningAnimation.css */
+/* components/OpeningAnimation.css
 .opening-animation {
   position: fixed;
   top: 0;
@@ -72,13 +72,252 @@
   }
 }
 
+/* components/OpeningAnimation.css */
+
+/* 容器样式 - 全屏 */
+.opening-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.opening-animation.fade-out {
+  animation: containerFadeOut 1.5s ease-in-out forwards;
+}
+
+/* 背景 */
+.animation-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  z-index: 1;
+}
+
+/* 卷轴容器 - 调整尺寸为更大 */
+.scroll-container {
+  position: relative;
+  display: flex;
+  width: 0;
+  height: 100vh; /* 更大的高度 */
+  max-height: 800px;
+  z-index: 2;
+  transition: width 1.5s ease-in-out;
+}
+
+.scroll-container.scroll-open {
+  width: 100vw; /* 更大的宽度 */
+  max-width: 1500px;
+}
+
+/* 卷轴左侧部分 - 使用img标签确保图片显示 */
+.scroll-left {
+  width: 100px; /* 根据您的素材调整这个宽度 */
+  height: 100%;
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+}
+
+/* 卷轴图片样式 */
+.scroll-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 确保图片填充整个区域 */
+}
+
+/* 卷轴中间画布 - 更大的内边距 */
+.scroll-center {
+  flex: 1;
+  background: 
+    linear-gradient(135deg, #f5e8c8 0%, #e6d2a9 100%),
+    url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%239C92AC' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+  padding: 60px 80px; /* 更大的内边距 */
+  box-shadow: 
+    inset 0 0 30px rgba(0, 0, 0, 0.1),
+    0 10px 30px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 卷轴内容 */
+.scroll-content {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 1s ease-out 0.5s;
+  text-align: center;
+  width: 100%;
+}
+
+.scroll-content.content-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 主标题 - 更大的字体 */
+.main-title {
+  font-family: 'SimSun', 'STKaiti', 'KaiTi', serif;
+  font-size: 5rem; /* 更大的字体 */
+  font-weight: bold;
+  color: #3a2615;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  margin-bottom: 30px;
+}
+
+/* 副标题 - 更大的字体 */
+.subtitle {
+  font-family: 'SimSun', 'STKaiti', 'KaiTi', serif;
+  font-size: 2.2rem; /* 更大的字体 */
+  color: #5d4037;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+/* 简笔山水画 - 更大的尺寸 */
+.landscape-simple {
+  position: relative;
+  width: 90%;
+  height: 250px; /* 更大的高度 */
+  margin: 0 auto;
+}
+
+.mountain {
+  position: absolute;
+  bottom: 0;
+  left: 20%;
+  width: 60%;
+  height: 70%; /* 更大的山 */
+  background: linear-gradient(to top, #4a6572 0%, #344955 30%, #232f34 100%);
+  clip-path: polygon(0% 100%, 20% 40%, 40% 60%, 60% 30%, 80% 50%, 100% 100%);
+  z-index: 1;
+}
+
+.river {
+  position: absolute;
+  bottom: 0;
+  left: 30%;
+  width: 40%;
+  height: 35%; /* 更大的河流 */
+  background: linear-gradient(to bottom, rgba(79, 195, 247, 0.7) 0%, rgba(3, 155, 229, 0.5) 100%);
+  clip-path: polygon(0% 100%, 30% 0%, 70% 0%, 100% 100%);
+  z-index: 0;
+}
+
+.cloud {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  filter: blur(5px);
+  z-index: 2;
+}
+
+.cloud-1 {
+  width: 120px; /* 更大的云 */
+  height: 60px;
+  top: 20%;
+  left: 15%;
+  animation: cloudFloatSimple 15s linear infinite;
+}
+
+.cloud-2 {
+  width: 140px; /* 更大的云 */
+  height: 70px;
+  top: 30%;
+  right: 20%;
+  animation: cloudFloatSimple 20s linear infinite reverse;
+}
+
+/* 卷轴右侧部分 */
+.scroll-right {
+  width: 100px; /* 与左侧对称 */
+  height: 100%;
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+}
+
+/* 加载提示 */
+.loading-hint {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'SimSun', 'STKaiti', 'KaiTi', serif;
+  font-size: 1.5rem; /* 更大的字体 */
+  color: rgba(255, 255, 255, 0.8);
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.loading-hint.hint-visible {
+  opacity: 1;
+}
+
+/* 动画定义 */
+@keyframes containerFadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes cloudFloatSimple {
+  0% {
+    transform: translateX(-50px);
+  }
+  100% {
+    transform: translateX(calc(100% + 50px));
+  }
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
+  .scroll-container.scroll-open {
+    width: 95vw;
+    height: 85vh;
+  }
+  
   .main-title {
-    font-size: 2.5rem;
+    font-size: 3.5rem;
   }
   
   .subtitle {
+    font-size: 1.8rem;
+  }
+  
+  .scroll-left,
+  .scroll-right {
+    width: 60px; /* 移动端调整卷轴宽度 */
+  }
+  
+  .scroll-center {
+    padding: 40px 50px;
+  }
+  
+  .landscape-simple {
+    height: 180px;
+  }
+  
+  .loading-hint {
     font-size: 1.2rem;
   }
 }
