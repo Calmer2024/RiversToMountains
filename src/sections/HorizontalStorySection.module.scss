@@ -30,6 +30,22 @@
     pointer-events: none;
 }
 
+.introBackgroundVideo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    // 关键：确保视频像背景图一样铺满并裁切
+    object-fit: cover;
+    object-position: center;
+
+    z-index: 1; // 在 .introCanvas 内的最底层
+    visibility: hidden;
+    opacity: 0;
+}
+
 /* 组 1: 主副标题 */
 .titleGroup {
     position: absolute; // 关键：使用绝对定位
@@ -108,7 +124,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 1; // 确保它在 introCanvas 之下
+    z-index: 5; // 确保它在 introCanvas 之下和视频之上
 
     will-change: transform;
 }
