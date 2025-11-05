@@ -2,6 +2,7 @@ import HeroSection from './sections/HeroSection';
 import './styles/global.scss';
 import { Header } from './components/Header';
 import { CardCarousel } from './sections/CardCarousel';
+import { HorizontalStorySection } from './sections/HorizontalStorySection';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         subtitle="A sanctuary nestled in the classic landscapes of China​"
       />
       <CardCarousel />
+      <HorizontalStorySection />
 
     </div>
   )

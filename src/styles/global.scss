@@ -3,6 +3,45 @@
    ======================================================================== */
 
 @use "variables" as *;
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600&display=swap');
+
+
+
+/* ========================================================================
+   1. 导入你的自定义本地字体
+   ======================================================================== */
+
+@font-face {
+    font-family: '汉仪程行简';
+    /* 这是你给中文字体起的名字 */
+    src: url('../assets/fonts/汉仪程行简.woff2') format('woff2');
+    /* 相对路径！ */
+    font-weight: 600;
+    /* 假设这个文件是 600 字重 */
+    font-style: normal;
+    font-display: swap;
+    /* 优化：先显示备用字体，等它加载完再替换 */
+}
+
+@font-face {
+    font-family: '汉仪全唐诗简';
+    src: url('../assets/fonts/汉仪全唐诗简.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+// @font-face {
+//     font-family: 'MyCustomFont-Subtitle';
+//     /* 这是你给英文字体起的名字 */
+//     src: url('../assets/fonts/YourEnglishFont.woff2') format('woff2');
+//     /* 相对路径！ */
+//     font-weight: 400;
+//     /* 假设这个文件是 400 字重 */
+//     font-style: italic;
+//     /* 假设这个文件是斜体 */
+//     font-display: swap;
+// }
 
 /* 现代 CSS 重置 (Reset)
    ------------------------------------------------------------------------ */

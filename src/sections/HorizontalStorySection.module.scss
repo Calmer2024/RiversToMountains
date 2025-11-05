@@ -1,0 +1,268 @@
+.storySection {
+    background-color: #000;
+    color: #fff;
+    overflow: hidden; // 关键：隐藏水平溢出
+}
+
+/* 1. "钉住"容器 (高) */
+.pinContainer {
+    // GSAP 的 'pin' 会自动处理高度
+    // 我们只需要它是一个 100% 宽高的容器
+    height: 100vh;
+    width: 100%;
+    position: relative;
+}
+
+/* 2. "开幕画布" (Intro Canvas) 它是一个浮动层，用于播放 Phase 1 动画 */
+.introCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10; // 浮动在画卷之上
+
+    // 居中
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    pointer-events: none;
+}
+
+/* 组 1: 主副标题 */
+.titleGroup {
+    position: absolute; // 关键：使用绝对定位
+    text-align: center;
+
+    // 默认隐藏 (由 GSAP 的 fromTo 控制 autoAlpha)
+    visibility: hidden;
+    top: 20vh;
+
+    h2 {
+        font-family: "汉仪程行简", serif;
+        font-weight: 600;
+        font-size: clamp(3.5rem, 8vw, 7rem);
+        color: #f0f0f0;
+        margin: 0;
+    }
+
+    p {
+        font-family: "汉仪全唐诗简", serif;
+        font-size: clamp(1.2rem, 1vw, 1.5rem);
+        color: #999;
+        letter-spacing: 1.5px;
+        margin-top: 1rem;
+    }
+
+    /* 主标题和 Icon 的包裹器 */
+    .mainTitleWrapper {
+        position: relative; // 关键：成为 .titleIcon 的定位父级
+        display: inline-block; // 关键：使其宽度仅包裹 H2 的内容
+        margin-bottom: 1rem; // (原 h2 的 margin-bottom)
+    }
+
+    /*  Icon 图标样式 */
+    .titleIcon {
+        position: absolute; // 绝对定位于 .mainTitleWrapper
+
+        // 定位在 H2 的右上角
+        top: 0;
+        right: 0;
+
+        // 向外偏移一点，使其不重叠
+        // 120% = 100% (图标自身宽度) + 20% (间距)
+        // -20% = 向上移动 20% (图标自身高度)
+        transform: translate(120%, -10%);
+
+        width: 30px; // 保持较小 (可调整为你图片合适的尺寸)
+        height: auto; // 保持图片比例
+
+
+    }
+}
+
+/* 组 2: 章节标题 */
+.chapterTitle {
+    position: absolute; // 关键：使用绝对定位
+
+    font-family: "Noto Serif SC", serif;
+    font-weight: 400; // 较细的字重
+    font-size: clamp(2rem, 4vw, 3rem); // 比主标题小
+    color: #ccc; // 较暗的颜色
+
+    // 默认隐藏 (由 GSAP 的 fromTo 控制 autoAlpha)
+    visibility: hidden;
+}
+
+
+/* 3. "水平"轨道 (horizontalTrack)
+   (+++ 已修改 +++)
+   确认它是 absolute 并且 z-index 较低
+*/
+.horizontalTrack {
+    width: 500vw; // (5 张幻灯片)
+    height: 100vh;
+    display: flex;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1; // 确保它在 introCanvas 之下
+
+    will-change: transform;
+}
+
+/* 3. 幻灯片 (基础样式) */
+.slide {
+    width: 100vw; // 每张幻灯片占满一个视口宽度
+    height: 100vh; // 占满视口高度
+    padding: 5vw 8vw;
+    box-sizing: border-box; // 确保 padding 不会撑破宽度
+
+    // Flexbox 用于内部排版 (备用)
+    // display: flex;
+    // align-items: center;
+    // gap: 2rem;
+}
+
+/* --- 幻灯片布局变体 --- */
+
+/* 变体 A: 居中文本 (用于开篇、结尾) */
+// .slideIntro {
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     text-align: center;
+
+//     .textLayout {
+//         max-width: 60%;
+//     }
+// }
+
+/* 变体 B: 左右双栏 (用于图文、文+3D) */
+.slideDual {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 4rem;
+
+    // 响应式
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+
+        .modelLayout {
+            height: 50vh; // 手机上缩小 3D 区域
+        }
+    }
+}
+
+/* 变体 C: 布局反转 (用于 图文 -> 文图) */
+.layoutReverse {
+    .textLayout {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .imageLayout {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    @media (max-width: 768px) {
+
+        .textLayout,
+        .imageLayout {
+            grid-column: 1;
+            grid-row: auto;
+        }
+    }
+}
+
+/* --- 内部元素样式 --- */
+
+.textLayout {
+    h2 {
+        font-size: clamp(3rem, 8vw, 7rem); // 响应式巨型字体
+        font-weight: 300; // 细字体
+        color: #fff;
+        margin-bottom: 2rem;
+    }
+
+    p {
+        font-size: clamp(1.2rem, 2vw, 1.5rem);
+        color: #aaa; // 柔和的灰色
+        line-height: 1.7;
+        max-width: 40ch; // 限制行宽，易于阅读
+    }
+}
+
+.imageLayout {
+    width: 100%;
+    height: 80vh; // 给图片一个固定高度
+    overflow: hidden;
+    border-radius: 12px;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+/* --- UX: 滚动提示 --- */
+.scrollPrompt {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    opacity: 0.6;
+
+    // 简单的呼吸动画
+    animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.6;
+    }
+}
+
+.inkTextContainer {
+
+    h2 {
+        // 关键：使用衬线字体营造“水墨”和“雕刻”感
+        // 'Noto Serif SC' 是一个很好的、免费可商用的中文字体
+        // 你需要在你的 global.scss 中 @import 它
+        font-family: "Noto Serif SC", serif, "Georgia", "Times New Roman";
+        font-weight: 600; // 衬线字体的 600 weight 很好看
+        color: #f0f0f0; // 使用柔和的白色
+
+        // (你可以保留或覆盖 .textLayout 的 h2 样式)
+        font-size: clamp(3.5rem, 8vw, 7rem);
+    }
+
+    p {
+        font-family: "Georgia", serif; // 英文小字也用衬线体
+        font-style: italic;
+        font-size: clamp(1.2rem, 2vw, 1.5rem);
+        color: #999;
+        letter-spacing: 1.5px; // 增加字母间距
+    }
+}
