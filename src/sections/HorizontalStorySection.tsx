@@ -13,14 +13,18 @@ export const HorizontalStorySection: FC = () => {
 
     const introCanvasRef = useRef<HTMLDivElement>(null);
 
+    const cloudContainerRef = useRef<HTMLDivElement>(null);
+
     useLayoutEffect(() => {
         // --- 1. 获取所有元素 ---
         const pinContainer = pinContainerRef.current;
         const horizontalTrack = horizontalTrackRef.current;
         const introCanvas = introCanvasRef.current;
 
+        const cloudContainer = cloudContainerRef.current;
+
         // 检查所有关键元素是否存在
-        if (!pinContainer || !horizontalTrack || !introCanvas) {
+        if (!pinContainer || !horizontalTrack || !introCanvas || !cloudContainer) {
             console.warn("GSAP: 缺少关键元素，动画取消。");
             return;
         }
@@ -45,12 +49,16 @@ export const HorizontalStorySection: FC = () => {
 
         // --- 创建 "主时间轴" (Master Timeline) ---
         let ctx = gsap.context(() => {
+            const clouds = gsap.utils.toArray(cloudContainer.querySelectorAll("img"));
+            if (clouds.length === 0) {
+                console.warn("GSAP: 未找到云层图片，转场取消。");
+                return;
+            }
 
             const masterTimeline = gsap.timeline({
                 scrollTrigger: {
                     trigger: pinContainer,
                     start: "top top",
-                    // (我们不再需要为视频擦洗增加额外时间，可以改回 400vh)
                     end: `+=${scrollDistance + (window.innerHeight * 4)}`,
                     scrub: 1.5,
                     pin: true,
@@ -69,26 +77,62 @@ export const HorizontalStorySection: FC = () => {
             // Phase 8
             masterTimeline.to(introGroup2, { duration: 10 });
 
-            // Phase 9: 章节标题 淡出 *同时* 画卷开始移动
+            // [!code focus:start]
+            // --- Phase 2: 云层覆盖 ---
+            // "山河伊始" 开始淡出
+            masterTimeline.add("startCloudCover");
             masterTimeline.to(introGroup2,
-                { autoAlpha: 0, duration: 5 },
-                "startScroll"
+                { autoAlpha: 0, duration: 10 },
+                "startCloudCover"
             );
 
-            masterTimeline.to(introCanvas,
-                { autoAlpha: 0, duration: 3, pointerEvents: 'none' },
-                "startScroll"
+            // 云层 *同时* 动画进入，覆盖屏幕
+            masterTimeline.fromTo(clouds,
+                {
+                    autoAlpha: 0,
+                    scale: 1.5, // [!code modification] 从一个已经不小的尺寸开始
+                    // 根据索引 (0, 1, 2) 分散它们
+                    xPercent: (i) => [-150, 0, 150][i], // [!code modification] 从屏幕外飞入 (左, 中, 右)
+                    yPercent: (i) => [20, -10, 20][i],  // [!code modification] 从不同高度飞入
+                },
+                {
+                    autoAlpha: 1,
+                    scale: 2.0, // [!code modification] 汇聚时变得非常大 (200%)，确保覆盖
+                    xPercent: (i) => [-20, 0, 20][i], // [!code modification] 在中心重叠，而不是都在 0
+                    yPercent: 0, // [!code modification] 汇聚到 Y 轴中心
+                    duration: 15, // 覆盖过程
+                    stagger: 0.1 // 云层错开
+                },
+                "startCloudCover"
             );
 
-            // Phase 10: 水平画卷
+            // --- Phase 3: "交换" (在云层后) ---
+            // 在云层完全覆盖后 (时间轴的下一个点)，立即隐藏 introCanvas
+            masterTimeline.set(introCanvas, { autoAlpha: 0, pointerEvents: 'none' });
+
+            // --- Phase 4: 云层拨开 & 画卷开始 ---
+            // 这是转场的“高光时刻”
+            masterTimeline.add("startScroll");
+
+            // 云层 *同时* 拨开 (例如：飞散 + 放大 + 淡出)
+            masterTimeline.to(clouds, {
+                autoAlpha: 0,
+                scale: 3, // 放大
+                xPercent: (i) => (i - 1) * 150, // 向两边飞散
+                duration: 20, // 拨开过程
+                stagger: 0.1
+            }, "startScroll");
+
+            // 水平画卷 *同时* 开始移动
             const horizontalScrollTween = masterTimeline.to(horizontalTrack,
                 {
                     x: `-=${scrollDistance}px`,
                     ease: "none",
-                    duration: 100
+                    duration: 100 // 画卷滚动的总时长 (保持不变)
                 },
                 "startScroll"
             );
+            // [!code focus:end]
 
             // Phase 11: “其他幻灯片”的淡入动画 (保持不变)
             otherAnimatedElements.forEach((el: any) => {
@@ -132,6 +176,25 @@ export const HorizontalStorySection: FC = () => {
                         <h3 className={styles.chapterSubtitle}>序章·开霁</h3>
                         <p>我们的画卷从青藏高原开始，顺着冰川融水与大江大河，穿过中部的奇峰峡谷，最终抵达东部的人文与海岸。</p>
                     </div>
+                </div>
+
+                <div className={styles.cloudTransitionContainer} ref={cloudContainerRef}>
+                    {/* 你需要准备 3-4 张透明背景的 .png 云彩图片 */}
+                    <img
+                        src="/images/clouds/cloud1.png"
+                        alt="转场云"
+                        className={styles.cloudImage}
+                    />
+                    <img
+                        src="/images/clouds/cloud2.png"
+                        alt="转场云"
+                        className={styles.cloudImage}
+                    />
+                    <img
+                        src="/images/clouds/cloud3.png"
+                        alt="转场云"
+                        className={styles.cloudImage}
+                    />
                 </div>
 
                 <div className={styles.horizontalTrack} ref={horizontalTrackRef}>

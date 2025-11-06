@@ -30,6 +30,41 @@
     pointer-events: none;
 }
 
+/* --- 2. 新增的云层转场 --- */
+.cloudTransitionContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    /* 关键：z-index 必须介于 introCanvas (10) 和 horizontalTrack (5) 之间 */
+    z-index: 9;
+
+    /* 确保它不会遮挡鼠标事件 */
+    pointer-events: none;
+
+    /* 隐藏飞出屏幕的云 */
+    overflow: hidden;
+
+    /* 居中云彩 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cloudImage {
+    position: absolute;
+    /* 尺寸可以根据你的图片调整，这里给个示例 */
+    width: 120%; // 允许比屏幕大
+    height: auto;
+
+    opacity: 0;
+    visibility: hidden;
+
+    will-change: transform, opacity;
+}
+
 .introBackgroundVideo {
     position: absolute;
     top: 0;
