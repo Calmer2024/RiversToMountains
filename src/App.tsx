@@ -3,6 +3,7 @@ import './styles/global.scss';
 import { Header } from './components/Header';
 import { CardCarousel } from './sections/CardCarousel';
 import { HorizontalStorySection } from './sections/HorizontalStorySection';
+import { StoryHeaderSection } from './sections/StoryHeaderSection';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         subtitle="A sanctuary nestled in the classic landscapes of China​"
       />
       <CardCarousel />
+      <StoryHeaderSection />
       <HorizontalStorySection />
 
     </div>

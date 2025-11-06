@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, type FC } from 'react';
+import { useLayoutEffect, useRef, type FC } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import styles from './HorizontalStorySection.module.scss';
@@ -10,7 +10,6 @@ export const HorizontalStorySection: FC = () => {
 
     const pinContainerRef = useRef<HTMLDivElement>(null);
     const horizontalTrackRef = useRef<HTMLDivElement>(null);
-    const videoRef = useRef<HTMLVideoElement>(null);
 
     const introCanvasRef = useRef<HTMLDivElement>(null);
 
@@ -18,11 +17,10 @@ export const HorizontalStorySection: FC = () => {
         // --- 1. 获取所有元素 ---
         const pinContainer = pinContainerRef.current;
         const horizontalTrack = horizontalTrackRef.current;
-        const video = videoRef.current;
         const introCanvas = introCanvasRef.current;
 
         // 检查所有关键元素是否存在
-        if (!pinContainer || !horizontalTrack || !video || !introCanvas) {
+        if (!pinContainer || !horizontalTrack || !introCanvas) {
             console.warn("GSAP: 缺少关键元素，动画取消。");
             return;
         }
@@ -37,11 +35,10 @@ export const HorizontalStorySection: FC = () => {
         const scrollDistance = trackWidth - viewportWidth;
         if (scrollDistance <= 0) return;
 
-        const introGroup1 = pinContainer.querySelector("[data-animate='intro-group-1']");
         const introGroup2 = pinContainer.querySelector("[data-animate='intro-group-2']");
         const otherAnimatedElements = gsap.utils.toArray("[data-animate='text-fade-in']");
 
-        if (!introGroup1 || !introGroup2) {
+        if (!introGroup2) {
             console.warn("GSAP: 缺少 introGroup 元素，动画取消。");
             return;
         }
@@ -62,41 +59,6 @@ export const HorizontalStorySection: FC = () => {
             });
 
             // --- “电影开场”动画 ---
-
-            // Phase 1: 主副标题渐显
-            masterTimeline.fromTo(introGroup1,
-                { autoAlpha: 0, y: 20 },
-                { autoAlpha: 1, y: 0, duration: 10 }
-            );
-
-            // Phase 2: 主副标题保持
-            masterTimeline.to(introGroup1, { duration: 5 });
-
-            // Phase 3: 主副标题淡出
-            masterTimeline.to(introGroup1,
-                {
-                    autoAlpha: 0,
-                    duration: 5,
-                },
-            );
-
-            // Phase 4: 视频渐显
-            masterTimeline.fromTo(video,
-                { autoAlpha: 0 },
-                { autoAlpha: 1, duration: 10 }
-            );
-
-
-            // Phase 5: 视频保持
-            masterTimeline.to(video, { duration: 10 });
-
-            // Phase 6: 视频淡出
-            masterTimeline.to(video,
-                {
-                    autoAlpha: 0,
-                    duration: 5,
-                },
-            );
 
             // Phase 7: 章节标题 ("Intro 序幕") 渐显
             masterTimeline.fromTo(introGroup2,
@@ -156,31 +118,6 @@ export const HorizontalStorySection: FC = () => {
         <section className={styles.storySection}>
             <div className={styles.pinContainer} ref={pinContainerRef}>
                 <div className={styles.introCanvas} ref={introCanvasRef}>
-
-                    <video
-                        ref={videoRef}
-                        className={styles.introBackgroundVideo}
-                        data-animate="intro-bg-video"
-                        muted
-                        playsInline
-                        preload="auto"
-                        loop
-                        autoPlay
-                    >
-                        <source src="/videos/story.mp4" type="video/mp4" />
-                    </video>
-
-                    <div className={styles.titleGroup} data-animate="intro-group-1">
-                        <div className={styles.mainTitleWrapper}>
-                            <h2>山河之旅</h2>
-                            <img
-                                src="/images/山河之旅.png"
-                                alt="山河之旅"
-                                className={styles.titleIcon}
-                            />
-                        </div>
-                        <p>这是一幅流动的画卷。请向下滚动，开启一场西东之旅，见证大地的奇迹</p>
-                    </div>
 
                     <div className={styles.subTitleGroup} data-animate="intro-group-2">
                         <div className={styles.chapterTitleWrapper}>
