@@ -41,7 +41,7 @@ export const StoryHeaderSection: FC = () => {
     const [volume, setVolume] = useState(0.7);
     const [isManuallyPaused, setIsManuallyPaused] = useState(true);
 
-    // --- [新增] 播放器展开状态 ---
+    // --- 播放器展开状态 ---
     const [isExpanded, setIsExpanded] = useState(false);
 
     // --- 现有 IntersectionObserver ---
@@ -54,7 +54,7 @@ export const StoryHeaderSection: FC = () => {
                 const newVisibility = entry.isIntersecting;
                 setIsVisible(newVisibility);
 
-                // 控制音乐播放 (新逻辑)
+                // 控制音乐播放 
                 if (newVisibility) {
                     // --- 用户在区域内 ---
                     // 播放, 除非他们手动暂停了
@@ -93,7 +93,7 @@ export const StoryHeaderSection: FC = () => {
         };
     }, [isManuallyPaused]);
 
-    // --- 同步 React 状态到 <audio> 元素 (保持不变) ---
+    // --- 同步 React 状态到 <audio> 元素 ---
     useEffect(() => {
         const audio = audioRef.current;
         if (!audio) return;
@@ -117,12 +117,12 @@ export const StoryHeaderSection: FC = () => {
     // --- 播放器控制函数 ---
 
     // [!code focus:start]
-    // 1. [新增] 切换展开/折叠
+    // 1. 切换展开/折叠
     const toggleExpand = () => {
         setIsExpanded(prev => !prev);
     };
 
-    // 2. 切换播放/暂停 (逻辑不变)
+    // 2. 切换播放/暂停 
     const togglePlayPause = () => {
         if (isPlaying) {
             setIsPlaying(false);
@@ -132,9 +132,9 @@ export const StoryHeaderSection: FC = () => {
             setIsManuallyPaused(false);
         }
     };
-    // [!code focus:end]
 
-    // 3. 调整音量 (逻辑不变)
+
+    // 3. 调整音量 
     const handleVolumeChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newVolume = parseFloat(e.target.value);
         setVolume(newVolume);
@@ -147,10 +147,10 @@ export const StoryHeaderSection: FC = () => {
     return (
         <section className={styles.headerSection} ref={sectionRef}>
 
-            {/* --- [修改] 音乐播放器 UI --- */}
+            {/* --- 音乐播放器 UI --- */}
             <div className={styles.musicPlayer}>
 
-                {/* 1. 音乐图标 (主按钮) */}
+                {/* 1. 音乐图标  */}
                 <button
                     onClick={toggleExpand}
                     className={`${styles.toggleExpandButton} ${isPlaying ? styles.isPlaying : ''}`}
@@ -183,7 +183,7 @@ export const StoryHeaderSection: FC = () => {
 
             </div>
 
-            {/* --- <audio> 元素 (保持不变) --- */}
+            {/* --- <audio> 元素 --- */}
             <audio
                 ref={audioRef}
                 src="/music/story-theme.mp3"
@@ -191,7 +191,7 @@ export const StoryHeaderSection: FC = () => {
                 preload="auto"
             />
 
-            {/* --- 视频背景 (保持不变) --- */}
+            {/* --- 视频背景 --- */}
             <video
                 className={styles.introBackgroundVideo}
                 muted
@@ -203,9 +203,8 @@ export const StoryHeaderSection: FC = () => {
                 <source src="/videos/story.mp4" type="video/mp4" />
             </video>
 
-            {/* --- 标题组 (保持不变) --- */}
+            {/* --- 标题组 --- */}
             <div className={titleGroupClassName} data-animate="intro-group-1" ref={titleGroupRef}>
-                {/* ... (h2, p, img 保持不变) ... */}
                 <div className={styles.mainTitleWrapper}>
                     <h2>山河之旅</h2>
                     <img

@@ -128,6 +128,8 @@ export const HorizontalStorySection: FC = () => {
                                 className={styles.titleIcon}
                             />
                         </div>
+                        <div className={styles.divider}></div>
+                        <h3 className={styles.chapterSubtitle}>序章·开霁</h3>
                         <p>我们的画卷从青藏高原开始，顺着冰川融水与大江大河，穿过中部的奇峰峡谷，最终抵达东部的人文与海岸。</p>
                     </div>
                 </div>
