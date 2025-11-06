@@ -98,22 +98,79 @@
     }
 }
 
-/* 组 2: 章节标题 */
-.chapterTitle {
+/* 组 1: 主副标题 */
+.subTitleGroup {
     position: absolute; // 关键：使用绝对定位
-
-    font-family: "Noto Serif SC", serif;
-    font-weight: 400; // 较细的字重
-    font-size: clamp(2rem, 4vw, 3rem); // 比主标题小
-    color: #ccc; // 较暗的颜色
+    text-align: center;
 
     // 默认隐藏 (由 GSAP 的 fromTo 控制 autoAlpha)
     visibility: hidden;
+    top: 20vh;
+
+
+    h2 {
+        font-family: "汉仪程行简", serif;
+        font-weight: 600;
+        font-size: clamp(2rem, 6vw, 7rem);
+        color: #ccc;
+    }
+
+    p {
+        font-family: "汉仪全唐诗简", serif;
+        font-size: clamp(1.2rem, 1vw, 1.5rem);
+        color: #999;
+        letter-spacing: 1.5px;
+        margin-top: 1rem;
+    }
+
+    /* 主标题和 Icon 的包裹器 */
+    .chapterTitleWrapper {
+        position: relative; // 关键：成为 .titleIcon 的定位父级
+        display: inline-block; // 关键：使其宽度仅包裹 H2 的内容
+        margin-bottom: 1rem; // (原 h2 的 margin-bottom)
+    }
+
+    /*  Icon 图标样式 */
+    .titleIcon {
+        position: absolute; // 绝对定位于 .mainTitleWrapper
+
+        // 定位在 H2 的右上角
+        top: 0;
+        right: 0;
+
+        // 向外偏移一点，使其不重叠
+        // 120% = 100% (图标自身宽度) + 20% (间距)
+        // -20% = 向上移动 20% (图标自身高度)
+        transform: translate(120%, -10%);
+
+        width: 30px; // 保持较小 (可调整为你图片合适的尺寸)
+        height: auto; // 保持图片比例
+    }
+
+    .verticalSubtitle {
+        writing-mode: vertical-rl;
+
+        text-orientation: upright;
+
+        // 字体样式 (我参考了你的 p 标签)
+        font-family: "汉仪全唐诗简", serif;
+        font-size: clamp(1.2rem, 1vw, 1.5rem); // 字体大小
+        color: #999; // 字体颜色
+        font-weight: 400;
+
+        // 间距
+        margin-top: 2.5rem; // 距离上方 p 标签的间距
+        letter-spacing: 0.25em; // 调整字与字之间的垂直间距
+
+
+        // 因为 .subTitleGroup 已经是 text-align: center，
+        // 竖排文本会自动在其父容器中水平居中。
+    }
 }
 
 
+
 /* 3. "水平"轨道 (horizontalTrack)
-   (+++ 已修改 +++)
    确认它是 absolute 并且 z-index 较低
 */
 .horizontalTrack {

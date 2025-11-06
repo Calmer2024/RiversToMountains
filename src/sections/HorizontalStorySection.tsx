@@ -182,9 +182,17 @@ export const HorizontalStorySection: FC = () => {
                         <p>这是一幅流动的画卷。请向下滚动，开启一场西东之旅，见证大地的奇迹</p>
                     </div>
 
-                    <h2 className={styles.chapterTitle} data-animate="intro-group-2">
-                        Intro 序幕
-                    </h2>
+                    <div className={styles.subTitleGroup} data-animate="intro-group-2">
+                        <div className={styles.chapterTitleWrapper}>
+                            <h2>山河伊始</h2>
+                            <img
+                                src="/images/山河伊始.png"
+                                alt="山河伊始"
+                                className={styles.titleIcon}
+                            />
+                        </div>
+                        <p>我们的画卷从青藏高原开始，顺着冰川融水与大江大河，穿过中部的奇峰峡谷，最终抵达东部的人文与海岸。</p>
+                    </div>
                 </div>
 
                 <div className={styles.horizontalTrack} ref={horizontalTrackRef}>
