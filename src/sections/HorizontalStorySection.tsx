@@ -68,16 +68,14 @@ export const HorizontalStorySection: FC = () => {
 
             // --- “电影开场”动画 ---
 
-            // Phase 7: 章节标题 ("Intro 序幕") 渐显
+            // Phase 1: 章节标题 (序幕·开霁) 渐显
             masterTimeline.fromTo(introGroup2,
                 { autoAlpha: 0, y: 20 },
                 { autoAlpha: 1, y: 0, duration: 10 }
             );
 
-            // Phase 8
             masterTimeline.to(introGroup2, { duration: 10 });
 
-            // [!code focus:start]
             // --- Phase 2: 云层覆盖 ---
             // "山河伊始" 开始淡出
             masterTimeline.add("startCloudCover");
@@ -132,9 +130,8 @@ export const HorizontalStorySection: FC = () => {
                 },
                 "startScroll"
             );
-            // [!code focus:end]
 
-            // Phase 11: “其他幻灯片”的淡入动画 (保持不变)
+            // Phase 5: “其他幻灯片”的淡入动画 (保持不变)
             otherAnimatedElements.forEach((el: any) => {
                 gsap.fromTo(el,
                     { autoAlpha: 0, y: 50 },
@@ -179,7 +176,6 @@ export const HorizontalStorySection: FC = () => {
                 </div>
 
                 <div className={styles.cloudTransitionContainer} ref={cloudContainerRef}>
-                    {/* 你需要准备 3-4 张透明背景的 .png 云彩图片 */}
                     <img
                         src="/images/clouds/cloud1.png"
                         alt="转场云"
@@ -199,6 +195,47 @@ export const HorizontalStorySection: FC = () => {
 
                 <div className={styles.horizontalTrack} ref={horizontalTrackRef}>
                     <div className={`${styles.slide} ${styles.slideIntro}`}>
+                    </div>
+
+                    {/* --- 幻灯片 2: [新增] 青藏高原 --- */}
+                    <div className={`${styles.slide} ${styles.slideChapterStart}`}>
+
+                        {/* 巨型背景文字 */}
+                        <div className={styles.backgroundText} data-animate="text-fade-in">
+                            Tibet
+                        </div>
+
+                        {/* 主要内容容器 */}
+                        <div className={styles.mainContent}>
+
+                            {/* 胶囊视频 */}
+                            <div className={styles.capsuleVideoContainer} data-animate="text-fade-in">
+                                <video
+                                    src="/videos/tibet-loop.mp4"
+                                    muted
+                                    autoPlay
+                                    loop
+                                    playsInline
+                                    className={styles.capsuleVideo}
+                                />
+                                {/* 视频周围的小字 */}
+                                <span className={`${styles.capsuleLabel} ${styles.labelTop}`}>
+                                    世界第三极
+                                </span>
+                                <span className={`${styles.capsuleLabel} ${styles.labelBottom}`}>
+                                    平均海拔 4500米
+                                </span>
+                            </div>
+
+                            {/* 标题和介绍文字 */}
+                            <div className={styles.chapterText} data-animate="text-fade-in">
+                                <h2>青藏高原</h2>
+                                <p>
+                                    故事从这里开始。世界的屋脊，雪山与冰川的故乡。
+                                    冰川融水汇聚成河，一路向东，开启了这场山河之旅。
+                                </p>
+                            </div>
+                        </div>
                     </div>
 
                     <div className={`${styles.slide} ${styles.slideDual}`}>

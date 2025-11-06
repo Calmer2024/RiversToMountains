@@ -30,7 +30,7 @@
     pointer-events: none;
 }
 
-/* --- 2. 新增的云层转场 --- */
+/* --- 云层转场 --- */
 .cloudTransitionContainer {
     position: absolute;
     top: 0;
@@ -81,7 +81,7 @@
     opacity: 0;
 }
 
-/* 组 1: 主副标题 */
+/* 主副标题 */
 .subTitleGroup {
     position: absolute; // 关键：使用绝对定位
     text-align: center;
@@ -173,7 +173,7 @@
    确认它是 absolute 并且 z-index 较低
 */
 .horizontalTrack {
-    width: 500vw; // (5 张幻灯片)
+    width: 400vw; // (5 张幻灯片)
     height: 100vh;
     display: flex;
 
@@ -196,6 +196,109 @@
     // display: flex;
     // align-items: center;
     // gap: 2rem;
+}
+
+/* 变体: 章节首屏 (e.g., Tibet) */
+.slideChapterStart {
+    position: relative; // 为 .backgroundText 提供定位上下文
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    text-align: center;
+    overflow: hidden; // 隐藏 .backgroundText 溢出的部分
+}
+
+/* 巨型背景文字 */
+.backgroundText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(10rem, 25vw, 20rem); // 巨型文字
+    font-weight: 800;
+    color: #ffffff3f; // 极淡的颜色
+    z-index: 1;
+    user-select: none;
+    text-transform: uppercase; // 英文大写
+    white-space: nowrap; // 防止 "Tibet" 换行
+}
+
+/* 承载视频和文字的主要内容 */
+.mainContent {
+    position: relative; // 确保在 .backgroundText 之上
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem; // 视频和文字的间距
+}
+
+/* 标题和介绍文字 */
+.chapterText {
+    h2 {
+        font-family: "山海汲刻宋", serif;
+        font-size: clamp(3rem, 6vw, 5rem);
+        font-weight: 600;
+        color: #f0f0f0;
+        margin: 0;
+    }
+
+    p {
+        font-family: "汉仪全唐诗简", serif;
+        font-size: clamp(1.1rem, 1vw, 1.3rem);
+        color: #aaa;
+        line-height: 1.7;
+        max-width: 50ch; // 限制行宽，易于阅读
+        margin-top: 1rem;
+    }
+}
+
+/* 胶囊视频容器 */
+.capsuleVideoContainer {
+    position: relative;
+    width: 100%;
+    max-width: 500px; // 胶囊最大宽度
+    height: 280px; // 16:9 比例 (500 * 9/16 ≈ 280)
+
+    border-radius: 200px; // 关键：胶囊形状
+    overflow: hidden;
+
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+
+    // 性能优化
+    transform: translateZ(0);
+}
+
+.capsuleVideo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; // 确保视频铺满胶囊
+}
+
+/* 视频周围的小字 */
+.capsuleLabel {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+    color: #fff;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+
+    &.labelTop {
+        top: 1.5rem;
+        left: 1.5rem;
+    }
+
+    &.labelBottom {
+        bottom: 1.5rem;
+        right: 1.5rem;
+    }
 }
 
 /* --- 幻灯片布局变体 --- */
