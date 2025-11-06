@@ -81,7 +81,7 @@
     opacity: 0;
 }
 
-/* 主副标题 */
+/* 序章 */
 .subTitleGroup {
     position: absolute; // 关键：使用绝对定位
     text-align: center;
@@ -173,7 +173,7 @@
    确认它是 absolute 并且 z-index 较低
 */
 .horizontalTrack {
-    width: 400vw; // (5 张幻灯片)
+    width: 1000vw; // (5 张幻灯片)
     height: 100vh;
     display: flex;
 
@@ -218,7 +218,7 @@
     transform: translate(-50%, -50%);
     font-size: clamp(10rem, 25vw, 20rem); // 巨型文字
     font-weight: 800;
-    color: #ffffff3f; // 极淡的颜色
+    color: #ffffff25; // 极淡的颜色
     z-index: 1;
     user-select: none;
     text-transform: uppercase; // 英文大写
@@ -255,20 +255,27 @@
     }
 }
 
+.videoLayoutWrapper {
+    position: relative;
+    /* 关键：成为 .capsuleLabel 的定位父级 */
+
+    /* 保持和 capsuleVideoContainer 一样的尺寸 */
+    width: 100%;
+    max-width: 500px;
+    height: 280px;
+}
+
 /* 胶囊视频容器 */
 .capsuleVideoContainer {
-    position: relative;
     width: 100%;
-    max-width: 500px; // 胶囊最大宽度
-    height: 280px; // 16:9 比例 (500 * 9/16 ≈ 280)
+    height: 100%;
 
-    border-radius: 200px; // 关键：胶囊形状
+    border-radius: 200px;
     overflow: hidden;
+    /* 这个 overflow 现在 *只* 裁剪视频 */
 
     border: 2px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-
-    // 性能优化
     transform: translateZ(0);
 }
 
@@ -290,15 +297,213 @@
     font-weight: 500;
     letter-spacing: 1px;
 
-    &.labelTop {
-        top: 1.5rem;
+    &.labelTopLeft {
+        top: 1rem;
         left: 1.5rem;
     }
 
-    &.labelBottom {
-        bottom: 1.5rem;
+    &.labelTopRight {
+        top: 1.5rem;
         right: 1.5rem;
     }
+
+    &.labelBottomLeft {
+        bottom: 1.5rem;
+        left: 2rem;
+    }
+
+    &.labelBottomRight {
+        bottom: 1rem;
+        right: 1.5rem;
+    }
+}
+
+.slideFullBgTibet {
+    width: 100vw;
+    height: 100vh;
+    flex-shrink: 0;
+
+    background-image: url("/images/backgrounds/tibet-wide-bg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* [!code modification] 关键: 添加 position 和 overflow */
+    position: relative;
+    overflow-x: hidden; // 裁剪掉飞出屏幕的 .loadingBar
+
+    /* 蒙层 (保持不变) */
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+
+    /* [!code focus:start] */
+    /* --- [新增] 进度条轨道 --- */
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 4px; // 轨道高度
+        background-color: rgba(255, 255, 255, 0.2); // 轨道颜色
+        z-index: 3; // 在蒙层之上
+    }
+
+}
+
+/////////////////////// 加载动画 ////////////////////////////
+/* --- 1. 定义动画 (可以放在 .scss 文件底部) --- */
+/* [!code focus:start] */
+@keyframes loadingScan {
+    from {
+        /* 从左侧屏幕外开始 */
+        transform: translateX(-100%);
+    }
+
+    to {
+        /* 移动到右侧屏幕外
+           (334% = 100% (屏幕宽度) / 30% (扫描条宽度) ≈ 3.33 * 100%)
+        */
+        transform: translateX(334%);
+    }
+}
+
+@keyframes flowAnimation {
+    0% {
+        /* 动画开始时，背景在 0 0 位置 */
+        background-position: 0 0;
+    }
+
+    100% {
+        /* 动画结束时，背景移动了一个完整图案的距离 (60px)
+           这会创造一个无缝循环
+        */
+        background-position: 60px 0;
+    }
+}
+
+
+/* --- 3. [新增] 扫描条样式 --- */
+.loadingBar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 4px; // 扫描条高度 (同轨道)
+
+    width: 30%; // 扫描条宽度 (例如 30%)
+    background-color: #ffffff; // 扫描条颜色
+    z-index: 4; // 在轨道之上
+
+    // 应用动画
+    animation: loadingScan 2.5s infinite ease-in-out;
+}
+
+//////////////////////////////////////////////////////////////
+
+/////////////////// 章节幻灯片 /////////////////////
+.slideChapterTitleWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5vw 8vw;
+}
+
+.chapterTitleCard {
+    position: absolute; // 关键：使用绝对定位
+    text-align: center;
+
+    // 默认隐藏 (由 GSAP 的 fromTo 控制 autoAlpha)
+    visibility: hidden;
+    top: 20vh;
+
+
+    h2 {
+        font-family: "汉仪程行简", serif;
+        font-weight: 600;
+        font-size: clamp(2rem, 6vw, 7rem);
+        color: #ccc;
+    }
+
+    .divider {
+        width: 500px; // 横线宽度
+        height: 1px;
+        background-color: rgba(255, 255, 255, 0.353); // 半透明白色
+        margin: 1.5rem auto; // 上下边距 1.5rem，左右自动居中
+        border-radius: 1px;
+    }
+
+    .chapterSubtitle {
+        font-family: "汉仪全唐诗简", serif;
+        font-size: clamp(1.3rem, 2vw, 3rem); // 字体稍大
+        color: #d9d8d8;
+        letter-spacing: 2px;
+        font-weight: 400;
+        margin: 0; // 移除 h3 默认的 margin
+    }
+
+    p {
+        font-family: "汉仪全唐诗简", serif;
+        font-size: clamp(1.2rem, 1vw, 1.5rem);
+        color: #999999db;
+        letter-spacing: 1.5px;
+        margin-top: 10rem;
+    }
+
+    /* 主标题和 Icon 的包裹器 */
+    .chapterTitleWrapper {
+        position: relative; // 关键：成为 .titleIcon 的定位父级
+        display: inline-block; // 关键：使其宽度仅包裹 H2 的内容
+    }
+
+    /*  Icon 图标样式 */
+    .titleIcon {
+        position: absolute; // 绝对定位于 .mainTitleWrapper
+
+        // 定位在 H2 的右上角
+        top: 0;
+        right: 0;
+
+        // 向外偏移一点，使其不重叠
+        // 120% = 100% (图标自身宽度) + 20% (间距)
+        // -20% = 向上移动 20% (图标自身高度)
+        transform: translate(120%, -10%);
+
+        width: 30px; // 保持较小 (可调整为你图片合适的尺寸)
+        height: auto; // 保持图片比例
+    }
+
+    .verticalSubtitle {
+        writing-mode: vertical-rl;
+
+        text-orientation: upright;
+
+        // 字体样式 (我参考了你的 p 标签)
+        font-family: "汉仪全唐诗简", serif;
+        font-size: clamp(1.2rem, 1vw, 1.5rem); // 字体大小
+        color: #999; // 字体颜色
+        font-weight: 400;
+
+        // 间距
+        margin-top: 2.5rem; // 距离上方 p 标签的间距
+        letter-spacing: 0.25em; // 调整字与字之间的垂直间距
+
+
+        // 因为 .subTitleGroup 已经是 text-align: center，
+        // 竖排文本会自动在其父容器中水平居中。
+    }
+
 }
 
 /* --- 幻灯片布局变体 --- */

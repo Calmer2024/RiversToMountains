@@ -142,7 +142,7 @@ export const HorizontalStorySection: FC = () => {
                         scrollTrigger: {
                             trigger: el,
                             containerAnimation: horizontalScrollTween,
-                            start: "left 80%",
+                            start: "left 100%",
                             toggleActions: "play none none reverse",
                         }
                     }
@@ -209,20 +209,31 @@ export const HorizontalStorySection: FC = () => {
                         <div className={styles.mainContent}>
 
                             {/* 胶囊视频 */}
-                            <div className={styles.capsuleVideoContainer} data-animate="text-fade-in">
-                                <video
-                                    src="/videos/tibet-loop.mp4"
-                                    muted
-                                    autoPlay
-                                    loop
-                                    playsInline
-                                    className={styles.capsuleVideo}
-                                />
-                                {/* 视频周围的小字 */}
-                                <span className={`${styles.capsuleLabel} ${styles.labelTop}`}>
+                            <div className={styles.videoLayoutWrapper} data-animate="text-fade-in">
+
+                                {/* --- 2. 视频容器 --- */}
+                                <div className={styles.capsuleVideoContainer}>
+                                    <video
+                                        src="/videos/tibet-loop.mp4"
+                                        muted
+                                        autoPlay
+                                        loop
+                                        playsInline
+                                        className={styles.capsuleVideo}
+                                    />
+                                </div>
+
+                                {/* --- 3. 标签现在是视频容器的“兄弟” --- */}
+                                <span className={`${styles.capsuleLabel} ${styles.labelTopLeft}`}>
                                     世界第三极
                                 </span>
-                                <span className={`${styles.capsuleLabel} ${styles.labelBottom}`}>
+                                <span className={`${styles.capsuleLabel} ${styles.labelTopRight}`}>
+                                    亚洲水塔
+                                </span>
+                                <span className={`${styles.capsuleLabel} ${styles.labelBottomLeft}`}>
+                                    极地之外最大冰盖
+                                </span>
+                                <span className={`${styles.capsuleLabel} ${styles.labelBottomRight}`}>
                                     平均海拔 4500米
                                 </span>
                             </div>
@@ -235,6 +246,34 @@ export const HorizontalStorySection: FC = () => {
                                     冰川融水汇聚成河，一路向东，开启了这场山河之旅。
                                 </p>
                             </div>
+                        </div>
+                    </div>
+
+                    {/* --- 幻灯片 3: 全屏背景图片 (青藏高原场景过渡) --- */}
+                    {/* 这个 slide 将没有任何内容，只用于展示背景图 */}
+                    <div className={`${styles.slide} ${styles.slideFullBgTibet}`}>
+                        {/* <h2 className={styles.fullBgText} data-animate="text-fade-in">浩瀚与深邃</h2> */}
+                        <div className={styles.loadingBar}></div>
+                    </div>
+
+                    {/* --- 幻灯片 4: [新增] "雪域天穹" 章节标题 --- */}
+                    <div className={`${styles.slide} ${styles.slideChapterTitleWrapper}`}>
+                        <div className={styles.chapterTitleCard} data-animate="text-fade-in">
+                            <div className={styles.chapterTitleWrapper}>
+                                <h2>雪域天穹</h2>
+                                <img
+                                    src="/images/雪域天穹.png"
+                                    alt="雪域天穹"
+                                    className={styles.titleIcon}
+                                />
+                            </div>
+                            <div className={styles.divider}></div>
+                            <h3 className={styles.chapterSubtitle}>第一章·天际</h3>
+                            <p>
+                                我们的旅程从世界之巅开始。这里是山河的源头，
+                                雪峰静默，冰川闪耀，湖泊如镜，
+                                展现着天地之初的纯粹与宏大。
+                            </p>
                         </div>
                     </div>
 
