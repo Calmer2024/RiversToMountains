@@ -1,0 +1,61 @@
+.slideKangrinboqe {
+    /* 继承父组件 .slideChapterStart 的大部分 flex 布局 */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+    .mainContent {
+        width: 100%;
+    }
+}
+
+.videoWindowGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 1.5rem;
+    width: 70vw;
+    height: 60vh;
+
+    @media (max-width: 768px) {
+        width: 90vw;
+        height: 50vh;
+        gap: 1rem;
+    }
+}
+
+.videoWindow {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    background-color: #111;
+
+    video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.windowLarge {
+    grid-column: 1 / 3;
+    grid-row: 1 / 3;
+}
+
+.windowSmallTop {
+    grid-column: 3 / 4;
+    grid-row: 1 / 2;
+}
+
+.windowSmallBottom {
+    grid-column: 3 / 4;
+    grid-row: 2 / 3;
+}

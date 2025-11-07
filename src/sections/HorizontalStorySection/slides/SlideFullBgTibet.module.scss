@@ -1,0 +1,54 @@
+.slideFullBgTibet {
+    background-image: url("/images/backgrounds/tibet-wide-bg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow-x: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background-color: rgba(255, 255, 255, 0.2);
+        z-index: 3;
+    }
+}
+
+@keyframes loadingScan {
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(334%);
+    }
+}
+
+.loadingBar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 4px;
+    width: 30%;
+    background-color: #ffffff;
+    z-index: 4;
+    animation: loadingScan 2.5s infinite ease-in-out;
+}

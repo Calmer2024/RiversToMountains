@@ -1,0 +1,93 @@
+/* 幻灯片 8: 察尔汗盐湖 */
+.slideSaltLake {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 1. 分裂的文本 */
+.splitTextContainer {
+    position: absolute;
+    z-index: 10;
+
+    /* [!] 这是您修改后的样式 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .splitChinese {
+        font-size: clamp(2rem, 2vw, 2rem);
+        font-family: "山海汲刻宋", serif;
+        color: #fff;
+        white-space: nowrap;
+
+        span:first-child {
+            margin-right: 1.5rem;
+        }
+    }
+
+    .splitEnglish {
+        font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+        font-family: 'Arial', sans-serif;
+        color: #aaa;
+        white-space: nowrap;
+
+        span:first-child {
+            margin-right: 1.5rem;
+        }
+    }
+
+    span {
+        display: inline-block;
+        will-change: transform;
+    }
+}
+
+/* 2. 视频容器 */
+.saltLakeVideoContainer {
+    position: absolute;
+    z-index: 5;
+
+    width: 55vw;
+    height: 55vh;
+
+    @media (max-width: 768px) {
+        width: 90vw;
+        height: 50vh;
+    }
+
+    transform: scale(0);
+    visibility: hidden;
+    opacity: 0;
+
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    video {
+        width: 100%;
+        object-fit: cover;
+        flex-grow: 1;
+        flex-shrink: 1;
+        height: 0;
+    }
+
+    p {
+        flex-shrink: 0;
+        background-color: #000;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        color: #aaa;
+        font-family: "汉仪全唐诗简", serif;
+        font-size: clamp(1.1rem, 1.5vw, 1.5rem);
+        padding: 1.25rem 1.5rem;
+        text-align: center;
+        margin: 0;
+        box-sizing: border-box;
+    }
+}

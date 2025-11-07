@@ -1,0 +1,213 @@
+.storySection {
+    background-color: #000;
+    color: #fff;
+    overflow: hidden;
+}
+
+/* 1. "钉住"容器 (高) */
+.pinContainer {
+    height: 100vh;
+    width: 100%;
+    position: relative;
+}
+
+/* 2. "开幕画布" (Intro Canvas) */
+.introCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+
+/* --- 云层转场 --- */
+.cloudTransitionContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9;
+    pointer-events: none;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cloudImage {
+    position: absolute;
+    width: 120%;
+    height: auto;
+    opacity: 0;
+    visibility: hidden;
+    will-change: transform, opacity;
+}
+
+/* 序章 */
+.subTitleGroup {
+    position: absolute;
+    text-align: center;
+    visibility: hidden;
+    top: 20vh;
+
+    h2 {
+        font-family: "汉仪程行简", serif;
+        font-weight: 600;
+        font-size: clamp(2rem, 6vw, 7rem);
+        color: #ccc;
+    }
+
+    .divider {
+        width: 500px;
+        height: 1px;
+        background-color: rgba(255, 255, 255, 0.353);
+        margin: 1.5rem auto;
+        border-radius: 1px;
+    }
+
+    .chapterSubtitle {
+        font-family: "汉仪全唐诗简", serif;
+        font-size: clamp(1.3rem, 2vw, 3rem);
+        color: #d9d8d8;
+        letter-spacing: 2px;
+        font-weight: 400;
+        margin: 0;
+    }
+
+    p {
+        font-family: "汉仪全唐诗简", serif;
+        font-size: clamp(1.2rem, 1vw, 1.5rem);
+        color: #999999db;
+        letter-spacing: 1.5px;
+        margin-top: 10rem;
+    }
+
+    .chapterTitleWrapper {
+        position: relative;
+        display: inline-block;
+    }
+
+    .titleIcon {
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translate(120%, -10%);
+        width: 30px;
+        height: auto;
+    }
+}
+
+/* 3. "水平"轨道 (horizontalTrack) */
+.horizontalTrack {
+    // [!] 注意：这里的宽度现在由子组件的数量自动决定
+    // 你可以在父组件的 JS 中动态设置它
+    // 或者简单地在这里设置一个足够大的值
+    width: 800vw; // 假设有 8 张幻灯片
+    height: 100vh;
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    will-change: transform;
+}
+
+/* 4. 幻灯片 (基础样式) */
+.slide {
+    width: 100vw;
+    height: 100vh;
+    padding: 5vw 8vw;
+    box-sizing: border-box;
+    flex-shrink: 0; // [!] 确保幻灯片不会被压缩
+}
+
+/* =====================================================
+  [!] 可复用的幻灯片样式块 [!]
+  这些样式将被子组件导入和使用
+=====================================================
+*/
+
+/* 变体: 章节首屏 (e.g., Tibet) */
+.slideChapterStart {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    text-align: center;
+    overflow: hidden;
+}
+
+/* 巨型背景文字 */
+.backgroundText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(10rem, 25vw, 20rem);
+    font-weight: 800;
+    color: #ffffff25;
+    z-index: 1;
+    user-select: none;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+/* 承载视频和文字的主要内容 */
+.mainContent {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+}
+
+/* 标题和介绍文字 */
+.chapterText {
+    h2 {
+        font-family: "山海汲刻宋", serif;
+        font-size: clamp(3rem, 6vw, 5rem);
+        font-weight: 600;
+        color: #f0f0f0;
+        margin: 0;
+    }
+
+    p {
+        font-family: "汉仪全唐诗简", serif;
+        font-size: clamp(1.1rem, 1vw, 1.3rem);
+        color: #aaa;
+        line-height: 1.7;
+        max-width: 50ch;
+        margin-top: 1rem;
+    }
+}
+
+/* 冈仁波齐和慕士塔格峰复用的 .textContent */
+.textContent {
+    text-align: center;
+
+    h2 {
+        font-family: "山海汲刻宋", serif;
+        font-size: clamp(3rem, 6vw, 5rem);
+        font-weight: 600;
+        color: #f0f0f0;
+        margin: 0;
+    }
+
+    p {
+        font-family: "汉仪全唐诗简", serif;
+        font-size: clamp(1.1rem, 1vw, 1.3rem);
+        color: #aaa;
+        line-height: 1.7;
+        max-width: 50ch;
+        margin-top: 1rem;
+    }
+}

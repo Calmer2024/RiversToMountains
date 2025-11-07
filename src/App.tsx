@@ -2,7 +2,7 @@ import HeroSection from './sections/HeroSection';
 import './styles/global.scss';
 import { Header } from './components/Header';
 import { CardCarousel } from './sections/CardCarousel';
-import { HorizontalStorySection } from './sections/HorizontalStorySection';
+import { HorizontalStorySection } from './sections/HorizontalStorySection/HorizontalStorySection';
 import { StoryHeaderSection } from './sections/StoryHeaderSection';
 
 function App() {
