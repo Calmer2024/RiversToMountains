@@ -1,10 +1,11 @@
 import { useLayoutEffect, useRef, type FC } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { TextPlugin } from 'gsap/TextPlugin';
 import styles from './HorizontalStorySection.module.scss';
 
 // 注册 GSAP 插件
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
 export const HorizontalStorySection: FC = () => {
 
@@ -29,7 +30,6 @@ export const HorizontalStorySection: FC = () => {
             return;
         }
 
-        // --- 2. (+++ 已简化 +++)
         // 我们不再需要 setupGSAPTimeline 或 'canplay' 事件
         // GSAP 可以立即运行
 
@@ -59,7 +59,7 @@ export const HorizontalStorySection: FC = () => {
                 scrollTrigger: {
                     trigger: pinContainer,
                     start: "top top",
-                    end: `+=${scrollDistance + (window.innerHeight * 4)}`,
+                    end: `+=${scrollDistance + (window.innerHeight * 2)}`,
                     scrub: 1.5,
                     pin: true,
                     invalidateOnRefresh: true,
@@ -104,7 +104,7 @@ export const HorizontalStorySection: FC = () => {
                 "startCloudCover"
             );
 
-            // --- Phase 3: "交换" (在云层后) ---
+            // --- Phase 3: "交换"  ---
             // 在云层完全覆盖后 (时间轴的下一个点)，立即隐藏 introCanvas
             masterTimeline.set(introCanvas, { autoAlpha: 0, pointerEvents: 'none' });
 
@@ -122,16 +122,19 @@ export const HorizontalStorySection: FC = () => {
             }, "startScroll");
 
             // 水平画卷 *同时* 开始移动
-            const horizontalScrollTween = masterTimeline.to(horizontalTrack,
-                {
-                    x: `-=${scrollDistance}px`,
-                    ease: "none",
-                    duration: 100 // 画卷滚动的总时长 (保持不变)
-                },
-                "startScroll"
-            );
+            // 1. **单独创建** 水平滚动的 Tween
+            //    我们使用 gsap.to() 而不是 masterTimeline.to()
+            const horizontalScrollTween = gsap.to(horizontalTrack, {
+                x: `-=${scrollDistance}px`,
+                ease: "none",
+                duration: 100, // 这个 duration 定义了它在时间轴上的相对速度
+                // paused: true  
+            });
 
-            // Phase 5: “其他幻灯片”的淡入动画 (保持不变)
+            // 2. 将这个 **已创建的 Tween** 添加到主时间轴
+            masterTimeline.add(horizontalScrollTween, "startScroll");
+
+            // Phase 5: “其他幻灯片”的淡入动画 
             otherAnimatedElements.forEach((el: any) => {
                 gsap.fromTo(el,
                     { autoAlpha: 0, y: 50 },
@@ -142,7 +145,7 @@ export const HorizontalStorySection: FC = () => {
                         scrollTrigger: {
                             trigger: el,
                             containerAnimation: horizontalScrollTween,
-                            start: "left 100%",
+                            start: "left 80%",
                             toggleActions: "play none none reverse",
                         }
                     }
@@ -197,7 +200,7 @@ export const HorizontalStorySection: FC = () => {
                     <div className={`${styles.slide} ${styles.slideIntro}`}>
                     </div>
 
-                    {/* --- 幻灯片 2: [新增] 青藏高原 --- */}
+                    {/* --- 幻灯片 2:青藏高原 --- */}
                     <div className={`${styles.slide} ${styles.slideChapterStart}`}>
 
                         {/* 巨型背景文字 */}
@@ -211,7 +214,7 @@ export const HorizontalStorySection: FC = () => {
                             {/* 胶囊视频 */}
                             <div className={styles.videoLayoutWrapper} data-animate="text-fade-in">
 
-                                {/* --- 2. 视频容器 --- */}
+                                {/* --- 视频容器 --- */}
                                 <div className={styles.capsuleVideoContainer}>
                                     <video
                                         src="/videos/tibet-loop.mp4"
@@ -223,7 +226,6 @@ export const HorizontalStorySection: FC = () => {
                                     />
                                 </div>
 
-                                {/* --- 3. 标签现在是视频容器的“兄弟” --- */}
                                 <span className={`${styles.capsuleLabel} ${styles.labelTopLeft}`}>
                                     世界第三极
                                 </span>
@@ -249,14 +251,14 @@ export const HorizontalStorySection: FC = () => {
                         </div>
                     </div>
 
-                    {/* --- 幻灯片 3: 全屏背景图片 (青藏高原场景过渡) --- */}
+                    {/* --- 幻灯片 3: 全屏背景图片  --- */}
                     {/* 这个 slide 将没有任何内容，只用于展示背景图 */}
                     <div className={`${styles.slide} ${styles.slideFullBgTibet}`}>
                         {/* <h2 className={styles.fullBgText} data-animate="text-fade-in">浩瀚与深邃</h2> */}
                         <div className={styles.loadingBar}></div>
                     </div>
 
-                    {/* --- 幻灯片 4: [新增] "雪域天穹" 章节标题 --- */}
+                    {/* --- 幻灯片 4: "雪域天穹" 章节标题 --- */}
                     <div className={`${styles.slide} ${styles.slideChapterTitleWrapper}`}>
                         <div className={styles.chapterTitleCard} data-animate="text-fade-in">
                             <div className={styles.chapterTitleWrapper}>
@@ -269,11 +271,66 @@ export const HorizontalStorySection: FC = () => {
                             </div>
                             <div className={styles.divider}></div>
                             <h3 className={styles.chapterSubtitle}>第一章·天际</h3>
-                            <p>
+                            <p data-animate-text="typewriter"> {/* [!code ++] */}
                                 我们的旅程从世界之巅开始。这里是山河的源头，
                                 雪峰静默，冰川闪耀，湖泊如镜，
                                 展现着天地之初的纯粹与宏大。
                             </p>
+                        </div>
+                    </div>
+
+                    {/* --- [新] 幻灯片 5: 冈仁波齐 --- */}
+                    <div className={`${styles.slide} ${styles.slideKangrinboqe}`}>
+                        {/* 巨型背景文字 */}
+                        <div className={styles.backgroundText} data-animate="text-fade-in">
+                            Kangrinboqe
+                        </div>
+
+                        {/* 主要内容容器 (z-index: 2) */}
+                        <div className={styles.mainContent}>
+
+                            {/* 1. 视频窗口网格 */}
+                            <div className={styles.videoWindowGrid} data-animate="text-fade-in">
+                                {/* 大窗口 (占据 2x2) */}
+                                <div className={`${styles.videoWindow} ${styles.windowLarge}`}>
+                                    <video
+                                        src="/videos/kailash-main.mp4"
+                                        muted
+                                        autoPlay
+                                        loop
+                                        playsInline
+                                    />
+                                </div>
+                                {/* 小窗口 1 (右上) */}
+                                <div className={`${styles.videoWindow} ${styles.windowSmallTop}`}>
+                                    <video
+                                        // [!code warning] 确保你有这个视频文件
+                                        src="/videos/kailash-drone.mp4"
+                                        muted
+                                        autoPlay
+                                        loop
+                                        playsInline
+                                    />
+                                </div>
+                                {/* 小窗口 2 (右下) */}
+                                <div className={`${styles.videoWindow} ${styles.windowSmallBottom}`}>
+                                    <video
+                                        // [!code warning] 确保你有这个视频文件
+                                        src="/videos/kailash-prayer-flags.mp4"
+                                        muted
+                                        autoPlay
+                                        loop
+                                        playsInline
+                                    />
+                                </div>
+                            </div>
+
+                            {/* 2. 文本内容 */}
+                            <div className={styles.textContent} data-animate="text-fade-in">
+                                <h2>冈仁波齐</h2>
+                                <p>冈仁波齐。信仰的中心，世界的轴。我们的旅程，从最高处的仰望开始。</p>
+                            </div>
+
                         </div>
                     </div>
 
