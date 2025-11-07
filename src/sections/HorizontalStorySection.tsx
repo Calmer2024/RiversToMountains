@@ -16,16 +16,24 @@ export const HorizontalStorySection: FC = () => {
 
     const cloudContainerRef = useRef<HTMLDivElement>(null);
 
+    // --- 进度条 Refs ---
+    const progressBarSlideRef = useRef<HTMLDivElement>(null);
+    const progressFillRef = useRef<HTMLDivElement>(null);
+    const progressTextRef = useRef<HTMLSpanElement>(null);
+
     useLayoutEffect(() => {
         // --- 1. 获取所有元素 ---
         const pinContainer = pinContainerRef.current;
         const horizontalTrack = horizontalTrackRef.current;
         const introCanvas = introCanvasRef.current;
-
         const cloudContainer = cloudContainerRef.current;
 
         // 检查所有关键元素是否存在
-        if (!pinContainer || !horizontalTrack || !introCanvas || !cloudContainer) {
+        if (!pinContainer || !horizontalTrack || !introCanvas || !cloudContainer ||
+            !progressBarSlideRef.current ||
+            !progressFillRef.current ||
+            !progressTextRef.current
+        ) {
             console.warn("GSAP: 缺少关键元素，动画取消。");
             return;
         }
@@ -152,6 +160,49 @@ export const HorizontalStorySection: FC = () => {
                 );
             });
 
+            // --- [新] Phase 6: 进度条动画 ---
+            // 获取 Refs
+            const progressBarSlide = progressBarSlideRef.current!;
+            const progressFill = progressFillRef.current!;
+            const progressText = progressTextRef.current!;
+
+            // 创建一个 "代理" 对象，GSAP 可以动画化它的 'percent' 属性
+            const progressProxy = { percent: 0 };
+
+            // 创建一个专门用于进度条的时间轴
+            const progressTimeline = gsap.timeline({
+                scrollTrigger: {
+                    trigger: progressBarSlide,           // 触发器是进度条幻灯片
+                    containerAnimation: horizontalScrollTween, // 关键：动画在水平滚动中发生
+
+                    // 当幻灯片的左边缘碰到视口左边缘时开始
+                    start: "left left",
+
+                    // 当幻灯片的右边缘碰到视口右边缘时结束
+                    // 这确保动画在幻灯片完全穿过屏幕的 100vw 距离内完成
+                    end: "right right",
+
+                    scrub: 1.5, // 关联到滚动条
+                }
+            });
+
+            // 动画1: 填充条的 scaleX 从 0 到 1
+            progressTimeline.to(progressFill, {
+                scaleX: 1,
+                ease: "none"
+            }, 0); // 0 表示在时间轴的开头
+
+            // 动画2: 代理对象的 'percent' 属性从 0 到 100
+            progressTimeline.to(progressProxy, {
+                percent: 100,
+                ease: "none",
+                roundProps: "percent", // 关键：将数字四舍五入为整数
+                onUpdate: () => {
+                    // 每次更新时，将数字设置到 span 元素中
+                    progressText.textContent = `${progressProxy.percent}%`;
+                }
+            }, 0); // 0 表示与上一个动画同时开始
+
         }, pinContainer); // 绑定 GSAP 上下文
 
         return () => ctx.revert(); // 返回清理函数
@@ -244,8 +295,8 @@ export const HorizontalStorySection: FC = () => {
                             <div className={styles.chapterText} data-animate="text-fade-in">
                                 <h2>青藏高原</h2>
                                 <p>
-                                    故事从这里开始。世界的屋脊，雪山与冰川的故乡。
-                                    冰川融水汇聚成河，一路向东，开启了这场山河之旅。
+                                    拨开云雾，你来到了青藏高原，这里是雪山与冰川的故乡。
+                                    冰川融水汇聚成河，一路向东。
                                 </p>
                             </div>
                         </div>
@@ -272,7 +323,7 @@ export const HorizontalStorySection: FC = () => {
                             <div className={styles.divider}></div>
                             <h3 className={styles.chapterSubtitle}>第一章·天际</h3>
                             <p data-animate-text="typewriter"> {/* [!code ++] */}
-                                我们的旅程从世界之巅开始。这里是山河的源头，
+                                你背起行囊，便叩问了这般雪域天穹。这里是山河的源头，
                                 雪峰静默，冰川闪耀，湖泊如镜，
                                 展现着天地之初的纯粹与宏大。
                             </p>
@@ -331,6 +382,73 @@ export const HorizontalStorySection: FC = () => {
                                 <p>冈仁波齐。信仰的中心，世界的轴。我们的旅程，从最高处的仰望开始。</p>
                             </div>
 
+                        </div>
+                    </div>
+
+                    {/* --- [新] 幻灯片 6: 进度条 --- */}
+                    <div
+                        className={`${styles.slide} ${styles.slideProgressBar}`}
+                        ref={progressBarSlideRef} // [!code ++]
+                    >
+                        {/* data-animate 用于整体淡入 */}
+                        <div className={styles.loadingContainer} data-animate="text-fade-in">
+                            <img
+                                // [!code warning] 确保你有这个图片文件
+                                src="/images/loading-top.jpg" // 假设图片路径
+                                alt="加载插画"
+                                className={styles.loadingImage} // [!code ++]
+                            />
+                            {/* 1. 百分比文本 */}
+                            <div className={styles.loadingText}>
+                                {/* [!code ++] 使用 ref */}
+                                辞别这片圣地，愿将冈仁波齐的祝福与静穆，带往尘世的每一步: <span ref={progressTextRef}>0%</span>
+                            </div>
+
+                            {/* 2. 进度条轨道 */}
+                            <div className={styles.progressBarTrack}>
+                                {/* [!code ++] 
+                                  进度条填充
+                                  我们将用 GSAP 动画化这个元素的 scaleX
+                              */}
+                                <div className={styles.progressBarFill} ref={progressFillRef}></div>
+                            </div>
+
+                            {/* 3. 底部说明文字 */}
+                            <p className={styles.loadingCaption}>
+                                OUR JOURNEY COMMENCES AT THE SUMMIT OF THE WORLD. THIS IS THE SOURCE OF THE GREAT RIVERS AND MOUNTAINS, WHERE SNOW-CAPPED PEAKS STAND IN SILENT GRANDEUR, GLACIERS GLITTER WITH ETERNAL LIGHT, AND LAKES LIE AS STILL AS MIRRORS, REVEALING THE PURE, MONUMENTAL SPLENDOR OF THE DAWN OF CREATION.
+                            </p>
+                        </div>
+                    </div>
+
+
+                    {/* --- [修改] 幻灯片 7: 慕士塔格峰 --- */}
+                    <div className={`${styles.slide} ${styles.slideMuztaghAta}`}>
+
+                        {/* 1. 全屏背景视频 */}
+                        <video
+                            // [!code warning] 确保你有这个视频文件
+                            src="/videos/muztagh-ata-bg.mp4"
+                            muted
+                            autoPlay
+                            loop
+                            playsInline
+                            className={styles.fullScreenVideo}
+                        />
+
+                        {/* 2. 巨型背景文字 (同冈仁波齐) */}
+                        {/* <div className={styles.backgroundText} data-animate="text-fade-in">
+                            Muztagh Ata
+                        </div> */}
+
+                        {/* 3. 主要内容 (同冈仁波齐的 .textContent) */}
+                        <div className={styles.mainContent}>
+                            {/* 复用冈仁波齐的 .textContent 样式 */}
+                            <div className={styles.textContent} data-animate="text-fade-in">
+                                <h2>慕士塔格峰</h2>
+                                <p>
+                                    你来到了慕士塔格峰，这是帕米尔高原上的巨擎，冷峻，纯粹，守护着古老的丝路。
+                                </p>
+                            </div>
                         </div>
                     </div>
 

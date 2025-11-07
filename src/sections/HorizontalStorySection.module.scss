@@ -607,6 +607,156 @@
     }
 }
 
+/* --- [新] 幻灯片 6: 进度条 --- */
+.slideProgressBar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    // .slide 已经有 padding: 5vw 8vw;
+}
+
+.loadingContainer {
+    width: 100%;
+    max-width: 900px; // 限制最大宽度
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .loadingImage {
+        // [!code ++]
+        max-width: 500px; // [!code ++] 图片的最大宽度，可以根据实际情况调整
+        height: auto; // [!code ++] 保持图片比例
+        margin-bottom: 2rem; // [!code ++] 图片和下方文字的间距
+        opacity: 0.8; // [!code ++] 稍微降低透明度，使其更融入背景
+    }
+}
+
+.loadingText {
+    font-family: 'Arial', sans-serif; // 使用更清晰的非衬线字体
+    font-size: clamp(1rem, 1.5vw, 1.25rem);
+    color: #b0b0b0;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+
+    span {
+        display: inline-block;
+        min-width: 4ch; // 给 0% - 100% 留出空间，防止跳动
+        text-align: left;
+    }
+}
+
+.progressBarTrack {
+    width: 100%;
+    height: 12px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden; // 隐藏内部的 .progressBarFill
+}
+
+.progressBarFill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%; // 宽度将由 GSAP 的 scaleX 控制
+
+    background-color: #ffffff;
+    border-radius: 10px;
+
+    // 关键：设置变换原点在左侧
+    transform-origin: left;
+    // 初始状态为 0
+    transform: scaleX(0);
+
+    // 模拟图片中的发光效果
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.7),
+        0 0 12px rgba(255, 255, 255, 0.5);
+}
+
+.loadingCaption {
+    font-family: 'Arial', sans-serif;
+    font-size: clamp(0.75rem, 1vw, 0.9rem);
+    color: #777;
+    margin-top: 2rem;
+    max-width: 70ch; // 限制行宽
+    text-align: center;
+    line-height: 1.6;
+    letter-spacing: 0.5px;
+}
+
+/* --- [修改] 幻灯片 7: 慕士塔格峰 (全屏视频 + 冈仁波齐文字) --- */
+.slideMuztaghAta {
+    position: relative; // 为所有子元素提供定位上下文
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; // 隐藏 .backgroundText 溢出
+
+    /* 蒙层，确保文字可读性 */
+    // &::before {
+    //     content: '';
+    //     position: absolute;
+    //     top: 0;
+    //     left: 0;
+    //     width: 100%;
+    //     height: 100%;
+    //     background-color: rgba(0, 0, 0, 0.4); // 蒙层
+    //     z-index: 1; // 在视频之上
+    // }
+
+    /* 全屏背景视频 */
+    .fullScreenVideo {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; // 铺满
+        z-index: 0; // 在最底层
+    }
+
+    /* 覆盖 .backgroundText (在 .slideChapterStart 中定义) */
+    .backgroundText {
+        z-index: 2; // 确保在蒙层之上
+        color: #ffffff1a; // 调整颜色以适应蒙层和视频
+    }
+
+    /* 覆盖 .mainContent (在 .slideChapterStart 中定义) */
+    .mainContent {
+        z-index: 3; // 确保在最顶层
+    }
+
+    /* [新] 复制 冈仁波齐 的 .textContent 样式 */
+    .textContent {
+        text-align: center;
+
+        h2 {
+            // 复制自 .slideKangrinboqe .textContent h2
+            font-family: "山海汲刻宋", serif;
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 600;
+            color: #f0f0f0; // 冈仁波齐的亮色
+            margin: 0;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5); // 增加阴影
+        }
+
+        p {
+            // 复制自 .slideKangrinboqe .textContent p
+            font-family: "汉仪全唐诗简", serif;
+            font-size: clamp(1.1rem, 1vw, 1.3rem);
+            color: #ffffffcb; // 冈仁波齐的次级文本色
+            line-height: 1.7;
+            max-width: 50ch; // 限制行宽
+            margin-top: 1rem;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3); // 增加阴影
+        }
+    }
+}
+
 /* 变体 B: 左右双栏 (用于图文、文+3D) */
 .slideDual {
     display: grid;
