@@ -163,8 +163,8 @@ export const ChatDialog: React.FC<ChatDialogProps> = ({ isOpen, onClose }) => {
 // 大语言模型 API 调用函数
 // 大语言模型 API 调用函数 - 直接调用版本
 async function callLanguageModelAPI(message: string): Promise<string> {
-  const API_KEY = 'sk-8ac72193d3074d0489731ecf67b66b86';
-  const API_URL = 'https://api.deepseek.com/v1/chat/completions';
+  const API_KEY = '';
+  const API_URL = '';
 
   try {
     const response = await fetch(API_URL, {
