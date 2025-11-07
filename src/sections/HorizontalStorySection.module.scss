@@ -687,7 +687,7 @@
     letter-spacing: 0.5px;
 }
 
-/* --- [修改] 幻灯片 7: 慕士塔格峰 (全屏视频 + 冈仁波齐文字) --- */
+/* --- 幻灯片 7: 慕士塔格峰 --- */
 .slideMuztaghAta {
     position: relative; // 为所有子元素提供定位上下文
     display: flex;
@@ -719,23 +719,19 @@
         z-index: 0; // 在最底层
     }
 
-    /* 覆盖 .backgroundText (在 .slideChapterStart 中定义) */
     .backgroundText {
         z-index: 2; // 确保在蒙层之上
         color: #ffffff1a; // 调整颜色以适应蒙层和视频
     }
 
-    /* 覆盖 .mainContent (在 .slideChapterStart 中定义) */
     .mainContent {
         z-index: 3; // 确保在最顶层
     }
 
-    /* [新] 复制 冈仁波齐 的 .textContent 样式 */
     .textContent {
         text-align: center;
 
         h2 {
-            // 复制自 .slideKangrinboqe .textContent h2
             font-family: "山海汲刻宋", serif;
             font-size: clamp(3rem, 6vw, 5rem);
             font-weight: 600;
@@ -745,7 +741,6 @@
         }
 
         p {
-            // 复制自 .slideKangrinboqe .textContent p
             font-family: "汉仪全唐诗简", serif;
             font-size: clamp(1.1rem, 1vw, 1.3rem);
             color: #ffffffcb; // 冈仁波齐的次级文本色
@@ -757,73 +752,96 @@
     }
 }
 
-/* 变体 B: 左右双栏 (用于图文、文+3D) */
-.slideDual {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+/* --- [修改] 幻灯片 8: 察尔汗盐湖 (文本分离) --- */
+.slideSaltLake {
+    display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 4rem;
+    position: relative;
+    overflow: hidden;
+    // [!] 移除了 3D 尺寸变量
+}
 
-    // 响应式
-    @media (max-width: 768px) {
-        grid-template-columns: 1fr;
-        gap: 1rem;
+/* 1. 分裂的文本 (保持不变) */
+.splitTextContainer {
+    position: absolute;
+    z-index: 10;
+    font-size: clamp(2rem, 2vw, 2rem);
+    font-family: "山海汲刻宋", serif;
+    color: #fff;
+    white-space: nowrap;
 
-        .modelLayout {
-            height: 50vh; // 手机上缩小 3D 区域
+    span:first-child {
+        margin-right: 1.5rem;
+    }
+
+    span {
+        display: inline-block; // 关键：使其可以被 transform
+        will-change: transform; // 性能优化：告诉浏览器这个元素即将变化
+    }
+
+    .splitEnglish {
+        font-size: clamp(0.9rem, 1vw, 1.1rem);
+        font-family: 'Arial', sans-serif;
+        color: #aaa;
+        white-space: nowrap;
+
+        span:first-child {
+            margin-right: 3.5rem; // 间距小一点
         }
     }
 }
 
-/* 变体 C: 布局反转 (用于 图文 -> 文图) */
-.layoutReverse {
-    .textLayout {
-        grid-column: 2;
-        grid-row: 1;
-    }
+/* 2. 视频容器 */
+.saltLakeVideoContainer {
+    position: absolute;
+    z-index: 5; // 在文本下方
 
-    .imageLayout {
-        grid-column: 1;
-        grid-row: 1;
-    }
+    // 尺寸
+    width: 55vw;
+    height: 55vh;
 
     @media (max-width: 768px) {
-
-        .textLayout,
-        .imageLayout {
-            grid-column: 1;
-            grid-row: auto;
-        }
+        width: 90vw;
+        height: 50vh;
     }
-}
 
-/* --- 内部元素样式 --- */
+    // 初始隐藏 (由 GSAP 控制)
+    transform: scale(0);
+    visibility: hidden;
+    opacity: 0;
 
-.textLayout {
-    h2 {
-        font-size: clamp(3rem, 8vw, 7rem); // 响应式巨型字体
-        font-weight: 300; // 细字体
-        color: #fff;
-        margin-bottom: 2rem;
+    // 内部样式 (复制自之前的 .face)
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); // 增加阴影
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    video {
+        width: 100%;
+        // height: 100%;
+        object-fit: cover;
+        flex-grow: 1;
+        flex-shrink: 1; // [!code ++] (允许视频在空间不足时收缩)
+        height: 0;
     }
 
     p {
-        font-size: clamp(1.2rem, 2vw, 1.5rem);
-        color: #aaa; // 柔和的灰色
-        line-height: 1.7;
-        max-width: 40ch; // 限制行宽，易于阅读
-    }
-}
-
-.imageLayout {
-    width: 100%;
-    height: 80vh; // 给图片一个固定高度
-    overflow: hidden;
-    border-radius: 12px;
-
-    img {
+        flex-shrink: 0; // [!code ++] (防止 <p> 标签被压缩)
+        background-color: #000; // [!] 改为纯黑背景
+        border-top: 1px solid rgba(255, 255, 255, 0.2); // [!] 增加分割线
+        /* backdrop-filter: blur(5px); */
+        // [!code --] (移除)
+        color: #aaa; // [!] 颜色调暗
+        font-family: "汉仪全唐诗简", serif;
+        font-size: clamp(1.1rem, 1vw, 1.3rem);
+        padding: 1.25rem 1.5rem; // [!] 增加内边距
+        text-align: center;
         width: 100%;
-        height: 100%;
-        object-fit: cover;
+        margin: 0;
+        box-sizing: border-box; // [!] 确保 padding 不会撑破
     }
 }

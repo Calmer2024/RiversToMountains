@@ -21,6 +21,14 @@ export const HorizontalStorySection: FC = () => {
     const progressFillRef = useRef<HTMLDivElement>(null);
     const progressTextRef = useRef<HTMLSpanElement>(null);
 
+    // --- [新] 察尔汗盐湖的 Refs ---
+    const saltLakeSlideRef = useRef<HTMLDivElement>(null);
+    const splitTextRef1 = useRef<HTMLSpanElement>(null);
+    const splitTextRef2 = useRef<HTMLSpanElement>(null);
+    const splitEnglishRef1 = useRef<HTMLSpanElement>(null); // [!code ++]
+    const splitEnglishRef2 = useRef<HTMLSpanElement>(null); // [!code ++]
+    const saltLakeVideoContainerRef = useRef<HTMLDivElement>(null); // [!code modification] (代替 cuboidRef)
+
     useLayoutEffect(() => {
         // --- 1. 获取所有元素 ---
         const pinContainer = pinContainerRef.current;
@@ -28,11 +36,16 @@ export const HorizontalStorySection: FC = () => {
         const introCanvas = introCanvasRef.current;
         const cloudContainer = cloudContainerRef.current;
 
-        // 检查所有关键元素是否存在
         if (!pinContainer || !horizontalTrack || !introCanvas || !cloudContainer ||
             !progressBarSlideRef.current ||
             !progressFillRef.current ||
-            !progressTextRef.current
+            !progressTextRef.current ||
+            !saltLakeSlideRef.current ||
+            !splitTextRef1.current ||
+            !splitTextRef2.current ||
+            !splitEnglishRef1.current || // [!code ++]
+            !splitEnglishRef2.current || // [!code ++]
+            !saltLakeVideoContainerRef.current // [!code modification] (代替 cuboidRef)
         ) {
             console.warn("GSAP: 缺少关键元素，动画取消。");
             return;
@@ -202,6 +215,80 @@ export const HorizontalStorySection: FC = () => {
                     progressText.textContent = `${progressProxy.percent}%`;
                 }
             }, 0); // 0 表示与上一个动画同时开始
+
+            // --- [修改] Phase 7: 察尔汗盐湖 动画 ---
+            const saltLakeSlide = saltLakeSlideRef.current!;
+            const splitText1 = splitTextRef1.current!;
+            const splitText2 = splitTextRef2.current!;
+            const saltLakeVideoContainer = saltLakeVideoContainerRef.current!;
+
+            const saltLakeTimeline = gsap.timeline({
+                scrollTrigger: {
+                    trigger: saltLakeSlide,
+                    containerAnimation: horizontalScrollTween,
+                    start: "left 30%",
+                    end: "right right",
+                    scrub: 1.5,
+                }
+            });
+
+            // 1. 动画 "Intro" 部分
+            saltLakeTimeline.add("intro", 0);
+
+            // [!code modification]
+            // 文本 1 向左移动 50vw (屏幕宽度的一半)，并保持可见
+            saltLakeTimeline.to(splitText1, {
+                x: '-30vw',          // [!code ++] (使用视口宽度确保移开)
+                // xPercent: -100,      // [!code --]
+                // autoAlpha: 0,        // [!code --] (移除淡出)
+                ease: "power2.inOut",// [!code modification] (使用更平滑的缓动)
+                duration: 1,
+            }, "intro");
+
+            // [!code modification]
+            // 文本 2 向右移动 50vw，并保持可见
+            saltLakeTimeline.to(splitText2, {
+                x: '30vw',           // [!code ++]
+                // xPercent: 100,       // [!code --]
+                // autoAlpha: 0,        // [!code --] (移除淡出)
+                ease: "power2.inOut",// [!code modification]
+                duration: 1,
+            }, "intro");
+
+            // [!code focus:start]
+            // [新] 英文动画 (与中文同步)
+            const splitEnglish1 = splitEnglishRef1.current!;
+            const splitEnglish2 = splitEnglishRef2.current!;
+
+            saltLakeTimeline.to(splitEnglish1, {
+                x: '-30vw',          // [!code ++] (使用视口宽度确保移开)
+                // xPercent: -100,      // [!code --]
+                // autoAlpha: 0,        // [!code --] (移除淡出)
+                ease: "power2.inOut",// [!code modification] (使用更平滑的缓动)
+                duration: 1,
+            }, "intro");
+
+            saltLakeTimeline.to(splitEnglish2, {
+                x: '30vw',           // [!code ++]
+                // xPercent: 100,       // [!code --]
+                // autoAlpha: 0,        // [!code --] (移除淡出)
+                ease: "power2.inOut",// [!code modification]
+                duration: 1,
+            }, "intro");
+            // [!code focus:end]
+
+            // 视频容器从 0 放大到 1 (保持不变)
+            saltLakeTimeline.fromTo(saltLakeVideoContainer, {
+                scale: 0,
+                autoAlpha: 0,
+            }, {
+                scale: 1,
+                autoAlpha: 1,
+                ease: "power2.out",
+                duration: 1.2,
+            }, "intro");
+
+            // --- [删除] 移除了 3D 旋转 (rotateY) 动画 ---
 
         }, pinContainer); // 绑定 GSAP 上下文
 
@@ -388,7 +475,7 @@ export const HorizontalStorySection: FC = () => {
                     {/* --- [新] 幻灯片 6: 进度条 --- */}
                     <div
                         className={`${styles.slide} ${styles.slideProgressBar}`}
-                        ref={progressBarSlideRef} // [!code ++]
+                        ref={progressBarSlideRef}
                     >
                         {/* data-animate 用于整体淡入 */}
                         <div className={styles.loadingContainer} data-animate="text-fade-in">
@@ -396,7 +483,7 @@ export const HorizontalStorySection: FC = () => {
                                 // [!code warning] 确保你有这个图片文件
                                 src="/images/loading-top.jpg" // 假设图片路径
                                 alt="加载插画"
-                                className={styles.loadingImage} // [!code ++]
+                                className={styles.loadingImage}
                             />
                             {/* 1. 百分比文本 */}
                             <div className={styles.loadingText}>
@@ -435,11 +522,6 @@ export const HorizontalStorySection: FC = () => {
                             className={styles.fullScreenVideo}
                         />
 
-                        {/* 2. 巨型背景文字 (同冈仁波齐) */}
-                        {/* <div className={styles.backgroundText} data-animate="text-fade-in">
-                            Muztagh Ata
-                        </div> */}
-
                         {/* 3. 主要内容 (同冈仁波齐的 .textContent) */}
                         <div className={styles.mainContent}>
                             {/* 复用冈仁波齐的 .textContent 样式 */}
@@ -452,25 +534,41 @@ export const HorizontalStorySection: FC = () => {
                         </div>
                     </div>
 
-                    <div className={`${styles.slide} ${styles.slideDual}`}>
-                        <div className={styles.textLayout} data-animate="text-fade-in">
-                            <h2>黄山</h2>
-                            <p>奇松、怪石、云海。看自然如何作画。</p>
+                    {/* --- [修改] 幻灯片 8: 察尔汗盐湖 --- */}
+                    <div
+                        className={`${styles.slide} ${styles.slideSaltLake}`}
+                        ref={saltLakeSlideRef}
+                    >
+                        {/* 1. 分裂的文本 */}
+                        <h2 className={styles.splitTextContainer}>
+                            {/* 中文行 */}
+                            <div className={styles.splitChinese}>
+                                <span ref={splitTextRef1}>你来到了</span>
+                                <span ref={splitTextRef2}>察尔汗盐湖</span>
+                            </div>
+                            {/* 英文行 */}
+                            <div className={styles.splitEnglish}>
+                                <span ref={splitEnglishRef1}>You have arrived at</span>
+                                <span ref={splitEnglishRef2}>Qarhan Salt Lake</span>
+                            </div>
+                        </h2>
+
+                        {/* 2. 视频容器 */}
+                        <div
+                            className={styles.saltLakeVideoContainer}
+                            ref={saltLakeVideoContainerRef}
+                        >
+                            <video
+                                src="/videos/salt-lake.mp4"
+                                muted autoPlay loop playsInline
+                            />
+                            <p>
+                                当山峰隐去，大地变为镜面。在这里，天空与大地再无分别。
+                            </p>
                         </div>
-                        <div className={styles.imageLayout} data-animate="text-fade-in">
-                            <img src="/images/cards/huangshan.jpg" alt="黄山" />
-                        </div>
+
                     </div>
 
-                    <div className={`${styles.slide} ${styles.slideDual} ${styles.layoutReverse}`}>
-                        <div className={styles.textLayout} data-animate="text-fade-in">
-                            <h2>漓江</h2>
-                            <p>江作青罗带，山如碧玉簪。乘一叶竹筏，画中游。</p>
-                        </div>
-                        <div className={styles.imageLayout} data-animate="text-fade-in">
-                            <img src="/images/cards/guilin.jpg" alt="漓江" />
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
