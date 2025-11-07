@@ -1,50 +1,31 @@
+// src/components/Header.module.scss
 .header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 1.5rem 2.5rem;
-    z-index: 10;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    color: #ffffff;
+  position: fixed; // 固定定位
+  top: 0; // 固定在顶部
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000; // 确保 Header 在其他内容之上
+  background-color: rgba(255, 255, 255, 0.3); // 添加背景色，确保内容可读
+  backdrop-filter: blur(10px); // 毛玻璃效果（可选）
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); // 添加阴影增强层次感
+  transition: all 0.3s ease; // 添加过渡效果
+  // 其他现有样式...
 }
 
-// 左侧按钮
-.logo {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #ffffff;
-    text-decoration: none;
+.headerLeft, .headerRight {
+  display: flex;
+  align-items: center;
+  gap: 1rem; // 按钮之间的间距
+
+ &.scrolled {
+    background-color: rgba(255, 255, 255, 0.98); // 滚动时背景更实
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); // 滚动时阴影更深
+  }
 }
 
-// 右侧按钮
-.headerRight {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-}
-
-// 单个图标按钮
-.iconButton {
-    color: #ffffff;
-    font-size: 1.3rem;
-    line-height: 1;
-    transition: opacity 0.3s ease;
-
-    &:hover {
-        opacity: 0.7;
-    }
-}
-
-// (可选) 汉堡菜单按钮的特殊样式
-.menuButton {
-    font-size: 1.5rem; // 汉堡菜单通常更大
-    // 在桌面端可以隐藏
-    // @media (min-width: 769px) {
-    //   display: none;
-    // }
-}
+// 其他现有样式保持不变...

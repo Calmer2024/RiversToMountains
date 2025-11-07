@@ -1,0 +1,314 @@
+// src/pages/BpcoPage.module.scss
+.bpcoPage {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #333;
+  line-height: 1.6;
+}
+
+// 导航栏样式
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 4rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #000;
+  }
+  
+  .navLinks {
+    display: flex;
+    list-style: none;
+    gap: 3rem;
+    
+    li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      transition: color 0.3s ease;
+      
+      &:hover {
+        color: #007bff;
+      }
+    }
+  }
+}
+
+// 主视觉区域
+.hero {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  
+  .heroContent {
+    text-align: center;
+    color: white;
+    z-index: 2;
+    max-width: 800px;
+    padding: 0 2rem;
+  }
+  
+  .heroTitle {
+    font-size: 4rem;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+  }
+  
+  .heroSubtitle {
+    font-size: 1.25rem;
+    margin-bottom: 3rem;
+    opacity: 0.9;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .ctaButton {
+    background: white;
+    color: #333;
+    border: none;
+    padding: 1rem 2.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+  }
+  
+  .heroBackground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('/images/hero-bg.jpg') center/cover;
+    opacity: 0.1;
+  }
+}
+
+// 通用容器
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+// 关于我们区域
+.about {
+  padding: 8rem 0;
+  background: #f8f9fa;
+  
+  .aboutContent {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .sectionTitle {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: #333;
+  }
+  
+  .aboutText {
+    font-size: 1.125rem;
+    color: #666;
+    margin-bottom: 4rem;
+    line-height: 1.8;
+  }
+  
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    
+    .stat {
+      text-align: center;
+      
+      .statNumber {
+        display: block;
+        font-size: 3rem;
+        font-weight: 700;
+        color: #007bff;
+        margin-bottom: 0.5rem;
+      }
+      
+      .statLabel {
+        font-size: 1rem;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+    }
+  }
+}
+
+// 作品展示区域
+.work {
+  padding: 8rem 0;
+  
+  .sectionTitle {
+    text-align: center;
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 4rem;
+    color: #333;
+  }
+  
+  .workGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 3rem;
+  }
+  
+  .workItem {
+    text-align: center;
+    
+    .workImage {
+      height: 200px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      transition: transform 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-5px);
+      }
+    }
+    
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+    
+    p {
+      color: #666;
+      line-height: 1.6;
+    }
+  }
+}
+
+// 联系区域
+.contact {
+  padding: 8rem 0;
+  background: #f8f9fa;
+  
+  .sectionTitle {
+    text-align: center;
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+  
+  .contactText {
+    text-align: center;
+    font-size: 1.125rem;
+    color: #666;
+    margin-bottom: 3rem;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .contactForm {
+    max-width: 600px;
+    margin: 0 auto;
+    
+    .formInput,
+    .formTextarea {
+      width: 100%;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+      
+      &:focus {
+        outline: none;
+        border-color: #007bff;
+      }
+    }
+    
+    .submitButton {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 1rem 2.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      
+      &:hover {
+        background: #0056b3;
+      }
+    }
+  }
+}
+
+// 页脚
+.footer {
+  background: #333;
+  color: white;
+  padding: 2rem 0;
+  text-align: center;
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .navbar {
+    padding: 1rem 2rem;
+    
+    .navLinks {
+      gap: 1.5rem;
+    }
+  }
+  
+  .hero {
+    .heroTitle {
+      font-size: 2.5rem;
+    }
+    
+    .heroSubtitle {
+      font-size: 1rem;
+    }
+  }
+  
+  .about {
+    .stats {
+      flex-direction: column;
+      gap: 2rem;
+    }
+  }
+  
+  .work {
+    .workGrid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
