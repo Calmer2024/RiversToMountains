@@ -14,6 +14,11 @@ import { SlideKangrinboqe } from './slides/SlideKangrinboqe';
 import { SlideProgressBar } from './slides/SlideProgressBar';
 import { SlideMuztaghAta } from './slides/SlideMuztaghAta';
 import { SlideSaltLake } from './slides/SlideSaltLake';
+import { SlideZhangyeDanxia } from './slides/SlideZhangyeDanxia';
+import { SlideChapterCarved } from './slides/SlideChapterCarved';
+import { SlideDualVideos } from './slides/SlideDualVideos';
+import { SlideFanjingshan } from './slides/SlideFanjingshan';
+import { SlideZhangjiajie } from './slides/SlideZhangjiajie';
 
 // 注册 GSAP 插件
 gsap.registerPlugin(ScrollTrigger, TextPlugin);
@@ -183,7 +188,7 @@ export const HorizontalStorySection: FC = () => {
                         <img src="/images/clouds/cloud3.png" alt="转场云" className={styles.cloudImage} />
                     </div>
 
-                    {/* 轨道现在只包含子组件 */}
+                    {/* 轨道只包含子组件 */}
                     <div className={styles.horizontalTrack} ref={horizontalTrackRef}>
                         <SlideIntro />
                         <SlideChapterStart />
@@ -193,6 +198,11 @@ export const HorizontalStorySection: FC = () => {
                         <SlideProgressBar />
                         <SlideMuztaghAta />
                         <SlideSaltLake />
+                        <SlideZhangyeDanxia />
+                        <SlideChapterCarved />
+                        <SlideDualVideos />
+                        <SlideFanjingshan />
+                        <SlideZhangjiajie />
                     </div>
                 </div>
             </section>

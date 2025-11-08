@@ -1,0 +1,34 @@
+/* [!] 修改类名 */
+.slideZhangjiajie {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+    /* 蒙层在您的代码中是注释掉的，这里保持一致 */
+}
+
+/* 样式与 慕士塔格峰 完全相同 */
+.fullScreenVideo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+/* 样式与 慕士塔格峰 完全相同 */
+.textContent {
+    h2 {
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    p {
+        color: #ffffffcb;
+        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+    }
+}

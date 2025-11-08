@@ -1,0 +1,206 @@
+/*
+[!] 重构说明:
+1. .slideDualVideos 将覆盖父级 .slide 的 padding (padding: 0)。
+2. .videoCard 将各占 50vw 宽度和 100vh 高度。
+3. .backgroundVideo 被 CSS background-image 替代。
+4. 添加了 .foregroundImage 和 .cornerText 样式。
+5. 悬停逻辑 .isHovered 控制 .blurMask 和 .textContent 的显示/隐藏。
+*/
+
+.slideDualVideos {
+    /* [!] 覆盖父组件的 padding，实现全屏 (Req 1 & 4) */
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+}
+
+/* 卡片 */
+.videoCard {
+    width: 50vw;
+    /* [!] 宽度 50% */
+    height: 100vh;
+    /* [!] 高度 100% (Req 4) */
+    position: relative;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+
+    /* [!] 关键修改 2: 添加一个永久的背景蒙版 */
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        /* 0.2 = 20% 黑色蒙版 */
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 2;
+        /* 位于噪点之上, 内容之下 */
+        pointer-events: none;
+        /* 允许鼠标穿透 */
+    }
+}
+
+/* [新] 为每个卡片设置背景图片 (Req 1) */
+.cardLeft {
+    background-image: url('/images/cards/jiuzhaigou-bg.jpg');
+    /* [!] 确保你有这个图片 */
+}
+
+.cardRight {
+    background-image: url('/images/cards/tiger-gorge-bg.jpg');
+    /* [!] 确保你有这个图片 */
+}
+
+/* 模糊蒙版 */
+.blurMask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    /* [!] 提高 z-index */
+
+    backdrop-filter: blur(12px) brightness(0.6);
+
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.6s ease;
+    will-change: opacity;
+}
+
+/* 主要文本 (九寨沟, 虎跳峡) - 悬停显示 */
+.textContent {
+    position: absolute;
+    z-index: 11;
+    /* [!] 提高 z-index */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    box-sizing: border-box;
+
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.6s ease 0.1s;
+    /* 延迟 0.1s 出现 */
+    will-change: opacity;
+
+    h2 {
+        font-family: "山海汲刻宋", serif;
+        font-size: clamp(2.5rem, 4vw, 4rem);
+        color: #fff;
+        margin: 0.5rem 0;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .stylishTitle {
+        font-family: "汉仪全唐诗简", serif;
+        font-size: clamp(1.1rem, 1.3vw, 1.3rem);
+        color: #ddd;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    p {
+        font-family: "汉仪全唐诗简", serif;
+        font-size: clamp(1rem, 1.1vw, 1.1rem);
+        color: #ccc;
+        line-height: 1.7;
+        max-width: 35ch;
+        margin-top: 1rem;
+        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+    }
+}
+
+/* [新] 前景图片 (Req 2) - 始终显示 */
+.foregroundImage {
+    position: absolute;
+    z-index: 5;
+    /* 在背景之上，在模糊蒙版之下 */
+
+    /* 尺寸 (可调) */
+    width: 18vw;
+    height: 18vw;
+
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    object-fit: cover;
+    border-radius: 4px;
+    /* 轻微圆角 */
+
+    /* 始终可见, 但在悬停时也保持过渡 */
+    transition: opacity 0.6s ease;
+}
+
+/* [新] 角标文本 (Req 3) - 始终显示 */
+.cornerTextTopLeft,
+.cornerTextTopRight {
+    position: absolute;
+    z-index: 6;
+    /* 在前景图片之上 */
+
+    font-family: 'Arial', sans-serif;
+    font-size: clamp(0.8rem, 0.5vw, 0.9rem);
+    color: #fff;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3rem;
+    /* 足够的边距 */
+
+    /* 始终可见, 但在悬停时也保持过渡 */
+    transition: opacity 0.6s ease;
+}
+
+.cornerTextTopLeft {
+    font-family: 'HFSimpleLife-2', sans-serif;
+    font-size: clamp(0.8rem, 1vw, 0.9rem);
+}
+
+.cornerTextTopLeft {
+    top: 0;
+    left: 0;
+}
+
+.cornerTextTopRight {
+    top: 0;
+    right: 0;
+}
+
+
+
+/* --- 悬停动画 --- */
+/* 当 .isHovered 类被 React 添加时... */
+
+.videoCard.isHovered {
+    .blurMask {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .textContent {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* [!] 悬停时，我们隐藏前景图和角标，只显示主文本 */
+    .foregroundImage,
+    .cornerTextTopLeft,
+    .cornerTextTopRight {
+        opacity: 0;
+        visibility: hidden;
+    }
+}

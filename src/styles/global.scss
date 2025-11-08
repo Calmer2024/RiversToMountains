@@ -39,17 +39,14 @@
     font-display: swap;
 }
 
-// @font-face {
-//     font-family: 'MyCustomFont-Subtitle';
-//     /* 这是你给英文字体起的名字 */
-//     src: url('../assets/fonts/YourEnglishFont.woff2') format('woff2');
-//     /* 相对路径！ */
-//     font-weight: 400;
-//     /* 假设这个文件是 400 字重 */
-//     font-style: italic;
-//     /* 假设这个文件是斜体 */
-//     font-display: swap;
-// }
+
+@font-face {
+    font-family: 'HFSimpleLife-2';
+    src: url('../assets/fonts/HFSimpleLife-2.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
 
 /* 现代 CSS 重置 (Reset)
    ------------------------------------------------------------------------ */

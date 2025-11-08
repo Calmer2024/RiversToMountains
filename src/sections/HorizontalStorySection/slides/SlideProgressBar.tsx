@@ -76,7 +76,7 @@ export const SlideProgressBar: FC = () => {
                     <div className={styles.progressBarFill} ref={progressFillRef}></div>
                 </div>
                 <p className={styles.loadingCaption}>
-                    OUR JOURNEY COMMENCES AT THE SUMMIT OF THE WORLD. THIS IS THE SOURCE OF THE GREAT RIVERS AND MOUNTAINS...
+                    OUR JOURNEY COMMENCES AT THE SUMMIT OF THE WORLD. THIS IS THE SOURCE OF THE GREAT RIVERS AND MOUNTAINS, WHERE SNOW-CAPPED PEAKS STAND IN SILENT GRANDEUR, GLACIERS GLITTER WITH ETERNAL LIGHT, AND LAKES LIE AS STILL AS MIRRORS, REVEALING THE PURE, MONUMENTAL SPLENDOR OF THE DAWN OF CREATION.
                 </p>
             </div>
         </div>
