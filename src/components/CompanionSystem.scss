@@ -1,0 +1,212 @@
+// src/components/CompanionSystem.scss
+.companion-trigger {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.companion-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 1400px;
+  height: 100vh;
+  max-height: 800px;
+  z-index: 999;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  
+  .companion-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 1s ease-in-out;
+    }
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0.6) 0%,
+        rgba(0, 0, 0, 0.4) 50%,
+        rgba(0, 0, 0, 0.6) 100%
+      );
+    }
+  }
+  
+  .companion-content {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    color: white;
+    text-align: center;
+    
+    h3 {
+      margin-bottom: 15px;
+      font-size: 24px;
+      font-weight: 600;
+    }
+  }
+}
+
+.pomodoro-section {
+  margin-bottom: 30px;
+  
+  .timer-display {
+    font-size: 48px;
+    font-weight: 300;
+    margin: 20px 0;
+    font-family: 'Courier New', monospace;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  
+  .timer-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    justify-content: center;
+    
+    .control-btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      
+      &.start {
+        background: #4CAF50;
+        color: white;
+        
+        &:hover {
+          background: #45a049;
+        }
+      }
+      
+      &.pause {
+        background: #ff9800;
+        color: white;
+        
+        &:hover {
+          background: #e68900;
+        }
+      }
+      
+      &.reset {
+        background: #f44336;
+        color: white;
+        
+        &:hover {
+          background: #da190b;
+        }
+      }
+    }
+  }
+  
+  .time-presets {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    
+    button {
+      padding: 6px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border-radius: 15px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+}
+
+.white-noise-section {
+  margin-bottom: 20px;
+  
+  .noise-btn {
+    padding: 10px 20px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    
+    &:hover,
+    &.active {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.8);
+    }
+  }
+}
+
+.image-info {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  
+  span {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-size: 12px;
+  }
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .companion-panel {
+    width: 95%;
+    height: 80vh;
+  }
+  
+  .pomodoro-section .timer-display {
+    font-size: 36px;
+  }
+}
