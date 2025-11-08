@@ -1,0 +1,59 @@
+/* [!] 修改类名 */
+.slideWaterInkWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 样式与 SlideChapterTitle.module.scss 完全相同 */
+.chapterTitleCard {
+    position: relative;
+    text-align: center;
+    top: -5vh; // 稍微上移
+
+    h2 {
+        font-family: "汉仪程行简", serif;
+        font-weight: 600;
+        font-size: clamp(2rem, 6vw, 7rem);
+        color: #ccc;
+    }
+
+    .divider {
+        width: 500px;
+        height: 1px;
+        background-color: rgba(255, 255, 255, 0.353);
+        margin: 1.5rem auto;
+        border-radius: 1px;
+    }
+
+    .chapterSubtitle {
+        font-family: "汉仪全唐诗简", serif;
+        font-size: clamp(1.3rem, 2vw, 3rem);
+        color: #d9d8d8;
+        letter-spacing: 2px;
+        font-weight: 400;
+        margin: 0;
+    }
+
+    p {
+        font-family: "汉仪全唐诗简", serif;
+        font-size: clamp(1.2rem, 1vw, 1.5rem);
+        color: #999999db;
+        letter-spacing: 1.5px;
+        margin-top: 10rem;
+    }
+
+    .chapterTitleWrapper {
+        position: relative;
+        display: inline-block;
+    }
+
+    .titleIcon {
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translate(120%, -10%);
+        width: 30px;
+        height: auto;
+    }
+}

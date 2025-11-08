@@ -42,7 +42,7 @@ export const SlideDualVideos: FC = () => {
 
                 {/* 6. 主要文本内容 (悬停显示) */}
                 <div className={styles.textContent}>
-                    <h3 className={styles.stylishTitle}>五彩瑶池</h3>
+                    <h3 className={styles.stylishTitle}>-五彩瑶池-</h3>
                     <h2>九寨沟</h2>
                     <p>神明打翻的调色盘。水是这里的主角，色彩是它的灵魂。</p>
                 </div>
@@ -77,7 +77,7 @@ export const SlideDualVideos: FC = () => {
 
                 {/* 6. 主要文本内容 (悬停显示) */}
                 <div className={styles.textContent}>
-                    <h3 className={styles.stylishTitle}>江河的咆哮</h3>
+                    <h3 className={styles.stylishTitle}>-江河的咆哮-</h3>
                     <h2>虎跳峡</h2>
                     <p>金沙江在此奔腾。聆听山川被“雕刻”的声音，感受原始的力量。</p>
                 </div>

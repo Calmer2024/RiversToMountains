@@ -19,6 +19,10 @@ import { SlideChapterCarved } from './slides/SlideChapterCarved';
 import { SlideDualVideos } from './slides/SlideDualVideos';
 import { SlideFanjingshan } from './slides/SlideFanjingshan';
 import { SlideZhangjiajie } from './slides/SlideZhangjiajie';
+import { SlideWaterInk } from './slides/SlideWaterInk';
+import { SlideGuilin } from './slides/SlideGuilin';
+import { SlideHuangshan } from './slides/SlideHuangshan';
+import { SlideLushan } from './slides/SlideLushan';
 
 // 注册 GSAP 插件
 gsap.registerPlugin(ScrollTrigger, TextPlugin);
@@ -203,6 +207,10 @@ export const HorizontalStorySection: FC = () => {
                         <SlideDualVideos />
                         <SlideFanjingshan />
                         <SlideZhangjiajie />
+                        <SlideWaterInk />
+                        <SlideGuilin />
+                        <SlideHuangshan />
+                        <SlideLushan />
                     </div>
                 </div>
             </section>
