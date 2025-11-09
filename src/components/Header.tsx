@@ -3,13 +3,13 @@ import { type FC, useState } from 'react';
 import { FiSearch, FiUser, FiMenu } from 'react-icons/fi';
 import { IoBookOutline } from "react-icons/io5";
 import { IconButton } from './IconButton';
-import { ChatDialog } from './ChatDialog'; // 导入对话框组件
 import { useNavigate } from 'react-router-dom';
+import { ChatDialog } from './ChatDialog'; // 确保导入ChatDialog
 import styles from './Header.module.scss';
 
 export const Header: FC = () => {
     const navigate = useNavigate();
-    const [isChatOpen, setIsChatOpen] = useState(false); // 对话框状态
+    const [isChatOpen, setIsChatOpen] = useState(false); // 添加弹窗状态
 
     return (
         <>
@@ -18,9 +18,9 @@ export const Header: FC = () => {
                 <div className={styles.headerLeft}>
                     <IconButton 
                         icon={<IoBookOutline />}
-                        ariaLabel="图鉴"
+                        ariaLabel="图鉴助手"
                         className={styles.iconButton}
-                        onClick={() => setIsChatOpen(true)} // 打开对话框
+                        onClick={() => setIsChatOpen(true)} // 恢复打开弹窗功能
                     />
                 </div>
 
@@ -44,16 +44,14 @@ export const Header: FC = () => {
 
                     <IconButton 
                         icon={<FiMenu />}
-                        ariaLabel="菜单"
+                        ariaLabel="意见反馈"
                         className={`${styles.iconButton} ${styles.menuButton}`}
-                        onClick={() => {
-                            console.log('打开菜单');
-                        }}
+                        onClick={() => navigate('/developer')}
                     />
                 </div>
             </header>
 
-            {/* 对话框组件 */}
+            {/* 图鉴助手弹窗 */}
             <ChatDialog 
                 isOpen={isChatOpen}
                 onClose={() => setIsChatOpen(false)}

@@ -1,0 +1,538 @@
+// src/sections/FeedbackPage.module.scss
+.feedbackPage {
+  font-family: 'SimHei', '黑体', 'Microsoft YaHei', '微软雅黑', sans-serif;
+  color: #333;
+  line-height: 1.6;
+  min-height: 100vh;
+  
+  // 动态背景设置
+  background: {
+    position: center center;
+    size: cover;
+    attachment: fixed;
+    repeat: no-repeat;
+  }
+  
+  position: relative;
+  transition: background-image 1s ease-in-out;
+  
+  // 添加深色遮罩层
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+  }
+  
+  // 确保内容在遮罩层之上
+  & > * {
+    position: relative;
+    z-index: 2;
+  }
+  
+  // 过渡状态
+  &.transitioning {
+    &::before {
+      background: rgba(0, 0, 0, 0.6);
+      transition: background 1s ease-in-out;
+    }
+  }
+}
+
+// 背景控制按钮
+.bgControls {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  z-index: 1001;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 0.5rem;
+  border-radius: 25px;
+  backdrop-filter: blur(10px);
+  
+  .bgControlButton {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+    
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+  
+  .bgIndicator {
+    color: white;
+    font-size: 0.9rem;
+    min-width: 50px;
+    text-align: center;
+  }
+}
+
+// 导航栏样式 - 增加顶部间距
+.navbar {
+  position: fixed;
+  top: 1rem; // 增加顶部间距
+  left: 1rem;
+  right: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  z-index: 1000;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px; // 添加圆角
+  max-width: calc(100% - 2rem); // 限制最大宽度
+  margin: 0 auto;
+  
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  }
+  
+  .navInfo {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+// 主内容区域 - 大幅增加顶部间距
+.mainContent {
+  padding: 8rem 0 2rem; // 增加顶部padding，让内容整体下移
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  width: 100%;
+}
+
+// 标题区域 - 增加底部间距
+.headerSection {
+  text-align: center;
+  margin-bottom: 3rem;
+  color: white;
+  
+  .pageTitle {
+    font-size: 2.5rem; // 稍微减小标题大小
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  
+  .pageSubtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+    color: #e0e0e0;
+  }
+}
+
+// 反馈表单区域 - 增加内部间距
+.feedbackFormSection {
+  margin-bottom: 3rem;
+}
+
+.formCard {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2.5rem;
+  border-radius: 15px;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  margin-top: 1rem; // 增加与标题的间距
+}
+
+.formTitle {
+  font-size: 1.8rem; // 减小表单标题大小
+  color: white;
+  margin-bottom: 2rem;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.successMessage,
+.errorMessage {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.successMessage {
+  background: rgba(212, 237, 218, 0.9);
+  color: #155724;
+  border: 1px solid rgba(195, 230, 203, 0.8);
+}
+
+.errorMessage {
+  background: rgba(248, 215, 218, 0.9);
+  color: #721c24;
+  border: 1px solid rgba(245, 198, 203, 0.8);
+}
+
+.feedbackForm {
+  .formRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem; // 增加表单项间距
+    margin-bottom: 2rem; // 增加行间距
+    
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+  
+  .formGroup {
+    margin-bottom: 2rem; // 增加表单项底部间距
+    
+    &:last-child {
+      margin-bottom: 1rem;
+    }
+  }
+  
+  .label {
+    display: block;
+    margin-bottom: 0.8rem; // 增加标签与输入框间距
+    font-weight: 600;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    font-size: 1rem;
+  }
+  
+  .formInput,
+  .formSelect,
+  .formTextarea {
+    width: 100%;
+    padding: 1.2rem; // 增加输入框内边距
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    color: #333;
+    transition: all 0.3s ease;
+    
+    &:focus {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.7);
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    &::placeholder {
+      color: #666;
+      font-size: 0.95rem;
+    }
+  }
+  
+  .formSelect {
+    background: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1rem;
+  }
+  
+  .formTextarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.5;
+  }
+  
+  .charCount {
+    text-align: right;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .submitButton {
+    width: 100%;
+    padding: 1.3rem; // 增加按钮内边距
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    margin-top: 1rem; // 增加按钮顶部间距
+    
+    &:hover:not(:disabled) {
+      background: linear-gradient(45deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.2));
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+  }
+}
+
+// 联系信息区域 - 增加间距
+.contactSection {
+  margin-bottom: 3rem;
+}
+
+.contactCard {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-top: 1rem;
+  
+  h3 {
+    margin: 0 0 1rem 0;
+    color: white;
+    font-size: 1.3rem;
+  }
+}
+
+.contactInfo {
+  .contactItem {
+    display: flex;
+    margin-bottom: 1rem; // 增加联系项间距
+    align-items: center;
+    
+    @media (max-width: 480px) {
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 0.8rem;
+    }
+  }
+  
+  .contactLabel {
+    font-weight: 600;
+    min-width: 100px;
+    color: rgba(255, 255, 255, 0.9);
+    margin-right: 1rem;
+  }
+  
+  .contactLink {
+    color: #4fc3f7;
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  
+  span {
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+// 常见问题区域 - 增加间距
+.faqSection {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 10px;
+  margin-bottom: 3rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-top: 1rem;
+  
+  h3 {
+    margin: 0 0 1.5rem 0;
+    color: white;
+    font-size: 1.3rem;
+  }
+}
+
+.faqList {
+  .faqItem {
+    margin-bottom: 1.5rem;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+    
+    strong {
+      display: block;
+      margin-bottom: 0.8rem; // 增加问题与答案间距
+      color: white;
+      font-size: 1rem;
+    }
+    
+    p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+  }
+}
+
+// 返回按钮区域 - 增加顶部间距
+.backSection {
+  text-align: center;
+  margin-top: 2rem; // 增加返回按钮顶部间距
+}
+
+.backButton {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+  }
+}
+
+// 响应式设计调整
+@media (max-width: 768px) {
+  .navbar {
+    top: 0.5rem;
+    left: 0.5rem;
+    right: 0.5rem;
+    padding: 0.8rem 1rem;
+    max-width: calc(100% - 1rem);
+    
+    .logo {
+      font-size: 1.3rem;
+    }
+    
+    .navInfo {
+      font-size: 0.8rem;
+    }
+  }
+  
+  .mainContent {
+    padding: 6rem 0 1rem; // 移动端调整顶部间距
+  }
+  
+  .container {
+    padding: 0 1rem;
+  }
+  
+  .headerSection {
+    margin-bottom: 2rem;
+    
+    .pageTitle {
+      font-size: 2rem;
+    }
+    
+    .pageSubtitle {
+      font-size: 1rem;
+    }
+  }
+  
+  .formCard {
+    padding: 1.5rem;
+    margin-top: 0.5rem;
+  }
+  
+  .formTitle {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .feedbackForm {
+    .formRow {
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .formGroup {
+      margin-bottom: 1.5rem;
+    }
+    
+    .formInput,
+    .formSelect,
+    .formTextarea {
+      padding: 1rem;
+    }
+  }
+  
+  .contactCard,
+  .faqSection {
+    padding: 1.5rem;
+    margin-top: 0.5rem;
+  }
+  
+  .contactItem {
+    margin-bottom: 0.8rem;
+  }
+  
+  .backSection {
+    margin-top: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .mainContent {
+    padding: 5rem 0 1rem;
+  }
+  
+  .headerSection {
+    .pageTitle {
+      font-size: 1.8rem;
+    }
+  }
+  
+  .formCard {
+    padding: 1rem;
+  }
+  
+  .feedbackForm {
+    .formRow {
+      margin-bottom: 1rem;
+    }
+    
+    .formGroup {
+      margin-bottom: 1rem;
+    }
+    
+    .label {
+      margin-bottom: 0.5rem;
+    }
+  }
+}
