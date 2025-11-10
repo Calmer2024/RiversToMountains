@@ -1,6 +1,7 @@
-// src/sections/BpcoPage.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import styles from './BpcoPage.module.scss';
+import { AiOutlineCaretLeft, AiOutlineCaretRight } from "react-icons/ai";
 
 interface Message {
   id: number;
@@ -10,7 +11,6 @@ interface Message {
   avatar?: string;
 }
 
-// 背景图片数组 - 使用您提供的图片路径
 const backgroundImages = [
   '/images/cards/guilin.jpg',
   '/images/cards/huangshan.jpg',
@@ -19,8 +19,15 @@ const backgroundImages = [
   '/images/cards/zhangye.jpg'
 ];
 
-const BpcoPage: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([
+export default function BpcoPage() {
+  const location = useLocation();
+
+  const scrollerRef = useRef<HTMLDivElement | null>(null);
+  const publishCardRef = useRef<HTMLDivElement | null>(null);
+
+  const [newMessage, setNewMessage] = useState({ name: '', content: '' });
+
+  const [messages] = useState<Message[]>([
     {
       id: 1,
       name: '山河爱好者',
@@ -44,152 +51,126 @@ const BpcoPage: React.FC = () => {
     }
   ]);
 
-  const [newMessage, setNewMessage] = useState({
-    name: '',
-    content: ''
-  });
-
   const [currentBgIndex, setCurrentBgIndex] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // 背景轮播效果
+  // 背景自动轮播
   useEffect(() => {
-    const timer = setInterval(() => {
-      if (backgroundImages.length <= 1) return;
-      
-      setIsTransitioning(true);
-      setTimeout(() => {
-        setCurrentBgIndex((prev) => (prev + 1) % backgroundImages.length);
-        setIsTransitioning(false);
-      }, 1000);
+    const t = setInterval(() => {
+      setCurrentBgIndex(p => (p + 1) % backgroundImages.length);
     }, 5000);
-
-    return () => clearInterval(timer);
+    return () => clearInterval(t);
   }, []);
 
-  // 手动切换背景
-  const nextBackground = () => {
-    if (backgroundImages.length <= 1) return;
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentBgIndex((prev) => (prev + 1) % backgroundImages.length);
-      setIsTransitioning(false);
-    }, 1000);
+  // 进入页面/路由切换时 → 居中发布新留言
+  useEffect(() => {
+    const container = scrollerRef.current;
+    const firstCard = publishCardRef.current;
+    if (!container || !firstCard) return;
+    requestAnimationFrame(() => {
+      const offset = firstCard.offsetLeft - (container.clientWidth - firstCard.clientWidth) / 2;
+      container.scrollTo({ left: offset, behavior: 'auto' });
+    });
+  }, [location.pathname]);
+
+  // 辅助函数：居中某一 index 的卡
+  const scrollToCard = (index: number) => {
+    const container = scrollerRef.current;
+    if (!container) return;
+
+    const cards = Array.from(container.children) as HTMLElement[];
+    if (!cards[index]) return;
+
+    const card = cards[index];
+    const offset = card.offsetLeft - (container.clientWidth - card.clientWidth) / 2;
+    container.scrollTo({ left: offset, behavior: 'smooth' });
   };
 
-  const prevBackground = () => {
-    if (backgroundImages.length <= 1) return;
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentBgIndex((prev) => (prev - 1 + backgroundImages.length) % backgroundImages.length);
-      setIsTransitioning(false);
-    }, 1000);
+  // 点击 左/右按钮
+  const gotoPrev = () => {
+    const container = scrollerRef.current;
+    if (!container) return;
+    const center = container.scrollLeft + container.clientWidth / 2;
+    const cards = Array.from(container.children) as HTMLElement[];
+
+    // 找当前
+    let currentIndex = 0;
+    let bestDist = Infinity;
+    cards.forEach((card, i) => {
+      const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+      const dist = Math.abs(cardCenter - center);
+      if (dist < bestDist) {
+        bestDist = dist;
+        currentIndex = i;
+      }
+    });
+
+    if (currentIndex > 0) scrollToCard(currentIndex - 1);
+  };
+
+  const gotoNext = () => {
+    const container = scrollerRef.current;
+    if (!container) return;
+    const center = container.scrollLeft + container.clientWidth / 2;
+    const cards = Array.from(container.children) as HTMLElement[];
+
+    let currentIndex = 0;
+    let bestDist = Infinity;
+    cards.forEach((card, i) => {
+      const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+      const dist = Math.abs(cardCenter - center);
+      if (dist < bestDist) {
+        bestDist = dist;
+        currentIndex = i;
+      }
+    });
+
+    if (currentIndex < cards.length - 1) scrollToCard(currentIndex + 1);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newMessage.name.trim() || !newMessage.content.trim()) return;
-
-    const message: Message = {
-      id: messages.length + 1,
-      name: newMessage.name,
-      content: newMessage.content,
-      timestamp: new Date().toLocaleString('zh-CN'),
-      avatar: '💬'
-    };
-
-    setMessages([message, ...messages]);
-    setNewMessage({ name: '', content: '' });
+    alert("提交逻辑在这里执行，你可以对接后台");
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setNewMessage(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setNewMessage(prev => ({ ...prev, [name]: value }));
   };
 
   return (
-    <div 
-      className={`${styles.bpcoPage} ${isTransitioning ? styles.transitioning : ''}`}
+    <div
+      className={styles.bpcoPage}
       style={{ backgroundImage: `url(${backgroundImages[currentBgIndex]})` }}
     >
-      {/* 背景控制按钮 */}
-      {backgroundImages.length > 1 && (
-        <div className={styles.bgControls}>
-          <button 
-            className={styles.bgControlButton}
-            onClick={prevBackground}
-            aria-label="上一张背景"
-          >
-            ‹
-          </button>
-          <div className={styles.bgIndicator}>
-            {currentBgIndex + 1} / {backgroundImages.length}
-          </div>
-          <button 
-            className={styles.bgControlButton}
-            onClick={nextBackground}
-            aria-label="下一张背景"
-          >
-            ›
-          </button>
-        </div>
-      )}
 
-      {/* 导航栏 */}
-      <nav className={styles.navbar}>
-        <div className={styles.logo}>山河留言板</div>
-        <div className={styles.navInfo}>分享你的山河故事</div>
-      </nav>
+      {/* 左右按钮 */}
+      <button className={styles.arrowLeft} onClick={gotoPrev}>
+        <AiOutlineCaretLeft />
+      </button>
 
-      {/* 主视觉区域 */}
-      <section className={styles.hero}>
-        <div className={styles.heroContent}>
-          <h1 className={styles.heroTitle}>
-            山河图鉴
-            <br />
-            笔墨山河 · 留白天地
-          </h1>
-          <p className={styles.heroSubtitle}>
-            在这里分享你的旅行见闻、摄影心得和山河故事
-          </p>
-        </div>
-      </section>
+      <div className={styles.cardsScroller} ref={scrollerRef}>
 
-      {/* 留言表单区域 */}
-      <section className={styles.messageForm}>
-        <div className={styles.container}>
+        {/* 第一张：发布新留言 */}
+        <div className={styles.messageCard} ref={publishCardRef}>
           <h2 className={styles.sectionTitle}>发布新留言</h2>
           <form onSubmit={handleSubmit} className={styles.form}>
-            <div className={styles.formGroup}>
-              <input
-                type="text"
-                name="name"
-                value={newMessage.name}
-                onChange={handleInputChange}
-                placeholder="你的昵称"
-                className={styles.formInput}
-                maxLength={20}
-              />
-            </div>
-            <div className={styles.formGroup}>
-              <textarea
-                name="content"
-                value={newMessage.content}
-                onChange={handleInputChange}
-                placeholder="分享你的山河故事、旅行见闻或摄影心得..."
-                rows={4}
-                className={styles.formTextarea}
-                maxLength={500}
-              />
-              <div className={styles.charCount}>
-                {newMessage.content.length}/500
-              </div>
-            </div>
-            <button 
-              type="submit" 
+            <input
+              className={styles.input}
+              type="text"
+              name="name"
+              placeholder="你的昵称"
+              value={newMessage.name}
+              onChange={handleInput}
+            />
+            <textarea
+              className={styles.textarea}
+              name="content"
+              placeholder="分享你的山河故事…"
+              rows={6}
+              value={newMessage.content}
+              onChange={handleInput}
+            />
+            <button
               className={styles.submitButton}
               disabled={!newMessage.name.trim() || !newMessage.content.trim()}
             >
@@ -197,47 +178,20 @@ const BpcoPage: React.FC = () => {
             </button>
           </form>
         </div>
-      </section>
 
-      {/* 留言列表区域 */}
-      <section className={styles.messages}>
-        <div className={styles.container}>
-          <h2 className={styles.sectionTitle}>
-            最新留言
-            <span className={styles.messageCount}>({messages.length} 条)</span>
-          </h2>
-          
-          <div className={styles.messagesList}>
-            {messages.map((message) => (
-              <div key={message.id} className={styles.messageItem}>
-                <div className={styles.messageHeader}>
-                  <span className={styles.avatar}>{message.avatar}</span>
-                  <div className={styles.userInfo}>
-                    <span className={styles.userName}>{message.name}</span>
-                    <span className={styles.timestamp}>{message.timestamp}</span>
-                  </div>
-                </div>
-                <div className={styles.messageContent}>
-                  {message.content}
-                </div>
-                <div className={styles.messageActions}>
-                  <button className={styles.actionButton}>👍 赞</button>
-                  <button className={styles.actionButton}>💬 回复</button>
-                </div>
-              </div>
-            ))}
+        {/* 后续留言卡片 */}
+        {messages.map(m => (
+          <div key={m.id} className={styles.messageCard}>
+            <h3 className={styles.cardTitle}>{m.name}</h3>
+            <div className={styles.content}>{m.content}</div>
+            <div className={styles.timestamp}>{m.timestamp}</div>
           </div>
-        </div>
-      </section>
+        ))}
+      </div>
 
-      {/* 页脚 */}
-      <footer className={styles.footer}>
-        <div className={styles.container}>
-          <p>&copy; 2025 山河图鉴留言板. 记录每一段山河故事.</p>
-        </div>
-      </footer>
+      <button className={styles.arrowRight} onClick={gotoNext}>
+        <AiOutlineCaretRight />
+      </button>
     </div>
   );
-};
-
-export default BpcoPage;
+}

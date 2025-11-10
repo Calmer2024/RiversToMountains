@@ -1,430 +1,111 @@
-// src/sections/BpcoPage.module.scss
 .bpcoPage {
-  font-family: 'KaiTi', '楷体', 'STKaiti', '华文楷体', 'SimKai', serif;
-  color: #333;
-  line-height: 1.6;
-  min-height: 100vh;
-  
-  // 动态背景设置
-  background: {
-    position: center center;
-    size: cover;
-    attachment: fixed;
-    repeat: no-repeat;
-  }
-  
-  position: relative;
-  transition: background-image 1s ease-in-out;
-  
-  // 添加深色遮罩层
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 1;
-  }
-  
-  // 确保内容在遮罩层之上
-  & > * {
-    position: relative;
-    z-index: 2;
-  }
-  
-  // 过渡状态
-  &.transitioning {
-    &::before {
-      background: rgba(0, 0, 0, 0.6);
-      transition: background 1s ease-in-out;
-    }
-  }
-}
-
-// 背景控制按钮
-.bgControls {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  z-index: 1001;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 0.5rem;
-  border-radius: 25px;
-  backdrop-filter: blur(10px);
-  
-  .bgControlButton {
-    width: 40px;
-    height: 40px;
-    border: none;
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 1.2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    
-    &:hover {
-      background: rgba(255, 255, 255, 0.3);
-      transform: scale(1.1);
-    }
-    
-    &:active {
-      transform: scale(0.95);
-    }
-  }
-  
-  .bgIndicator {
-    color: white;
-    font-size: 0.9rem;
-    min-width: 50px;
-    text-align: center;
-  }
-}
-
-// 导航栏样式
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(15px);
-  z-index: 1000;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  
-  .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: white;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-  }
-  
-  .navInfo {
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.8);
-  }
-}
-
-// 主视觉区域
-.hero {
+  width: 100vw;
   height: 100vh;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+/* 横向滚动区域 */
+.cardsScroller {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  padding: 0 40px;
+}
+
+/* 每张卡片 40vw */
+.messageCard {
+  width: 40vw;
+  min-width: 40vw;
+  height: 80%;
+  align-self: center;
+
+  background: rgba(255,255,255,0.16);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 32px;
+  scroll-snap-align: center;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+  color: white;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.sectionTitle { font-size: 26px; margin-bottom: 20px; }
+
+.form { display: flex; flex-direction: column; gap: 20px; }
+
+.input,
+.textarea {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  border-radius: 12px;
+  padding: 12px;
+  color: white;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: rgba(255,255,255,0.7);
+}
+
+.submitButton {
+  background: rgba(255,255,255,0.4);
+  border: none;
+  border-radius: 12px;
+  padding: 10px 16px;
+  cursor: pointer;
+  color: black;
+  font-weight: 600;
+}
+
+.submitButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.cardTitle { font-size: 22px; font-weight: 600; }
+.content { margin: 14px 0; flex-grow: 1; line-height: 1.5; }
+.timestamp { opacity: 0.7; font-size: 14px; }
+
+.arrowLeft,
+.arrowRight {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  background: rgba(255,255,255,0.25);
+  backdrop-filter: blur(10px);
+  border: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  
-  .heroContent {
-    text-align: center;
-    color: white;
-    z-index: 2;
-    max-width: 800px;
-    padding: 0 2rem;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
-  }
-  
-  .heroTitle {
-    font-size: 3.5rem;
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 1.5rem;
-    letter-spacing: 0.1em;
-  }
-  
-  .heroSubtitle {
-    font-size: 1.3rem;
-    margin-bottom: 2rem;
-    opacity: 0.9;
-    line-height: 1.6;
-  }
-}
-
-// 通用容器
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 2rem;
-}
-
-// 章节标题
-.sectionTitle {
-  text-align: center;
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 2rem;
+  cursor: pointer;
   color: white;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-  
-  .messageCount {
-    font-size: 1rem;
-    opacity: 0.8;
-    margin-left: 0.5rem;
-  }
+  font-size: 26px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+  transition: all 0.25s cubic-bezier(.22, .61, .36, 1);
+  opacity: 0.5;
 }
 
-// 留言表单区域
-.messageForm {
-  padding: 4rem 0;
-  
-  .form {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 2.5rem;
-    border-radius: 15px;
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  }
-  
-  .formGroup {
-    margin-bottom: 1.5rem;
-  }
-  
-  .formInput,
-  .formTextarea {
-    width: 100%;
-    padding: 1rem 1.5rem;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.9);
-    font-size: 1rem;
-    color: #333;
-    transition: all 0.3s ease;
-    
-    &:focus {
-      outline: none;
-      border-color: rgba(255, 255, 255, 0.7);
-      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
-      background: rgba(255, 255, 255, 1);
-    }
-    
-    &::placeholder {
-      color: #666;
-    }
-  }
-  
-  .formTextarea {
-    resize: vertical;
-    min-height: 120px;
-  }
-  
-  .charCount {
-    text-align: right;
-    font-size: 0.8rem;
-    margin-top: 0.5rem;
-    color: rgba(255, 255, 255, 0.7);
-  }
-  
-  .submitButton {
-    width: 100%;
-    padding: 1.2rem;
-    background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    
-    &:hover:not(:disabled) {
-      background: linear-gradient(45deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.2));
-      transform: translateY(-2px);
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-    }
-    
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-    }
-  }
+.arrowLeft:hover,
+.arrowRight:hover {
+  transform: translateY(-50%) scale(1.12);
+  opacity: 1;
+  box-shadow: 0 0 20px rgba(255,255,255,0.8);
 }
 
-// 留言列表区域
-.messages {
-  padding: 4rem 0;
-  
-  .messagesList {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-  
-  .messageItem {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 2rem;
-    border-radius: 15px;
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    
-    &:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      border-color: rgba(255, 255, 255, 0.3);
-    }
-  }
-  
-  .messageHeader {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-    
-    .avatar {
-      font-size: 1.8rem;
-      margin-right: 1rem;
-      width: 50px;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-    }
-    
-    .userInfo {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-      
-      .userName {
-        font-weight: 600;
-        font-size: 1.2rem;
-        color: white;
-      }
-      
-      .timestamp {
-        font-size: 0.9rem;
-        color: rgba(255, 255, 255, 0.7);
-      }
-    }
-  }
-  
-  .messageContent {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-    color: white;
-  }
-  
-  .messageActions {
-    display: flex;
-    gap: 1rem;
-    
-    .actionButton {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      padding: 0.5rem 1.5rem;
-      border-radius: 20px;
-      color: white;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(5px);
-      
-      &:hover {
-        background: rgba(255, 255, 255, 0.2);
-        transform: translateY(-1px);
-      }
-    }
-  }
-}
-
-// 页脚
-.footer {
-  background: rgba(0, 0, 0, 0.2);
-  color: rgba(255, 255, 255, 0.7);
-  padding: 2rem 0;
-  text-align: center;
-  backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-// 响应式设计
-@media (max-width: 768px) {
-  .bgControls {
-    bottom: 1rem;
-    right: 1rem;
-    flex-direction: column;
-    gap: 0.5rem;
-    
-    .bgIndicator {
-      writing-mode: vertical-lr;
-      min-width: auto;
-    }
-  }
-  
-  .navbar {
-    padding: 1rem;
-    flex-direction: column;
-    gap: 0.5rem;
-    
-    .logo {
-      font-size: 1.3rem;
-    }
-    
-    .navInfo {
-      font-size: 0.8rem;
-    }
-  }
-  
-  .hero {
-    height: 70vh;
-    padding-top: 120px;
-    
-    .heroTitle {
-      font-size: 2.5rem;
-    }
-    
-    .heroSubtitle {
-      font-size: 1.1rem;
-    }
-  }
-  
-  .container {
-    padding: 0 1rem;
-  }
-  
-  .messageForm {
-    padding: 2rem 0;
-    
-    .form {
-      padding: 1.5rem;
-    }
-  }
-  
-  .messages {
-    padding: 2rem 0;
-    
-    .sectionTitle {
-      font-size: 2rem;
-    }
-  }
-  
-  .messageItem {
-    padding: 1.5rem;
-  }
-  
-  .messageActions {
-    flex-direction: column;
-    gap: 0.5rem;
-    
-    .actionButton {
-      width: 100%;
-      text-align: center;
-    }
-  }
-}
+.arrowLeft { left: 20px; }
+.arrowRight { right: 20px; }

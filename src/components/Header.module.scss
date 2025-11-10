@@ -1,31 +1,42 @@
-// src/components/Header.module.scss
 .header {
-  position: fixed; // 固定定位
-  top: 0; // 固定在顶部
+  position: fixed;
+  top: 0;
   left: 0;
   right: 0;
   width: 100%;
-  z-index: 1000; // 确保 Header 在其他内容之上
-  background-color: rgba(255, 255, 255, 0.3); // 添加背景色，确保内容可读
-  backdrop-filter: blur(10px); // 毛玻璃效果（可选）
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); // 添加阴影增强层次感
-  transition: all 0.3s ease; // 添加过渡效果
-  // 其他现有样式...
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 .headerLeft, .headerRight {
   display: flex;
   align-items: center;
-  gap: 1rem; // 按钮之间的间距
-
- &.scrolled {
-    background-color: rgba(255, 255, 255, 0.98); // 滚动时背景更实
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); // 滚动时阴影更深
+  gap: 1rem;
+  &.scrolled {
+    background-color: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   }
 }
 
-// 其他现有样式保持不变...
+/* ↓↓↓ 在底部追加 ↓↓↓ */
+
+/* 首页完全透明 */
+.homeTransparent {
+  background-color: transparent !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+/* 毛玻璃 */
+.headerGlass {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+}

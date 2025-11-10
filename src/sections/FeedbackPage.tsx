@@ -150,7 +150,7 @@ const FeedbackPage: React.FC = () => {
       <main className={styles.mainContent}>
         <div className={styles.container}>
           <div className={styles.headerSection}>
-            <h1 className={styles.pageTitle}>💌 用户意见箱</h1>
+            <h1 className={styles.pageTitle}>用户意见箱</h1>
             <p className={styles.pageSubtitle}>
               感谢您使用山河图鉴！我们珍视每一位用户的反馈，您的建议将帮助我们不断改进。
             </p>
@@ -169,7 +169,7 @@ const FeedbackPage: React.FC = () => {
               
               {submitStatus === 'error' && (
                 <div className={styles.errorMessage}>
-                  ❌ 发送失败，请稍后重试或直接发送邮件至：suwei@example.com
+                  发送失败，请稍后重试或直接发送邮件至：suwei@example.com
                 </div>
               )}
 
@@ -269,7 +269,7 @@ const FeedbackPage: React.FC = () => {
                   className={styles.submitButton}
                   disabled={isSubmitting || !feedback.name || !feedback.email || !feedback.subject || !feedback.message}
                 >
-                  {isSubmitting ? '发送中...' : '📤 发送反馈'}
+                  {isSubmitting ? '发送中...' : '发送反馈'}
                 </button>
               </form>
             </div>
@@ -278,7 +278,7 @@ const FeedbackPage: React.FC = () => {
           {/* 联系信息 */}
           <div className={styles.contactSection}>
             <div className={styles.contactCard}>
-              <h3>📞 其他联系方式</h3>
+              <h3>其他联系方式</h3>
               <div className={styles.contactInfo}>
                 <div className={styles.contactItem}>
                   <span className={styles.contactLabel}>邮箱地址：</span>
@@ -300,7 +300,7 @@ const FeedbackPage: React.FC = () => {
 
           {/* 常见问题 */}
           <div className={styles.faqSection}>
-            <h3>❓ 反馈前请阅读</h3>
+            <h3>反馈前请阅读</h3>
             <div className={styles.faqList}>
               <div className={styles.faqItem}>
                 <strong>如何让反馈更有效？</strong>
