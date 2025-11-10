@@ -23,6 +23,7 @@ import { SlideWaterInk } from './slides/SlideWaterInk';
 import { SlideGuilin } from './slides/SlideGuilin';
 import { SlideHuangshan } from './slides/SlideHuangshan';
 import { SlideLushan } from './slides/SlideLushan';
+import { SlideEpilogue } from './slides/SlideEpilogue';
 
 // 注册 GSAP 插件
 gsap.registerPlugin(ScrollTrigger, TextPlugin);
@@ -211,6 +212,7 @@ export const HorizontalStorySection: FC = () => {
                         <SlideGuilin />
                         <SlideHuangshan />
                         <SlideLushan />
+                        <SlideEpilogue />
                     </div>
                 </div>
             </section>
