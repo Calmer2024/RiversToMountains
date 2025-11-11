@@ -68,7 +68,7 @@ export const HorizontalStorySection: FC = () => {
             return;
         }
 
-        // --- 创建 "主时间轴" (Master Timeline) ---
+        // --- 创建 "主时间轴"  ---
         let ctx = gsap.context(() => {
             const clouds = gsap.utils.toArray(cloudContainer.querySelectorAll("img"));
             if (clouds.length === 0) {
@@ -80,22 +80,22 @@ export const HorizontalStorySection: FC = () => {
                 scrollTrigger: {
                     trigger: pinContainer,
                     start: "top top",
-                    end: `+=${scrollDistance + (window.innerHeight * 2)}`,
+                    end: `+=${scrollDistance + (window.innerHeight * 1)}`,
                     scrub: 1.5,
                     pin: true,
                     invalidateOnRefresh: true,
                 }
             });
 
-            // --- Phase 1, 2, 3: “电影开场”和“云层”动画 ---
+            // --- Phase 1: “电影开场”和“云层”转场 ---
             masterTimeline.fromTo(introGroup2,
                 { autoAlpha: 0, y: 20 },
-                { autoAlpha: 1, y: 0, duration: 10 }
+                { autoAlpha: 1, y: 0, duration: 3 }
             );
-            masterTimeline.to(introGroup2, { duration: 10 });
+            masterTimeline.to(introGroup2, { duration: 1 });
             masterTimeline.add("startCloudCover");
             masterTimeline.to(introGroup2,
-                { autoAlpha: 0, duration: 10 },
+                { autoAlpha: 0, duration: 3 },
                 "startCloudCover"
             );
             masterTimeline.fromTo(clouds,
@@ -110,7 +110,7 @@ export const HorizontalStorySection: FC = () => {
                     scale: 2.0,
                     xPercent: (i) => [-20, 0, 20][i],
                     yPercent: 0,
-                    duration: 15,
+                    duration: 5,
                     stagger: 0.1
                 },
                 "startCloudCover"
@@ -123,7 +123,7 @@ export const HorizontalStorySection: FC = () => {
                 autoAlpha: 0,
                 scale: 3,
                 xPercent: (i) => (i - 1) * 150,
-                duration: 20,
+                duration: 7,
                 stagger: 0.1
             }, "startScroll");
 
@@ -140,7 +140,7 @@ export const HorizontalStorySection: FC = () => {
             // 3. 将 Tween 存储在 State 中，以传递给 Context
             setHorizontalTween(tween);
 
-            // Phase 5: “其他幻灯片”的淡入动画 
+            // Phase 2: “其他幻灯片”的淡入动画 
             otherAnimatedElements.forEach((el: any) => {
                 gsap.fromTo(el,
                     { autoAlpha: 0, y: 50 },
@@ -150,7 +150,7 @@ export const HorizontalStorySection: FC = () => {
                         ease: "power2.out",
                         scrollTrigger: {
                             trigger: el,
-                            containerAnimation: tween, // [!] 挂载到 tween
+                            containerAnimation: tween, 
                             start: "left 80%",
                             toggleActions: "play none none reverse",
                         }

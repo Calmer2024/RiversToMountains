@@ -16,7 +16,7 @@ function App() {
         logoAlt="山河奇景 网站 Logo"
         subtitle="A sanctuary nestled in the classic landscapes of China​"
       />
-      <CardCarousel />
+      {/* <CardCarousel /> */}
       <StoryHeaderSection />
       <HorizontalStorySection />
 

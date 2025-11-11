@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, type FC, type ChangeEvent } from 'react';
 import styles from './StoryHeaderSection.module.scss';
 
-// [!code focus:start]
 // --- SVG 图标 ---
 const IconMusic = () => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
@@ -26,7 +25,6 @@ const IconVolume = () => (
         <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
     </svg>
 );
-// [!code focus:end]
 
 
 export const StoryHeaderSection: FC = () => {
@@ -150,7 +148,7 @@ export const StoryHeaderSection: FC = () => {
             {/* --- 音乐播放器 UI --- */}
             <div className={styles.musicPlayer}>
 
-                {/* 1. 音乐图标  */}
+                {/* 音乐图标  */}
                 <button
                     onClick={toggleExpand}
                     className={`${styles.toggleExpandButton} ${isPlaying ? styles.isPlaying : ''}`}
@@ -159,7 +157,7 @@ export const StoryHeaderSection: FC = () => {
                     <IconMusic />
                 </button>
 
-                {/* 2. 可折叠的控制器 */}
+                {/* 可折叠的控制器 */}
                 <div
                     className={`${styles.controlsContainer} ${isExpanded ? styles.isExpanded : ''}`}
                 >
