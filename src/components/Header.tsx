@@ -30,7 +30,11 @@ export const Header: FC = () => {
                 </a>
 
                 {/* 菜单 */}
-                <a href="#" className={styles.iconButton + ' ' + styles.menuButton} aria-label="菜单">
+                <a href="/thanks.html" 
+                    className={styles.iconButton} 
+                    aria-label="团队风采"
+                    title="查看团队风采"
+                >
                     <FiMenu />
                 </a>
             </div>
