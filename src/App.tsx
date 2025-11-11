@@ -1,32 +1,39 @@
-// src/App.tsx
-import React from 'react';
+import React, { useState } from 'react'; 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-// App.tsx
-import { useState } from 'react';
-import HeroSection from './sections/HeroSection';
 import './styles/global.scss';
-import { Header } from './components/Header';
-import { CardCarousel } from './sections/CardCarousel';
-import { HorizontalStorySection } from './sections/HorizontalStorySection/HorizontalStorySection';
-import { StoryHeaderSection } from './sections/StoryHeaderSection';
-import BpcoPage from './sections/BpcoPage';
-import FeedbackPage from './sections/FeedbackPage'; // 替换为意见箱页面
 
-function HomePage() {
+// 组件
+import { Header } from './components/Header';
 import OpeningAnimation from './components/OpeningAnimation';
 import CompanionSystem from './components/CompanionSystem';
 
-function App() {
+// 页面
+import BpcoPage from './sections/BpcoPage';
+import FeedbackPage from './sections/FeedbackPage';
+
+// 区域 (Sections)
+import HeroSection from './sections/HeroSection';
+// import { CardCarousel } from './sections/CardCarousel';
+import { HorizontalStorySection } from './sections/HorizontalStorySection/HorizontalStorySection';
+import { StoryHeaderSection } from './sections/StoryHeaderSection';
+
+/**
+ * 主页组件
+ * 包含了开场动画和主页所有内容
+ */
+function HomePage() {
   const [animationCompleted, setAnimationCompleted] = useState(false);
 
   const handleAnimationComplete = () => {
     setAnimationCompleted(true);
   };
 
+  // 动画未完成时，只显示动画
   if (!animationCompleted) {
     return <OpeningAnimation onAnimationComplete={handleAnimationComplete} />;
   }
 
+  // 动画完成后，显示主页内容
   return (
     <div className="app-container">
       <Header />
@@ -38,23 +45,30 @@ function App() {
         subtitle="A sanctuary nestled in the classic landscapes of China"
         buttonLink="/bpco"
       />
-      {/* <CardCarousel /> */}
+      {/* <CardCarousel />  */}
       <StoryHeaderSection />
       <HorizontalStorySection />
-
-      <CardCarousel />
       <CompanionSystem />
     </div>
   );
 }
 
+/**
+ * 根组件
+ * 负责处理应用级路由
+ */
 function App() {
   return (
     <Router>
       <Routes>
+        {/* 路由：主页 */}
         <Route path="/" element={<HomePage />} />
+        
+        {/* 路由：Bpco 页面 */}
         <Route path="/bpco" element={<BpcoPage />} />
-        <Route path="/developer" element={<FeedbackPage />} /> {/* 替换为意见箱 */}
+        
+        {/* 路由：开发者反馈页面 */}
+        <Route path="/developer" element={<FeedbackPage />} />
       </Routes>
     </Router>
   );
