@@ -1,6 +1,8 @@
 // src/App.tsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// App.tsx
+import { useState } from 'react';
 import HeroSection from './sections/HeroSection';
 import './styles/global.scss';
 import { Header } from './components/Header';
@@ -11,6 +13,20 @@ import BpcoPage from './sections/BpcoPage';
 import FeedbackPage from './sections/FeedbackPage'; // 替换为意见箱页面
 
 function HomePage() {
+import OpeningAnimation from './components/OpeningAnimation';
+import CompanionSystem from './components/CompanionSystem';
+
+function App() {
+  const [animationCompleted, setAnimationCompleted] = useState(false);
+
+  const handleAnimationComplete = () => {
+    setAnimationCompleted(true);
+  };
+
+  if (!animationCompleted) {
+    return <OpeningAnimation onAnimationComplete={handleAnimationComplete} />;
+  }
+
   return (
     <div className="app-container">
       <Header />
@@ -26,6 +42,8 @@ function HomePage() {
       <StoryHeaderSection />
       <HorizontalStorySection />
 
+      <CardCarousel />
+      <CompanionSystem />
     </div>
   );
 }
