@@ -22,7 +22,7 @@ function HomePage() {
         subtitle="A sanctuary nestled in the classic landscapes of China"
         buttonLink="/bpco"
       />
-      <CardCarousel />
+      {/* <CardCarousel /> */}
       <StoryHeaderSection />
       <HorizontalStorySection />
 
