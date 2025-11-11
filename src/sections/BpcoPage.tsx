@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
-import styles from './BpcoPage.module.scss';
+import React, { useState, useEffect, useRef } from "react";
+import styles from "./BpcoPage.module.scss";
 import { AiOutlineCaretLeft, AiOutlineCaretRight } from "react-icons/ai";
 
 interface Message {
@@ -12,129 +11,90 @@ interface Message {
 }
 
 const backgroundImages = [
-  '/images/cards/guilin.jpg',
-  '/images/cards/huangshan.jpg',
-  '/images/cards/jiuzhaigou.jpg',
-  '/images/cards/zhangjiajie.jpg',
-  '/images/cards/zhangye.jpg'
+  "/images/cards/guilin.jpg",
+  "/images/cards/huangshan.jpg",
+  "/images/cards/jiuzhaigou.jpg",
+  "/images/cards/zhangjiajie.jpg",
+  "/images/cards/zhangye.jpg",
 ];
 
-export default function BpcoPage() {
-  const location = useLocation();
-
-  const scrollerRef = useRef<HTMLDivElement | null>(null);
-  const publishCardRef = useRef<HTMLDivElement | null>(null);
-
-  const [newMessage, setNewMessage] = useState({ name: '', content: '' });
-
-  const [messages] = useState<Message[]>([
-    {
-      id: 1,
-      name: '山河爱好者',
-      content: '桂林的山水真是人间仙境，漓江的水清澈见底，象鼻山栩栩如生！',
-      timestamp: '2024-01-15 14:30',
-      avatar: '👤'
-    },
-    {
-      id: 2,
-      name: '旅行家小王',
-      content: '黄山的云海和奇松让人叹为观止，迎客松真的像在欢迎每一位游客。',
-      timestamp: '2024-01-14 10:15',
-      avatar: '🧳'
-    },
-    {
-      id: 3,
-      name: '摄影爱好者',
-      content: '九寨沟的秋天色彩斑斓，每个海子都像调色盘，是摄影的天堂。',
-      timestamp: '2024-01-13 16:45',
-      avatar: '📷'
-    }
-  ]);
-
+const BpcoPage: React.FC = () => {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [newMessage, setNewMessage] = useState({ name: "", content: "" });
   const [currentBgIndex, setCurrentBgIndex] = useState(0);
+  const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
+  const listRef = useRef<HTMLDivElement>(null);
 
   // 背景自动轮播
   useEffect(() => {
     const t = setInterval(() => {
-      setCurrentBgIndex(p => (p + 1) % backgroundImages.length);
+      setCurrentBgIndex((p) => (p + 1) % backgroundImages.length);
     }, 5000);
     return () => clearInterval(t);
   }, []);
 
-  // 进入页面/路由切换时 → 居中发布新留言
+  // ✅ 初始化加载留言
   useEffect(() => {
-    const container = scrollerRef.current;
-    const firstCard = publishCardRef.current;
-    if (!container || !firstCard) return;
-    requestAnimationFrame(() => {
-      const offset = firstCard.offsetLeft - (container.clientWidth - firstCard.clientWidth) / 2;
-      container.scrollTo({ left: offset, behavior: 'auto' });
-    });
-  }, [location.pathname]);
-
-  // 辅助函数：居中某一 index 的卡
-  const scrollToCard = (index: number) => {
-    const container = scrollerRef.current;
-    if (!container) return;
-
-    const cards = Array.from(container.children) as HTMLElement[];
-    if (!cards[index]) return;
-
-    const card = cards[index];
-    const offset = card.offsetLeft - (container.clientWidth - card.clientWidth) / 2;
-    container.scrollTo({ left: offset, behavior: 'smooth' });
-  };
-
-  // 点击 左/右按钮
-  const gotoPrev = () => {
-    const container = scrollerRef.current;
-    if (!container) return;
-    const center = container.scrollLeft + container.clientWidth / 2;
-    const cards = Array.from(container.children) as HTMLElement[];
-
-    // 找当前
-    let currentIndex = 0;
-    let bestDist = Infinity;
-    cards.forEach((card, i) => {
-      const cardCenter = card.offsetLeft + card.offsetWidth / 2;
-      const dist = Math.abs(cardCenter - center);
-      if (dist < bestDist) {
-        bestDist = dist;
-        currentIndex = i;
+    try {
+      const saved = window.localStorage.getItem("shanhua_messages");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) setMessages(parsed);
       }
-    });
+    } catch (e) {
+      console.warn("无法读取留言数据", e);
+    }
+  }, []);
 
-    if (currentIndex > 0) scrollToCard(currentIndex - 1);
+  // ✅ 保存留言（仅当有内容时）
+  useEffect(() => {
+    if (messages.length > 0) {
+      window.localStorage.setItem("shanhua_messages", JSON.stringify(messages));
+    }
+  }, [messages]);
+
+
+  // 输入
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setNewMessage((prev) => ({ ...prev, [name]: value }));
   };
 
-  const gotoNext = () => {
-    const container = scrollerRef.current;
-    if (!container) return;
-    const center = container.scrollLeft + container.clientWidth / 2;
-    const cards = Array.from(container.children) as HTMLElement[];
-
-    let currentIndex = 0;
-    let bestDist = Infinity;
-    cards.forEach((card, i) => {
-      const cardCenter = card.offsetLeft + card.offsetWidth / 2;
-      const dist = Math.abs(cardCenter - center);
-      if (dist < bestDist) {
-        bestDist = dist;
-        currentIndex = i;
-      }
-    });
-
-    if (currentIndex < cards.length - 1) scrollToCard(currentIndex + 1);
-  };
-
+  // 提交留言
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert("提交逻辑在这里执行，你可以对接后台");
+    if (!newMessage.name.trim() || !newMessage.content.trim()) return;
+
+    const msg: Message = {
+      id: Date.now(),
+      name: newMessage.name.trim(),
+      content: newMessage.content.trim(),
+      timestamp: new Date().toLocaleString("zh-CN", { hour12: false }),
+      avatar: "💬",
+    };
+
+    setMessages([msg, ...messages]);
+    setNewMessage({ name: "", content: "" });
   };
 
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setNewMessage(prev => ({ ...prev, [name]: value }));
+  // 每列最多 3 条
+  const columns: Message[][] = [];
+  for (let i = 0; i < messages.length; i += 3) {
+    columns.push(messages.slice(i, i + 3));
+  }
+
+  // 横向滚动控制
+  const scrollByColumn = (dir: "left" | "right") => {
+    if (!listRef.current) return;
+    const container = listRef.current;
+    const scrollAmount = container.clientWidth;
+    const newLeft =
+      dir === "left"
+        ? container.scrollLeft - scrollAmount
+        : container.scrollLeft + scrollAmount;
+    container.scrollTo({ left: newLeft, behavior: "smooth" });
   };
 
   return (
@@ -142,35 +102,35 @@ export default function BpcoPage() {
       className={styles.bpcoPage}
       style={{ backgroundImage: `url(${backgroundImages[currentBgIndex]})` }}
     >
+      {/* 页面标题 */}
+      <div className={styles.pageTitle}>
+        <div className={styles.titleMain}>山河留言板</div>
+        <div className={styles.titleSub}>笔墨山河 · 留白天地</div>
+      </div>
 
-      {/* 左右按钮 */}
-      <button className={styles.arrowLeft} onClick={gotoPrev}>
-        <AiOutlineCaretLeft />
-      </button>
-
-      <div className={styles.cardsScroller} ref={scrollerRef}>
-
-        {/* 第一张：发布新留言 */}
-        <div className={styles.messageCard} ref={publishCardRef}>
+      <div className={styles.contentWrapper}>
+        {/* 左侧：发布新留言 */}
+        <div className={styles.newMessageCard}>
           <h2 className={styles.sectionTitle}>发布新留言</h2>
           <form onSubmit={handleSubmit} className={styles.form}>
             <input
-              className={styles.input}
               type="text"
               name="name"
-              placeholder="你的昵称"
               value={newMessage.name}
-              onChange={handleInput}
+              onChange={handleInputChange}
+              placeholder="你的昵称"
+              className={styles.input}
             />
             <textarea
-              className={styles.textarea}
               name="content"
-              placeholder="分享你的山河故事…"
-              rows={6}
               value={newMessage.content}
-              onChange={handleInput}
+              onChange={handleInputChange}
+              placeholder="分享你的山河故事..."
+              rows={6}
+              className={styles.textarea}
             />
             <button
+              type="submit"
               className={styles.submitButton}
               disabled={!newMessage.name.trim() || !newMessage.content.trim()}
             >
@@ -179,19 +139,84 @@ export default function BpcoPage() {
           </form>
         </div>
 
-        {/* 后续留言卡片 */}
-        {messages.map(m => (
-          <div key={m.id} className={styles.messageCard}>
-            <h3 className={styles.cardTitle}>{m.name}</h3>
-            <div className={styles.content}>{m.content}</div>
-            <div className={styles.timestamp}>{m.timestamp}</div>
+        {/* 右侧：留言墙 */}
+        <div className={styles.messageWallWrapper}>
+          <button
+            className={`${styles.navButton} ${styles.leftBtn}`}
+            onClick={() => scrollByColumn("left")}
+          >
+            <AiOutlineCaretLeft />
+          </button>
+
+          <div className={styles.messageWall} ref={listRef}>
+            {columns.map((col, ci) => (
+              <div key={ci} className={styles.messageColumn}>
+                {col.map((msg) => (
+                  <div
+                    key={msg.id}
+                    className={styles.messageCard}
+                    onClick={() => setSelectedMessage(msg)}
+                  >
+                    <div className={styles.messageHeader}>
+                      <span className={styles.avatar}>{msg.avatar}</span>
+                      <div>
+                        <div className={styles.userName}>{msg.name}</div>
+                        <div className={styles.timestamp}>{msg.timestamp}</div>
+                      </div>
+                    </div>
+                    <div className={styles.messageContent}>{msg.content}</div>
+                  </div>
+                ))}
+              </div>
+            ))}
           </div>
-        ))}
+
+          <button
+            className={`${styles.navButton} ${styles.rightBtn}`}
+            onClick={() => scrollByColumn("right")}
+          >
+            <AiOutlineCaretRight />
+          </button>
+        </div>
       </div>
 
-      <button className={styles.arrowRight} onClick={gotoNext}>
-        <AiOutlineCaretRight />
-      </button>
+      {/* 模态框 */}
+      {selectedMessage && (
+        <div
+          className={styles.modalOverlay}
+          onClick={() => setSelectedMessage(null)}
+        >
+          <div
+            className={styles.modalCard}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.modalHeader}>
+              <span className={styles.avatarLarge}>
+                {selectedMessage.avatar}
+              </span>
+              <div>
+                <div className={styles.modalUserName}>
+                  {selectedMessage.name}
+                </div>
+                <div className={styles.modalTimestamp}>
+                  {selectedMessage.timestamp}
+                </div>
+              </div>
+            </div>
+            <div className={styles.modalContent}>
+              {selectedMessage.content}
+            </div>
+            <button
+              className={styles.closeButton}
+              onClick={() => setSelectedMessage(null)}
+            >
+              关闭
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default BpcoPage;
