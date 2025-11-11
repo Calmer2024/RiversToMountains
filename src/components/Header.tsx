@@ -8,7 +8,7 @@ export const Header: FC = () => {
         <header className={styles.header}>
             {/* 左侧区域 */}
             <div className={styles.headerLeft}>
-                <a href="#" className={styles.iconButton} aria-label="图鉴">
+                <a href="/" className={styles.iconButton} aria-label="图鉴">
                     <IoBookOutline />
                 </a>
             </div>
@@ -19,8 +19,13 @@ export const Header: FC = () => {
                     <FiSearch />
                 </a>
 
-                {/* 用户 */}
-                <a href="#" className={styles.iconButton} aria-label="用户中心">
+                {/* 用户 - 跳转到团队页面 */}
+                <a 
+                    href="/thanks.html" 
+                    className={styles.iconButton} 
+                    aria-label="团队风采"
+                    title="查看团队风采"
+                >
                     <FiUser />
                 </a>
 
