@@ -1,50 +1,42 @@
 .header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 1.5rem 2.5rem;
-    z-index: 10;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    color: #ffffff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
-// 左侧按钮
-.logo {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #ffffff;
-    text-decoration: none;
+.headerLeft, .headerRight {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  &.scrolled {
+    background-color: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
 }
 
-// 右侧按钮
-.headerRight {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
+/* ↓↓↓ 在底部追加 ↓↓↓ */
+
+/* 首页完全透明 */
+.homeTransparent {
+  background-color: transparent !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
 }
 
-// 单个图标按钮
-.iconButton {
-    color: #ffffff;
-    font-size: 1.3rem;
-    line-height: 1;
-    transition: opacity 0.3s ease;
-
-    &:hover {
-        opacity: 0.7;
-    }
-}
-
-// (可选) 汉堡菜单按钮的特殊样式
-.menuButton {
-    font-size: 1.5rem; // 汉堡菜单通常更大
-    // 在桌面端可以隐藏
-    // @media (min-width: 769px) {
-    //   display: none;
-    // }
+/* 毛玻璃 */
+.headerGlass {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
 }

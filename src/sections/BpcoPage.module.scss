@@ -1,0 +1,244 @@
+.bpcoPage {
+  width: 100vw;
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  overflow-x: hidden;
+  position: relative;
+  padding: 40px 60px;
+}
+
+/* 标题 */
+.pageTitle {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 40px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+.titleMain {
+  font-size: 38px;
+  font-weight: 700;
+}
+.titleSub {
+  font-size: 18px;
+  opacity: 0.85;
+  margin-top: 6px;
+}
+
+/* 主体布局 */
+.contentWrapper {
+  display: grid;
+  grid-template-columns: 1.2fr 3fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* 左侧表单 */
+.newMessageCard {
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(20px);
+  border-radius: 32px;
+  padding: 30px;
+  color: white;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+}
+.sectionTitle {
+  font-size: 26px;
+  margin-bottom: 16px;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.input,
+.textarea {
+  background: rgba(255, 255, 255, 0.25);
+  border: none;
+  border-radius: 12px;
+  padding: 10px;
+  color: white;
+  resize: none;
+  font-size: 15px;
+}
+.input::placeholder,
+.textarea::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+.submitButton {
+  background: rgba(255, 255, 255, 0.35);
+  border: none;
+  border-radius: 12px;
+  padding: 10px 16px;
+  cursor: pointer;
+  color: black;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+.submitButton:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+/* 留言墙 */
+.messageWallWrapper {
+  position: relative;
+  overflow: hidden;
+}
+.messageWall {
+  display: flex;
+  gap: 40px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 10px;
+  scrollbar-width: none;
+}
+.messageWall::-webkit-scrollbar {
+  display: none;
+}
+.messageColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 300px;
+}
+.messageCard {
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(15px);
+  border-radius: 24px;
+  padding: 20px;
+  color: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.messageCard:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.25);
+}
+.messageHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.avatar {
+  font-size: 22px;
+}
+.userName {
+  font-weight: 600;
+}
+.timestamp {
+  font-size: 13px;
+  opacity: 0.8;
+}
+.messageContent {
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* 左右切换按钮（改小 + 外移） */
+.navButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(12px);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  font-size: 16px;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  opacity: 0.8;
+}
+.navButton:hover {
+  transform: translateY(-50%) scale(1.15);
+  background: rgba(255, 255, 255, 0.35);
+  opacity: 1;
+}
+.leftBtn {
+  left: -20px;
+}
+.rightBtn {
+  right: -20px;
+}
+
+/* 模态框 */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.modalCard {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(25px);
+  border-radius: 24px;
+  width: 600px;
+  max-width: 90vw;
+  padding: 30px;
+  color: white;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
+  animation: fadeInUp 0.3s ease;
+}
+.modalHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.avatarLarge {
+  font-size: 36px;
+}
+.modalUserName {
+  font-size: 20px;
+  font-weight: 600;
+}
+.modalTimestamp {
+  font-size: 14px;
+  opacity: 0.8;
+}
+.modalContent {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.closeButton {
+  display: block;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.35);
+  border: none;
+  border-radius: 12px;
+  padding: 8px 20px;
+  cursor: pointer;
+  color: black;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+/* 动画 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
