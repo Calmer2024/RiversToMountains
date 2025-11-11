@@ -36,10 +36,17 @@ export const Header: FC = () => {
 
                 <div className={styles.headerRight}>
                     <IconButton icon={<FiUser />} ariaLabel="用户中心" className={styles.iconButton} onClick={() => navigate('/bpco')} />
-                    <IconButton icon={<FiMenu />} ariaLabel="意见反馈" className={`${styles.iconButton} ${styles.menuButton}`} onClick={() => navigate('/developer')} />
+                    {/* <IconButton icon={<FiMenu />} ariaLabel="意见反馈" className={`${styles.iconButton} ${styles.menuButton}`} onClick={() => navigate('/developer')} /> */}
+                    {/* 菜单 */}
+                    <a href="/thanks.html" 
+                        className={styles.iconButton} 
+                        aria-label="团队风采"
+                        title="查看团队风采"
+                    >
+                        <FiMenu />
+                    </a>
                 </div>
             </header>
-
             <FloatingAssistant />
         </>
     );
