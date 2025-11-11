@@ -23,6 +23,8 @@ function HomePage() {
         buttonLink="/bpco"
       />
       <CardCarousel />
+      <StoryHeaderSection />
+      <HorizontalStorySection />
 
     </div>
   );
