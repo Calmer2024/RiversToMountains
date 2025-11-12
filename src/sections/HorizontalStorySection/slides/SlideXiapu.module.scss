@@ -1,0 +1,29 @@
+.slideXiapu {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.fullScreenVideo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+.textContent {
+    h2 {
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    p {
+        color: #ffffffcb;
+        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+    }
+}

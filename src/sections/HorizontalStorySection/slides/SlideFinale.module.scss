@@ -1,0 +1,83 @@
+/* [!] 修改类名 */
+.slideFinaleWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 样式与 SlideChapterTitle.module.scss 完全相同 */
+.chapterTitleCard {
+    position: relative;
+    text-align: center;
+    top: -5vh; // 稍微上移
+
+    h2 {
+        font-family: "汉仪程行简", serif;
+        font-weight: 600;
+        font-size: clamp(2rem, 6vw, 7rem);
+        color: #ccc;
+    }
+
+    .divider {
+        width: 500px;
+        height: 1px;
+        background-color: rgba(255, 255, 255, 0.353);
+        margin: 1.5rem auto;
+        border-radius: 1px;
+    }
+
+    .chapterSubtitle {
+        font-family: "汉仪全唐诗简", serif;
+        font-size: clamp(1.3rem, 2vw, 3rem);
+        color: #d9d8d8;
+        letter-spacing: 2px;
+        font-weight: 400;
+        margin: 0;
+    }
+
+    p {
+        font-family: "汉仪全唐诗简", serif;
+        font-size: clamp(1.2rem, 1vw, 1.5rem);
+        color: #999999db;
+        letter-spacing: 1.5px;
+        margin-top: 10rem;
+    }
+
+    .chapterTitleWrapper {
+        position: relative;
+        display: inline-block;
+    }
+
+    .titleIcon {
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translate(120%, -10%);
+        width: 30px;
+        height: auto;
+    }
+}
+
+/* [!code focus:start] */
+/* [!] 新增: "返回顶部" 按钮样式 */
+.scrollTopButton {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    padding: 12px 28px;
+    margin-top: 4rem; /* 与 <p> 标签的间距 */
+    border-radius: 30px; /* 胶囊形状 */
+    cursor: pointer;
+    font-family: "汉仪全唐诗简", serif; /* 保持风格统一 */
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    
+    transition: all 0.3s ease;
+    
+    &:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+}
+/* [!code focus:end] */

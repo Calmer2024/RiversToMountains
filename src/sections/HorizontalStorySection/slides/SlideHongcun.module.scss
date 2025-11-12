@@ -1,0 +1,187 @@
+/* 幻灯片: 宏村 (点击交互) */
+.slideHongcun {
+    padding: 0; /* [!] 覆盖父级 padding, 全屏布局 */
+    background: #000;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer; /* 提示用户可以点击 */
+}
+
+/* A. 图片容器 */
+.imageContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+
+    /* 蒙版 (确保文字可读) */
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.3) 100%);
+        z-index: 2;
+    }
+}
+
+.image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    
+    /* 关键: 交叉淡入/淡出动画 */
+    opacity: 0;
+    transform: scale(1.05);
+    transition: opacity 1.2s ease, transform 1.2s ease;
+    will-change: opacity, transform;
+
+    &.active {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* B. 文本容器 */
+.textContainer {
+    position: absolute;
+    z-index: 10;
+    
+    /* [!] 我们把文本放在底部 1/3 处, 靠近时间轴 */
+    bottom: 25%;
+    left: 0;
+    width: 100%;
+    
+    /* 用于对 .textContent 进行绝对定位 */
+    height: 1px; 
+    
+    display: flex;
+    justify-content: center;
+}
+
+.textContent {
+    position: absolute;
+    bottom: 0; /* 锚定在 .textContainer 的底部 */
+    text-align: center;
+    color: #fff;
+    width: 100%;
+    max-width: 50ch;
+
+    /* 关键: 交叉淡入/淡出 + 上移动画 */
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s;
+    will-change: opacity, transform;
+
+    &.active {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0.2s; /* 确保旧的淡出后再淡入 */
+    }
+}
+
+.mainTitle {
+    font-family: "山海汲刻宋", serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    color: #f0f0f0;
+    margin: 0;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+}
+.subTitle {
+    font-family: "汉仪全唐诗简", serif;
+    font-size: clamp(1.2rem, 1.5vw, 1.4rem);
+    color: #aaa;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+}
+.divider {
+    width: 80px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.3);
+    margin: 1.5rem auto;
+}
+.description {
+    font-family: "汉仪全唐诗简", serif;
+    font-size: clamp(1rem, 1.2vw, 1.2rem);
+    color: #ccc;
+    line-height: 1.7;
+    margin: 0;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* C. 底部时间轴 */
+.timelineContainer {
+    position: absolute;
+    bottom: 10%; /* 距离底部 10% */
+    left: 15%; /* 左右留出 15% 边距 */
+    width: 70%;
+    z-index: 20;
+}
+
+.axis {
+    position: relative;
+    width: 100%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.stopsWrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between; /* [!] 自动均分 4 个点 */
+    align-items: center;
+}
+
+.stop {
+    width: 10px;
+    height: 10px;
+    background: #888;
+    border-radius: 50%;
+    transition: all 0.4s ease;
+    
+    &.active {
+        background: #fff;
+        transform: scale(1.3);
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+    }
+}
+
+.car {
+    position: absolute;
+    top: 50%;
+    /* [!] left: 0; (已由 style 控制) */
+    font-size: 24px; /* emoji 大小 */
+
+    /* [!] 关键: 
+       使用 left 属性来动画, 
+       并用 transform 来居中 car (让 car 的 *中心* 对齐到点)
+    */
+    transform: translate(-50%, -50%); 
+    transition: left 0.6s cubic-bezier(0.65, 0, 0.35, 1); /* 平滑的缓动 */
+    will-change: left;
+}
+
+.clickPrompt {
+    color: #888;
+    font-size: 0.8rem;
+    text-align: center;
+    margin-top: 1.5rem;
+    letter-spacing: 1px;
+}
+
+.carIcon {
+    width: 3rem;
+    height: 3rem;
+    display: block;
+}

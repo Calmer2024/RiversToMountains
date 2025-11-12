@@ -1,0 +1,110 @@
+.slideYuanyangTerraces {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background-color: #0d0d0d; // 深色背景，衬托图片和文字
+    color: #fff;
+}
+
+.imageGrid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    // 创建一个不规则的网格布局，可以根据图片数量和大小调整
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+    grid-template-rows: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1.5vw; // 响应式间距
+    padding: 3vw; // 网格的内边距
+    perspective: 1000px; // 为3D效果准备
+}
+
+.imageWrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    will-change: transform, opacity; // 告诉浏览器这些属性会变化，优化性能
+    
+    // 随机的网格布局，使图片错落有致
+    &:nth-child(3n+1) { grid-column: span 2; grid-row: span 2; }
+    &:nth-child(5n+2) { grid-column: span 1; grid-row: span 3; }
+    &:nth-child(7n+3) { grid-column: span 3; grid-row: span 1; }
+    &:nth-child(11n+4) { grid-column: span 2; grid-row: span 1; }
+    // 可以添加更多规则，或者通过JS动态分配 grid-area
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transform: scale(1.05); // 图片略微放大，创造一点边缘裁剪感
+        transition: transform 0.5s ease; // 鼠标悬停放大效果
+    }
+
+    // 鼠标悬停效果
+    &:hover img {
+        transform: scale(1.1);
+    }
+}
+
+.textOverlay {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 3rem 4rem;
+    background: rgba(0, 0, 0, 0.6); // 半透明背景，保证文字可读性
+    backdrop-filter: blur(8px); // 增加毛玻璃效果，提升高级感 [注意性能]
+    border-radius: 15px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: 60%; // 限制文字区域宽度
+    will-change: opacity, transform;
+}
+
+.mainTitle {
+    font-family: "山海汲刻宋", serif; // 粗犷有力
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-weight: 700;
+    color: #f0f0f0;
+    margin-bottom: 0.5rem;
+    letter-spacing: 5px;
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+}
+
+.description {
+    font-family: "汉仪全唐诗简", serif;
+    font-size: clamp(1.1rem, 1.2vw, 1.6rem);
+    color: #b0b0b0;
+    line-height: 1.8;
+    max-width: 50ch;
+    margin: 0 auto;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+// 媒体查询，适应小屏幕
+@media (max-width: 768px) {
+    .imageGrid {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        grid-template-rows: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 1vw;
+        padding: 2vw;
+    }
+    .textOverlay {
+        padding: 2rem 3rem;
+        max-width: 85%;
+    }
+    .mainTitle {
+        font-size: clamp(2.5rem, 6vw, 5rem);
+    }
+    .subTitle {
+        font-size: clamp(1.2rem, 2.5vw, 2.5rem);
+    }
+    .description {
+        font-size: clamp(0.9rem, 1.2vw, 1.2rem);
+    }
+}
