@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './styles/global.scss';
 
 // 组件
-import { Header } from './components/Header';
+import {Header} from './components/Header';
 import OpeningAnimation from './components/OpeningAnimation';
 import CompanionSystem from './components/CompanionSystem';
 
@@ -13,8 +13,16 @@ import FeedbackPage from './sections/FeedbackPage';
 
 // 区域 (Sections)
 import HeroSection from './sections/HeroSection';
-import { HorizontalStorySection } from './sections/HorizontalStorySection/HorizontalStorySection';
-import { StoryHeaderSection } from './sections/StoryHeaderSection';
+// import { CardCarousel } from './sections/CardCarousel';
+import {HorizontalStorySection} from './sections/HorizontalStorySection/HorizontalStorySection';
+import {StoryHeaderSection} from './sections/StoryHeaderSection';
+import { IntroSection } from './sections/IntroSection';
+import { StatsSection } from './sections/StatsSection';
+
+
+import TestPlayground from "./TestPlayground.tsx";
+import {FeatureSection} from "./sections/FeatureSection.tsx";
+import {TextMaskSection} from "./sections/TextMaskSection.tsx";
 
 /**
  * 主页组件
@@ -131,10 +139,13 @@ function App() {
         <Route path="/outside" element={<CompanionPage />} />
         
         {/* 路由：Bpco 页面 */}
-        <Route path="/bpco" element={<BpcoPage />} />
-        
+        <Route path="/bpco" element={<BpcoPage/>}/>
+
         {/* 路由：开发者反馈页面 */}
-        <Route path="/developer" element={<FeedbackPage />} />
+        <Route path="/developer" element={<FeedbackPage/>}/>
+
+        {/*测试组件用*/}
+        <Route path="/test" element={<TestPlayground/>}/>
       </Routes>
     </Router>
   );

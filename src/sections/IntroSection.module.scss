@@ -1,0 +1,143 @@
+.sectionContainer {
+  background-color: #0a0a0a;
+  color: #ffffff;
+  padding: 160px 8vw;
+  // 只隐藏横向溢出，防止竖排文字被切
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+.contentWrapper {
+  max-width: 1600px; // 稍微宽一点
+  margin: 0 auto;
+  position: relative
+}
+
+.storyRow {
+  display: flex;
+  align-items: center; // 垂直居中
+  justify-content: space-between;
+  margin-bottom: 180px; // 间距拉大，留白就是高级感
+  gap: 40px;
+
+  &.reverse {
+    flex-direction: row-reverse;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    &.reverse {
+      flex-direction: column;
+    }
+    margin-bottom: 100px;
+    gap: 40px;
+  }
+}
+
+// --- 文字区域 ---
+.textContent {
+  flex: 1;
+  position: relative;
+
+  h3 {
+    font-family: "Songti SC", "Noto Serif SC", serif;
+    font-size: 2.8rem;
+    font-weight: normal;
+    margin-bottom: 30px;
+    letter-spacing: 4px;
+    color: #f0f0f0;
+    display: flex; // 为了让印章和文字对齐
+    align-items: center;
+  }
+
+  p {
+    font-size: 1.15rem;
+    line-height: 2.2;
+    color: #888;
+    font-weight: 300;
+    max-width: 90%; // 稍微限制宽度，不让文字太长
+  }
+
+
+  .subtitle {
+    display: flex;
+    flex-direction: column; /* 竖着排 */
+    max-width: 300px;         /* 限制最大宽度 */
+    flex-grow: 1;           /* 占满印章右侧空间 */
+  }
+
+  .subtitle span:first-child {
+    text-align: left;
+  }
+
+  .subtitle span:last-child {
+    text-align: right;
+  }
+}
+
+// 🏮 红色印章样式
+.seal {
+  display: inline-block;
+  font-size: 1rem;
+  background-color: #b92b27; // 中国红
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-right: 15px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  box-shadow: 0 0 10px rgba(185, 43, 39, 0.4); // 红色微光
+  writing-mode: vertical-rl; // 竖排效果
+}
+
+// --- 图片区域 ---
+.imageWrapper {
+  flex: 1.4; // 图片占比大一点
+  position: relative; // 为了定位那行竖排的字
+
+  img {
+    width: 100%;
+    display: block;
+    border-radius: 12px;
+    filter: brightness(0.9) contrast(1.1); // 稍微调色，更有质感
+    transition: transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); // 极其平滑的缓慢缩放
+
+
+    &:hover {
+      transform: scale(1.03); // 鼠标放上去缓慢放大
+      filter: brightness(1);
+    }
+  }
+}
+
+// 📜 竖排装饰文字
+.verticalDeco {
+  position: absolute;
+  top: 10%; // 稍微往下挪一点，不要顶头
+
+  // 因为现在整体变宽了，我们可以把字稍微往里收一点点，或者保持原样
+  right: -60px; // 保持在图片外面
+
+  font-family: "Songti SC", serif;
+  writing-mode: vertical-rl;
+  font-size: 1rem; // 稍微调小一点点，更精致
+  letter-spacing: 8px; // 字间距拉得更开
+  color: rgba(255, 255, 255, 0.25); // 稍微再暗一点
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+  padding-right: 15px;
+  height: 60%; // 线条不用太长
+
+  &.left {
+    right: auto;
+    left: -60px; // 对应左边的位置
+    border-right: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
+    padding-right: 0;
+    padding-left: 15px;
+  }
+
+  // 屏幕太小的时候（比如小笔记本），为了防止重叠，把装饰字隐藏
+  @media (max-width: 1200px) {
+    display: none;
+  }
+}
