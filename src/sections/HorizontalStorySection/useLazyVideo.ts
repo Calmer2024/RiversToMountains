@@ -1,16 +1,35 @@
 import { useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useScroll } from './ScrollContext'; // 导入我们已有的 Context
+import { useScroll } from './ScrollContext';
 
-/**
- * 一个自定义 Hook，用于懒加载和按需播放水平滚动中的视频。
- * @param videoRef - 指向 <video> 元素的 Ref
- */
+// [!code focus:start]
+// [!] 1. 修复 "NodeJS" 报错
+function simpleDebounce<T extends (...args: any[]) => any>(
+    func: T,
+    delay: number
+) {
+    // [!] 关键修改: 
+    // "NodeJS.Timeout" 是 Node.js (后端) 的类型。
+    // 在浏览器 (前端) 中, setTimeout 返回的是一个 "number"。
+    let timeout: number | null = null;
+    
+    return (...args: Parameters<T>) => {
+        if (timeout) {
+            clearTimeout(timeout);
+        }
+        // [!] 明确使用 window.setTimeout, 它返回 'number'
+        timeout = window.setTimeout(() => {
+            func(...args);
+        }, delay);
+    };
+}
+// [!code focus:end]
+
 export const useLazyVideo = (
     videoRef: React.RefObject<HTMLVideoElement | null>
 ) => {
-    const { horizontalTween } = useScroll(); // 获取主滚动条
+    const { horizontalTween } = useScroll();
 
     useLayoutEffect(() => {
         const video = videoRef.current;
@@ -18,24 +37,22 @@ export const useLazyVideo = (
             return;
         }
 
-        // 1. 找到这个视频所在的父幻灯片
         const slide = video.closest<HTMLElement>(
-            '[class*="slide"]' // 查找类名中包含 "slide" 的父元素
+            '[class*="slide"]'
         );
         if (!slide) return;
 
         let hasLoaded = false;
 
-        // 2. 创建一个“加载”触发器
+        // [!] "激进预加载" 触发器 (保持不变)
         const loadTrigger = ScrollTrigger.create({
             trigger: slide,
             containerAnimation: horizontalTween,
-            start: "left 100%", // 当幻灯片的左边缘碰到视口右边缘 (即刚要进入)
-            end: "right 0%",   // 当幻灯片的右边缘离开视口左边缘 (即完全离开)
+            start: "left 200%", // 提前 100vw 加载
+            end: "right 0%",   
             onEnter: () => {
                 if (hasLoaded) return;
                 
-                // 开始加载视频
                 const dataSrc = video.getAttribute('data-src');
                 if (dataSrc) {
                     video.src = dataSrc;
@@ -45,30 +62,31 @@ export const useLazyVideo = (
             },
         });
 
-        // 3. 创建一个“播放/暂停”触发器
+        // [!] "防抖播放" 函数 (保持不变)
+        const debouncedTogglePlay = simpleDebounce((isActive: boolean) => {
+            if (isActive) {
+                if (video.readyState >= 3) {
+                    video.play();
+                } else {
+                    video.oncanplay = () => video.play();
+                }
+            } else {
+                video.pause();
+            }
+        }, 100); 
+
+        // 播放触发器 (保持不变)
         const playTrigger = ScrollTrigger.create({
             trigger: slide,
             containerAnimation: horizontalTween,
-            start: "left 70%", // 当幻灯片进入视口 30% 时
-            end: "right 30%",  // 当幻灯片离开视口 30% 时
+            start: "left 70%", 
+            end: "right 30%",  
             
-            // onToggle 是 onEnter, onLeave, onEnterBack, onLeaveBack 的简写
             onToggle: (self) => {
-                if (self.isActive) {
-                    // 只有在视频数据足够播放时才尝试播放
-                    if (video.readyState >= 3) {
-                        video.play();
-                    } else {
-                        // 如果还没加载完，添加一个一次性事件
-                        video.oncanplay = () => video.play();
-                    }
-                } else {
-                    video.pause();
-                }
+                debouncedTogglePlay(self.isActive);
             },
         });
 
-        // 4. 清理
         return () => {
             loadTrigger.kill();
             playTrigger.kill();
