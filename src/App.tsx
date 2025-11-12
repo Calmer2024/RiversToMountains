@@ -1,9 +1,10 @@
-import React, { useState } from 'react'; 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// @ts-ignore
+import React, {useState} from 'react';
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import './styles/global.scss';
 
 // 组件
-import { Header } from './components/Header';
+import {Header} from './components/Header';
 import OpeningAnimation from './components/OpeningAnimation';
 import CompanionSystem from './components/CompanionSystem';
 
@@ -14,8 +15,11 @@ import FeedbackPage from './sections/FeedbackPage';
 // 区域 (Sections)
 import HeroSection from './sections/HeroSection';
 // import { CardCarousel } from './sections/CardCarousel';
-import { HorizontalStorySection } from './sections/HorizontalStorySection/HorizontalStorySection';
-import { StoryHeaderSection } from './sections/StoryHeaderSection';
+import {HorizontalStorySection} from './sections/HorizontalStorySection/HorizontalStorySection';
+import {StoryHeaderSection} from './sections/StoryHeaderSection';
+import { IntroSection } from './sections/IntroSection';
+
+import TestPlayground from "./TestPlayground.tsx";
 
 /**
  * 主页组件
@@ -30,13 +34,13 @@ function HomePage() {
 
   // 动画未完成时，只显示动画
   if (!animationCompleted) {
-    return <OpeningAnimation onAnimationComplete={handleAnimationComplete} />;
+    return <OpeningAnimation onAnimationComplete={handleAnimationComplete}/>;
   }
 
   // 动画完成后，显示主页内容
   return (
     <div className="app-container">
-      <Header />
+      <Header/>
       <HeroSection
         videoSrc="/videos/hero-video.mp4"
         posterImage="/images/hero-poster.jpg"
@@ -46,9 +50,10 @@ function HomePage() {
         buttonLink="/bpco"
       />
       {/* <CardCarousel />  */}
-      <StoryHeaderSection />
-      <HorizontalStorySection />
-      <CompanionSystem />
+      <StoryHeaderSection/>
+      <IntroSection/>
+      <HorizontalStorySection/>
+      <CompanionSystem/>
     </div>
   );
 }
@@ -62,13 +67,16 @@ function App() {
     <Router>
       <Routes>
         {/* 路由：主页 */}
-        <Route path="/" element={<HomePage />} />
-        
+        <Route path="/" element={<HomePage/>}/>
+
         {/* 路由：Bpco 页面 */}
-        <Route path="/bpco" element={<BpcoPage />} />
-        
+        <Route path="/bpco" element={<BpcoPage/>}/>
+
         {/* 路由：开发者反馈页面 */}
-        <Route path="/developer" element={<FeedbackPage />} />
+        <Route path="/developer" element={<FeedbackPage/>}/>
+
+        {/*测试组件用*/}
+        <Route path="/test" element={<TestPlayground/>}/>
       </Routes>
     </Router>
   );

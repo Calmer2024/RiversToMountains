@@ -1,0 +1,75 @@
+// 🌑 整体背景：改成黑色，匹配你的主页风格
+.sectionContainer {
+  background-color: #0a0a0a; // 接近纯黑
+  color: #ffffff; // 白字
+  padding: 150px 20px; // 上下留足空间，显得大气
+  overflow: hidden;
+}
+
+.contentWrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+// 每一行 (Row)
+.storyRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 150px; // 两块内容之间拉开距离
+  gap: 60px;
+
+  // 如果加了 .reverse 类名，就反转顺序
+  &.reverse {
+    flex-direction: row-reverse;
+  }
+
+  // 📱 手机端适配：统统变成垂直排列
+  @media (max-width: 768px) {
+    flex-direction: column;
+    &.reverse { flex-direction: column; }
+    margin-bottom: 80px;
+    gap: 30px;
+  }
+}
+
+// ✍️ 文字区域
+.textContent {
+  flex: 1; // 占一半宽度
+
+  h3 {
+    // 尝试匹配截图里的字体风格 (宋体/衬线体)
+    font-family: "Songti SC", "Noto Serif SC", serif;
+    font-size: 2.5rem;
+    font-weight: normal;
+    margin-bottom: 24px;
+    letter-spacing: 2px; // 字间距拉开一点，显得高级
+    color: #f0f0f0;
+  }
+
+  p {
+    font-size: 1.1rem;
+    line-height: 2; // 行高大一点，易读
+    color: #888; // 灰色文字，形成层次感
+    font-weight: 300;
+  }
+}
+
+// 🖼️ 图片区域
+.imageContent {
+  flex: 1.2; // 图片稍微宽一点
+
+  img {
+    width: 100%;
+    border-radius: 4px; // 轻微圆角
+    // 给图片加个只有在黑色背景下才好看的微光效果
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    opacity: 0.9; // 稍微暗一点点，不刺眼
+    transition: all 0.5s ease;
+
+    &:hover {
+      opacity: 1;
+      transform: translateY(-5px); // 鼠标放上去微微浮起
+    }
+  }
+}
