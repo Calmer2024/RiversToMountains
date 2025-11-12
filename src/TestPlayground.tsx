@@ -9,6 +9,8 @@ import {StatsSection} from './sections/StatsSection';
 
 import {FeatureSection} from './sections/FeatureSection';
 import {TextMaskSection} from "./sections/TextMaskSection.tsx";
+import {Header} from "./components/Header.tsx";
+import CompanionSystem from "./components/CompanionSystem.tsx";
 
 const TestPlayground = () => {
   return (
@@ -32,10 +34,8 @@ const TestPlayground = () => {
 
         {/*  组件 (解开注释)             */}
 
-        <IntroSection/>
-        <TextMaskSection/>
-        <FeatureSection/>
-        <StatsSection/>
+
+        <CompanionSystem />
 
         <p style={{textAlign: 'center', padding: '50px', color: '#999'}}>
           (组件预览完毕)

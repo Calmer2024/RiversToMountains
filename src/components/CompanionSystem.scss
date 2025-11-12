@@ -1,4 +1,6 @@
-// 全屏陪伴系统
+// ----------------------------------------------------
+// 全局设置
+// ----------------------------------------------------
 .companion-fullscreen {
   position: fixed;
   top: 0;
@@ -6,10 +8,161 @@
   width: 100vw;
   height: 100vh;
   z-index: 999;
-  background: transparent;
+  background: #000; // 默认黑底
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-// 主题视频全屏
+// ----------------------------------------------------
+// 主题选择界面 (暗黑海报风格)
+// ----------------------------------------------------
+.theme-selection-fullscreen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .theme-background-fullscreen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      // ✨ 默认调暗，并加模糊，突出前景
+      filter: brightness(0.6) blur(5px);
+      transform: scale(1.1);
+      transition: filter 10s ease, transform 10s ease;
+    }
+  }
+
+  // ✨ 暗黑遮罩
+  .theme-background-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+  }
+
+  .theme-content-fullscreen {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    text-align: center;
+
+    h2 {
+      font-family: "Songti SC", serif; // ✨ 宋体
+      font-size: 2.5rem;
+      letter-spacing: 5px;
+      font-weight: normal;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+      margin-bottom: 50px;
+    }
+
+    .theme-buttons-fullscreen {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr); // 一行四个
+      gap: 30px;
+      width: 100%;
+      max-width: 1000px;
+
+      .theme-button {
+        height: 250px;
+        background-color: #1a1a1a; // ✨ 修复 1：加入深色背景兜底
+        background-size: cover;
+        background-position: center;
+        border: 1px solid rgba(255, 255, 255, 0.2); // 细边框
+        color: white;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 1.5rem;
+        font-weight: 500;
+        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+
+        // 文字内容
+        span {
+          position: absolute;
+          bottom: 20px;
+          left: 20px;
+          font-family: "Songti SC", serif;
+          letter-spacing: 3px;
+          z-index: 2;
+          transform: translateY(0);
+          transition: transform 0.4s ease;
+        }
+
+        // ✨ 鼠标悬停时的遮罩和放大效果
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 60%;
+          background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+          z-index: 1;
+          transition: opacity 0.4s ease;
+        }
+
+        &:hover {
+          transform: scale(1.05);
+          border-color: rgba(255, 255, 255, 0.5);
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+
+          &::after { // 悬停时渐变消失
+            opacity: 0;
+          }
+
+          span { // 悬停时文字上移
+            transform: translateY(-160px);
+          }
+        }
+      }
+    }
+  }
+
+  .image-info-fullscreen {
+    position: absolute;
+    bottom: 30px;
+    // ... (样式不变)
+    span {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 8px 20px;
+      border-radius: 15px;
+      font-size: 14px;
+      backdrop-filter: blur(5px);
+    }
+  }
+}
+
+// ----------------------------------------------------
+// 主题内容界面 (视频播放)
+// ----------------------------------------------------
+
+.theme-content-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 .theme-video-fullscreen {
   position: fixed;
   top: 0;
@@ -20,126 +173,97 @@
   z-index: 1;
 }
 
-// 主题选择全屏界面
-.theme-selection-fullscreen {
-  position: relative;
+// 视频上的渐变遮罩 (防止UI看不清)
+.video-overlay-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  
-  .theme-background-fullscreen {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
-  
-  .theme-content-fullscreen {
-    position: relative;
-    z-index: 2;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 40px;
-    color: white;
-    text-align: center;
-    background: transparent;
-    
-    h2 {
-      margin-bottom: 40px;
-      font-size: 36px;
-      font-weight: 600;
-      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
-    }
-    
-    .theme-buttons-fullscreen {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 30px;
-      width: 100%;
-      max-width: 500px;
-      
-      .theme-button {
-        padding: 25px;
-        background: transparent;
-        border: 2px solid rgba(255, 255, 255, 0.7);
-        color: white;
-        border-radius: 15px;
-        cursor: pointer;
-        font-size: 20px;
-        font-weight: 500;
-        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
-        
-        &:hover {
-          background: rgba(255, 255, 255, 0.1);
-          border-color: rgba(255, 255, 255, 1);
-        }
-        
-        // 确保没有伪元素产生圈
-        &::before,
-        &::after {
-          content: none !important;
-        }
-      }
-    }
-    
-    // .close-companion-btn {
-    //   margin-top: 40px;
-    //   padding: 12px 24px;
-    //   background: transparent;
-    //   border: 1px solid rgba(255, 255, 255, 0.7);
-    //   color: white;
-    //   border-radius: 20px;
-    //   cursor: pointer;
-    //   font-size: 16px;
-    //   text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
-      
-    //   &:hover {
-    //     background: rgba(255, 255, 255, 0.1);
-    //     border-color: rgba(255, 255, 255, 1);
-    //   }
-    // }
-  }
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, transparent 30%, transparent 70%, rgba(0, 0, 0, 0.5) 100%);
 }
 
-// 主题内容全屏界面
-.theme-content-fullscreen {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-// 返回按钮 - 固定在左上角
-.back-button-top-left {
-  position: fixed;
-  top: 20px;
-  left: 20px;
+// UI 容器 (用于一键隐藏)
+.companion-ui-container {
+  position: absolute;
+  top: 0;
+  left: 0;
   z-index: 3;
-  padding: 10px 20px;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  color: white;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 14px;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
-  
-  &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 1);
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+
+  &.hidden {
+    opacity: 0;
+    pointer-events: none;
   }
 }
 
-// 透明番茄钟面板
-.pomodoro-panel-transparent {
+// ----------------------------------------------------
+// ✨ 新的极简控件
+// ----------------------------------------------------
+
+// 通用控制按钮
+.control-button {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+  }
+}
+
+.top-left {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+}
+
+.top-right-controls {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  display: flex;
+  gap: 15px;
+}
+
+.companion-fullscreen:hover .show-ui-button {
+  opacity: 1;
+}
+
+// 屏保模式的"显示"按钮
+.show-ui-button {
+  @extend .control-button; // 继承样式
+  position: absolute;
+  top: 3%;
+  left: 96.2%;
+  //transform: translate(-50%, -50%);
+  z-index: 4; // 在所有之上
+  opacity: 0;
+
+  &:hover { // 鼠标在屏幕上晃才显示
+    opacity: 1;
+  }
+}
+
+
+// 番茄钟 (居中)
+.pomodoro-panel-minimal {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -148,166 +272,228 @@
   width: 90%;
   max-width: 500px;
   padding: 30px;
-  background: transparent;
   color: white;
   text-align: center;
-}
 
-.pomodoro-section-transparent {
-  margin-bottom: 30px;
-  
-  h3 {
-    margin-bottom: 20px;
-    font-size: 28px;
-    font-weight: 600;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
-  }
-  
+  // ✨ 巨大、纤细的数字
   .timer-display {
-    font-size: 64px;
-    font-weight: 300;
-    margin: 30px 0;
-    font-family: 'Courier New', monospace;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+    font-size: clamp(6rem, 12vh, 10rem);
+    font-weight: 200; // 纤细
+    margin: 10px 0; // 缩小上下间距，让布局更紧凑
+    font-family: "Helvetica Neue", "Segoe UI", sans-serif;
+    text-shadow: 0 0 40px rgba(0, 0, 0, 0.7);
+    line-height: 1;
+    font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
   }
-  
-  .timer-controls-transparent {
+
+  .timer-controls-minimal {
     display: flex;
-    gap: 15px;
-    margin-bottom: 20px;
+    gap: 20px;
+    margin-bottom: 0; // 缩小间距
     justify-content: center;
-    
-    .control-btn-transparent {
-      padding: 12px 24px;
-      background: transparent;
-      border: 2px solid rgba(255, 255, 255, 0.7);
-      color: white;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: 500;
-      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
-      
-      &.start {
-        border-color: rgba(76, 175, 80, 0.7);
-        
-        &:hover {
-          background: rgba(76, 175, 80, 0.2);
-          border-color: rgba(76, 175, 80, 1);
-        }
+
+    .control-button { // 继承 .control-button 样式
+      width: 60px;
+      height: 60px;
+      font-size: 1.5rem;
+
+      &.start:hover, &.reset:hover {
+        background: rgba(185, 43, 39, 0.3); // 中国红
+        border-color: #b92b27;
       }
-      
-      &.pause {
-        border-color: rgba(255, 152, 0, 0.7);
-        
-        &:hover {
-          background: rgba(255, 152, 0, 0.2);
-          border-color: rgba(255, 152, 0, 1);
-        }
-      }
-      
-      &.reset {
-        border-color: rgba(244, 67, 54, 0.7);
-        
-        &:hover {
-          background: rgba(244, 67, 54, 0.2);
-          border-color: rgba(244, 67, 54, 1);
-        }
-      }
-    }
-  }
-  
-  .time-presets-transparent {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 25px;
-    justify-content: center;
-    
-    button {
-      padding: 8px 16px;
-      background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.7);
-      color: white;
-      border-radius: 15px;
-      cursor: pointer;
-      font-size: 14px;
-      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
-      
-      &:hover {
-        background: rgba(255, 255, 255, 0.1);
-        border-color: rgba(255, 255, 255, 1);
+
+      &.pause:hover {
+        background: rgba(255, 255, 255, 0.3);
       }
     }
   }
 }
 
-// 白噪声控制区域
-.white-noise-section-transparent {
-  margin-top: 20px;
-  
-  .white-noise-btn {
-    padding: 12px 24px;
-    background: transparent;
-    border: 2px solid rgba(100, 181, 246, 0.7);
-    color: white;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 500;
-    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
-    
-    &:hover,
-    &.active {
-      background: rgba(100, 181, 246, 0.2);
-      border-color: rgba(100, 181, 246, 1);
-    }
-    
-    // 确保没有伪元素产生圈
-    &::before,
-    &::after {
-      content: none !important;
-    }
-  }
-}
-
-.theme-info-transparent {
-  margin-top: 20px;
-  
-  span {
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    padding: 8px 20px;
-    border-radius: 15px;
-    font-size: 14px;
-    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
-  }
-}
-
-.image-info-fullscreen {
+// 底部控制栏
+.bottom-controls {
   position: absolute;
   bottom: 30px;
   left: 0;
   width: 100%;
-  text-align: center;
-  
-  span {
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    padding: 8px 20px;
-    border-radius: 15px;
-    font-size: 14px;
-    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px;
+
+  .time-presets-minimal {
+    display: flex;
+    gap: 12px;
+
+    button {
+      padding: 8px 16px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      color: #ccc;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9rem;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: #fff;
+      }
+    }
+  }
+
+  .white-noise-section-minimal {
+    .control-button.active { // 激活时
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  .theme-info-minimal {
+    span {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-family: "Songti SC", serif;
+      letter-spacing: 2px;
+    }
   }
 }
 
-// 加载指示器
-.loading-indicator {
+// ----------------------------------------------------
+// ✨ 阅读面板 (暗黑玻璃书房)
+// ----------------------------------------------------
+.article-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 400px; // 面板宽度
+  height: 100%;
+  background: rgba(10, 10, 10, 0.85); // 暗黑玻璃
+  backdrop-filter: blur(20px) saturate(120%);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 10;
+  transform: translateX(100%); // 默认隐藏
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); // 弹出动画
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  margin: 40px 0;
-  
+
+  &.open {
+    transform: translateX(0); // 弹出
+  }
+
+  .article-header {
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .article-tabs {
+    display: flex;
+    gap: 10px;
+
+    button {
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 0.9rem;
+      padding: 5px 0;
+      cursor: pointer;
+      font-family: "Songti SC", serif;
+
+      &.active {
+        color: #fff;
+        border-bottom: 2px solid #b92b27; // 中国红
+      }
+    }
+  }
+
+  .close-article {
+    background: none;
+    border: none;
+    color: #888;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+
+  .article-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 30px;
+    font-family: "Songti SC", serif; // 衬线体
+
+    h3 {
+      font-size: 1.8rem;
+      font-weight: normal;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    h4 {
+      font-size: 1rem;
+      color: #888;
+      font-weight: normal;
+      margin-bottom: 30px;
+      border-bottom: 1px solid #444;
+      padding-bottom: 15px;
+    }
+
+    p {
+      font-size: 1rem;
+      line-height: 2.2; // 超大行高，阅读舒适
+      color: #ccc;
+      margin-bottom: 2rem;
+    }
+
+    // ✨ 美化滚动条
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #444;
+      border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  }
+}
+
+// 响应式
+@media (max-width: 768px) {
+  .theme-selection-fullscreen .theme-content-fullscreen .theme-buttons-fullscreen {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .pomodoro-panel-minimal .timer-display {
+    font-size: 20vw;
+  }
+  .bottom-controls {
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    bottom: 10px;
+  }
+  .article-panel {
+    width: 100%;
+  }
+}
+
+// ... (加载指示器不变) ...
+.loading-indicator {
+  /* ... */
   .loading-spinner {
     width: 50px;
     height: 50px;
@@ -316,60 +502,13 @@
     border-radius: 50%;
     animation: spin 1s linear infinite;
   }
-  
-  p {
-    margin: 0;
-    font-size: 16px;
-    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
-  }
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-// 响应式设计
-@media (max-width: 768px) {
-  .theme-selection-fullscreen .theme-content-fullscreen .theme-buttons-fullscreen {
-    grid-template-columns: 1fr;
-    gap: 20px;
+  0% {
+    transform: rotate(0deg);
   }
-  
-  .pomodoro-section-transparent .timer-display {
-    font-size: 48px;
-  }
-  
-  .theme-selection-fullscreen .theme-content-fullscreen {
-    padding: 20px;
-  }
-  
-  .pomodoro-panel-transparent {
-    width: 95%;
-    padding: 20px;
-  }
-  
-  .timer-controls-transparent {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .time-presets-transparent {
-    flex-wrap: wrap;
-  }
-  
-  .back-button-top-left {
-    top: 10px;
-    left: 10px;
-    padding: 8px 16px;
-    font-size: 12px;
-  }
-}
-
-// 全局重置所有按钮的伪元素
-button {
-  &::before,
-  &::after {
-    content: none !important;
+  100% {
+    transform: rotate(360deg);
   }
 }

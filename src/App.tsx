@@ -118,10 +118,25 @@ function HomePage() {
 }
 
 function CompanionPage() {
+  // 1. 创建一个状态来控制 Header 的可见性
+  // 默认是 true (显示 Header)
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+
+  // 2. 创建一个回调函数，这个函数将被传递给子组件
+  // 当子组件状态改变时，会调用这个函数
+  const handleCompanionStateChange = (isCompanionActive: boolean) => {
+    // isCompanionActive=true (选择了主题) -> 隐藏Header (false)
+    // isCompanionActive=false (返回选择页) -> 显示Header (true)
+    setIsHeaderVisible(!isCompanionActive);
+  };
+
   return (
     <>
-      <Header />
-      <CompanionSystem />
+      {/* 3. 根据状态决定是否渲染 Header */}
+      {isHeaderVisible && <Header />}
+
+      {/* 4. 将回调函数作为 prop 传递下去 */}
+      <CompanionSystem onStateChange={handleCompanionStateChange} />
     </>
   );
 }

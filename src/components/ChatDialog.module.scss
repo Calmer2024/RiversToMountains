@@ -1,21 +1,25 @@
-// src/components/ChatDialog.module.scss
+// ------------------------------------
+// 暗黑主题重制
+// ------------------------------------
+
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7); // 遮罩更暗
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 2000;
-  //backdrop-filter: blur(2px);
+  backdrop-filter: blur(5px); // 背景模糊
 }
 
 .dialog {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
+  // 暗黑玻璃质感
+  background: rgba(10, 10, 10, 0.85); // 主体背景
+  backdrop-filter: blur(30px) saturate(120%); // 强模糊
   border-radius: 16px;
   width: 90%;
   max-width: 500px;
@@ -23,9 +27,10 @@
   max-height: 600px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1); // 细边框
   overflow: hidden;
+  color: #f0f0f0; // 默认文字颜色
 }
 
 .header {
@@ -33,13 +38,15 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.5rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  background: rgba(255, 255, 255, 0.8);
-  
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); // 亮色边框
+  background: rgba(0, 0, 0, 0.3); // 头部颜色深一点
+
   h3 {
     margin: 0;
     font-size: 1.2rem;
-    color: #333;
+    color: #f0f0f0;
+    font-family: "Songti SC", serif; // 匹配主题的宋体
+    letter-spacing: 2px;
   }
 }
 
@@ -48,23 +55,26 @@
   gap: 0.5rem;
 }
 
-.clearButton, .closeButton {
+.iconButton {
   background: transparent;
   border: none;
   padding: 0.5rem;
-  border-radius: 4px;
+  border-radius: 50%; // 圆形按钮
   cursor: pointer;
   font-size: 1rem;
-  transition: background-color 0.2s;
-  
-  &:hover {
-    background: rgba(0, 0, 0, 0.05);
-  }
-}
+  color: #aaa;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
 
-.closeButton {
-  font-size: 1.5rem;
-  line-height: 1;
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    transform: scale(1.1);
+  }
 }
 
 .messages {
@@ -78,9 +88,12 @@
 
 .welcome {
   text-align: center;
-  color: #666;
+  color: #888;
   padding: 2rem 1rem;
-  
+  font-family: "Songti SC", serif;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+
   p {
     margin: 0;
   }
@@ -90,12 +103,12 @@
   max-width: 80%;
   display: flex;
   flex-direction: column;
-  
+
   &.userMessage {
     align-self: flex-end;
     align-items: flex-end;
   }
-  
+
   &.botMessage {
     align-self: flex-start;
     align-items: flex-start;
@@ -106,24 +119,26 @@
   padding: 0.75rem 1rem;
   border-radius: 18px;
   word-wrap: break-word;
-  line-height: 1.4;
-  
+  line-height: 1.5; // 行高
+
+  // 用户的消息气泡
   .userMessage & {
-    background: #007AFF;
-    color: white;
+    background: rgba(255, 255, 255, 0.15); // 亮灰色气泡
+    color: #f0f0f0;
     border-bottom-right-radius: 4px;
   }
-  
+
+  // 机器人的消息气泡
   .botMessage & {
-    background: #F2F2F7;
-    color: #333;
+    background: rgba(0, 0, 0, 0.25); // 深灰色气泡
+    color: #d0d0d0;
     border-bottom-left-radius: 4px;
   }
 }
 
 .timestamp {
   font-size: 0.75rem;
-  color: #999;
+  color: #666; // 时间戳颜色
   margin-top: 0.25rem;
   padding: 0 0.5rem;
 }
@@ -132,14 +147,14 @@
   display: flex;
   gap: 4px;
   padding: 0.75rem 1rem;
-  
+
   span {
     height: 8px;
     width: 8px;
     border-radius: 50%;
-    background: #999;
+    background: #666; // 提示点
     animation: typing 1.4s infinite ease-in-out;
-    
+
     &:nth-child(1) { animation-delay: -0.32s; }
     &:nth-child(2) { animation-delay: -0.16s; }
   }
@@ -152,8 +167,8 @@
 
 .inputArea {
   padding: 1rem 1.5rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  background: rgba(255, 255, 255, 0.8);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.3); // 输入区域背景
 }
 
 .inputContainer {
@@ -164,42 +179,187 @@
 
 .textInput {
   flex: 1;
-  border: 1px solid #ddd;
+  background: rgba(0, 0, 0, 0.2); // 输入框背景
+  border: 1px solid #444; // 输入框边框
   border-radius: 20px;
   padding: 0.75rem 1rem;
   resize: none;
   font-family: inherit;
   font-size: 0.9rem;
+  color: #fff; // 输入文字颜色
   max-height: 120px;
   min-height: 40px;
-  
+
+  &::placeholder {
+    color: #777; // 提示文字颜色
+  }
+
   &:focus {
     outline: none;
-    border-color: #007AFF;
+    border-color: #b92b27; // 选中时：中国红
+    box-shadow: 0 0 0 2px rgba(185, 43, 39, 0.3);
   }
-  
+
   &:disabled {
-    background-color: #f5f5f5;
+    background-color: #222;
     cursor: not-allowed;
   }
 }
 
 .sendButton {
-  background: #007AFF;
+  background: #b92b27; // 发送按钮：中国红
   color: white;
   border: none;
-  border-radius: 20px;
-  padding: 0.75rem 1.5rem;
+  border-radius: 50%; // 圆形
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   font-size: 0.9rem;
-  transition: background-color 0.2s;
-  
+  transition: all 0.2s ease-in-out;
+
   &:hover:not(:disabled) {
-    background: #0056CC;
+    background: #d4380d; // 悬停加深
+    transform: scale(1.05);
   }
-  
+
   &:disabled {
-    background: #ccc;
+    background: #555; // 禁用时
+    color: #888;
     cursor: not-allowed;
+  }
+}
+
+// ------------------------------------
+// 设置弹窗的样式
+// ------------------------------------
+.settingsOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8); // 更暗的遮罩
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000; // 必须比聊天框高
+}
+
+.settingsDialog {
+  background: #1c1c1c; // 设置框背景
+  border: 1px solid #444;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  color: #f0f0f0;
+}
+
+.settingsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #444;
+
+  h4 {
+    margin: 0;
+    font-family: "Songti SC", serif;
+    letter-spacing: 1px;
+    font-size: 1.1rem;
+  }
+}
+
+.settingsCloseButton {
+  background: transparent;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0;
+
+  &:hover {
+    color: #fff;
+  }
+}
+
+.settingsBody {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  label {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #aaa;
+  }
+
+  p {
+    font-size: 0.85rem;
+    color: #777;
+    margin: -0.5rem 0 0.5rem;
+  }
+}
+
+.settingsInput {
+  background: #111;
+  border: 1px solid #555;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  color: #fff;
+  font-size: 1rem;
+
+  &:focus {
+    outline: none;
+    border-color: #b92b27;
+  }
+}
+
+.settingsSaveButton {
+  background: #b92b27; // 保存按钮：中国红
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background: #d4380d;
+  }
+}
+
+// 美化滚动条
+
+// 适用于 .messages 和 .textInput
+.messages::-webkit-scrollbar,
+.textInput::-webkit-scrollbar {
+  width: 6px; // 滚动条宽度
+}
+
+// 滚动条的轨道 (背景)
+.messages::-webkit-scrollbar-track,
+.textInput::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1); // 轨道背景
+  border-radius: 3px;
+}
+
+// 滚动条的滑块 (那个可以拖动的小条)
+.messages::-webkit-scrollbar-thumb,
+.textInput::-webkit-scrollbar-thumb {
+  background: #444; // 滑块颜色
+  border-radius: 3px;
+
+  &:hover {
+    background: #555; // 悬停时颜色
   }
 }
