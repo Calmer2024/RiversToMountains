@@ -1,24 +1,20 @@
-import { type FC, useRef } from 'react';
+import { type FC } from 'react';
 import parentStyles from '../HorizontalStorySection.module.scss';
 import styles from './SlideZhangyeDanxia.module.scss'; 
-import { useLazyVideo } from '../useLazyVideo';
 
 export const SlideZhangyeDanxia: FC = () => {
-    const videoRef = useRef<HTMLVideoElement>(null);
-    useLazyVideo(videoRef);
     return (
         <div className={`${parentStyles.slide} ${styles.slideZhangyeDanxia}`}>
             <video
-                ref={videoRef}
                 muted   
+                autoPlay 
                 playsInline
                 loop
-                data-src="/videos/zhangye-danxia-bg.mp4"
+                src="/videos/zhangye-danxia-bg.mp4" 
                 className={styles.fullScreenVideo}
             />
 
             <div className={parentStyles.mainContent}>
-                {/* [!] 替换文本 */}
                 <div className={`${parentStyles.textContent} ${styles.textContent}`} data-animate="text-fade-in">
                     <h2>张掖丹霞</h2>
                     <p>

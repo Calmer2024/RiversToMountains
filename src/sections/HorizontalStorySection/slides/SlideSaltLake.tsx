@@ -1,16 +1,15 @@
 import { useLayoutEffect, useRef, type FC } from 'react';
 import { gsap } from 'gsap';
-import { useScroll } from '../ScrollContext'; // [新] 导入 Context Hook
+import { useScroll } from '../ScrollContext'; 
 import parentStyles from '../HorizontalStorySection.module.scss';
 import styles from './SlideSaltLake.module.scss';
 import { useLazyVideo } from '../useLazyVideo';
 
 
 export const SlideSaltLake: FC = () => {
-    // [新] 从 Context 获取父组件的 horizontalTween
     const { horizontalTween } = useScroll();
 
-    // [新] Refs 现在是局部的
+    // Refs 现在是局部的
     const slideRef = useRef<HTMLDivElement>(null);
     const splitTextRef1 = useRef<HTMLSpanElement>(null);
     const splitTextRef2 = useRef<HTMLSpanElement>(null);
@@ -18,11 +17,8 @@ export const SlideSaltLake: FC = () => {
     const splitEnglishRef2 = useRef<HTMLSpanElement>(null);
     const saltLakeVideoContainerRef = useRef<HTMLDivElement>(null);
 
-    const videoRef = useRef<HTMLVideoElement>(null);
-    useLazyVideo(videoRef);
-
     useLayoutEffect(() => {
-        // [新] 等待父组件的 horizontalTween 准备就绪
+        // 等待父组件的 horizontalTween 准备就绪
         if (!horizontalTween) {
             return;
         }
@@ -52,7 +48,6 @@ export const SlideSaltLake: FC = () => {
 
             saltLakeTimeline.add("intro", 0);
 
-            // [!] 使用您最新的 GSAP matchMedia 逻辑...
             const mm = gsap.matchMedia();
             mm.add(
                 {
@@ -62,9 +57,6 @@ export const SlideSaltLake: FC = () => {
                 (context) => {
                     const { isDesktop } = context.conditions!;
 
-                    // [!] 注意：您代码中 x 值为 '-30vw'
-                    // 但您之前设置 .saltLakeVideoContainer 宽度为 55vw
-                    // 30vw + 30vw = 60vw 间隙. 55vw 视频. 完美.
                     const xMove = isDesktop ? '-35vw' : '-48vw'; // 移动端 90vw 视频 -> 48vw 移动 = 96vw 间隙
                     const xMovePos = isDesktop ? '35vw' : '48vw';
 
@@ -73,7 +65,7 @@ export const SlideSaltLake: FC = () => {
                     saltLakeTimeline.to(sEng1, { x: xMove, ease: "power2.inOut", duration: 1 }, "intro");
                     saltLakeTimeline.to(sEng2, { x: xMovePos, ease: "power2.inOut", duration: 1 }, "intro");
                 }
-            ); // 结束 mm.add
+            ); 
 
             saltLakeTimeline.fromTo(videoContainer,
                 { scale: 0, autoAlpha: 0 },
@@ -81,10 +73,10 @@ export const SlideSaltLake: FC = () => {
                 "intro"
             );
 
-        }, slide); // [新] 将 GSAP 上下文限定在此幻灯片
+        }, slide); 
 
         return () => ctx.revert();
-    }, [horizontalTween]); // [新] 依赖 horizontalTween
+    }, [horizontalTween]); // 依赖 horizontalTween
 
     return (
         <div
@@ -106,11 +98,11 @@ export const SlideSaltLake: FC = () => {
                 ref={saltLakeVideoContainerRef}
             >
                 <video
-                    ref={videoRef}
                     muted   
+                    autoPlay 
                     playsInline
                     loop
-                    data-src="/videos/salt-lake.mp4"
+                    src="/videos/salt-lake.mp4" 
                 />
                 <p>
                     当山峰隐去，大地变为镜面。在这里，天空与大地再无分别。

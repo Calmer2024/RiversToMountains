@@ -1,11 +1,8 @@
-import { type FC, useRef } from 'react';
+import { type FC} from 'react';
 import parentStyles from '../HorizontalStorySection.module.scss';
 import styles from './SlideChapterStart.module.scss';
-import { useLazyVideo } from '../useLazyVideo';
 
 export const SlideLushan: FC = () => {
-    const videoRef = useRef<HTMLVideoElement>(null);
-    useLazyVideo(videoRef);
     return (
         <div className={`${parentStyles.slide} ${parentStyles.slideChapterStart}`}>
 
@@ -21,16 +18,14 @@ export const SlideLushan: FC = () => {
                 <div className={styles.videoLayoutWrapper} data-animate="text-fade-in">
                     <div className={styles.capsuleVideoContainer}>
                         <video
-                            ref={videoRef}
                             muted   
+                            autoPlay 
                             playsInline
                             loop
-                            data-src="/videos/lushan-loop.mp4"
+                            src="/videos/lushan-loop.mp4" 
                             className={styles.capsuleVideo}
                         />
                     </div>
-                    {/* [!code focus:start] */}
-                    {/* [!] 替换四个角标 */}
                     <span className={`${styles.capsuleLabel} ${styles.labelTopLeft}`}>
                         匡庐奇秀甲天下
                     </span>
@@ -43,14 +38,11 @@ export const SlideLushan: FC = () => {
                     <span className={`${styles.capsuleLabel} ${styles.labelBottomRight}`}>
                         诗山云海
                     </span>
-                    {/* [!code focus:end] */}
                 </div>
 
                 {/* 标题和介绍文字 - 复用父组件的 .chapterText */}
                 <div className={parentStyles.chapterText} data-animate="text-fade-in">
-                    {/* [!] 替换标题 */}
                     <h2>庐山</h2>
-                    {/* [!] 替换文本 */}
                     <p>
                         诗意与云雾的故乡。“不识庐山真面目，只缘身在此山中。”
                     </p>
