@@ -21,9 +21,40 @@ const imageReveal = {
   }
 };
 
+// 〰️ 连线动画配置：像水流一样画出来
+const pathAnim = {
+  hidden: { pathLength: 0, opacity: 0 },
+  visible: {
+    pathLength: 1,
+    opacity: 1,
+    transition: {
+      duration: 5, // 画慢一点，显得优雅
+      ease: "easeInOut"
+    }
+  }
+};
+
 export const IntroSection = () => {
   return (
     <section className={styles.sectionContainer}>
+
+      {/* 🎨 背景连线层 */}
+      {/* 这个 SVG 覆盖整个区域，画一条 S 型曲线链接上下两部分 */}
+      <svg className={styles.connectionSvg} viewBox="0 0 100 100" preserveAspectRatio="none">
+        <motion.path
+          // 这是一条贝塞尔曲线 (S型)
+          // M 80 20: 起点在右上 (对应第一张图附近)
+          // C ... : 控制点，画出优雅的弧线
+          // ... 20 80: 终点在左下 (对应第二张图附近)
+          d="M 30 15 C 135 -20, 25 50, 25 75"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }} // 滚到 20% 时开始画线
+          // @ts-ignore
+          variants={pathAnim}
+        />
+
+      </svg>
       <div className={styles.contentWrapper}>
 
         {/* 🟦 第一组：左文右图 */}

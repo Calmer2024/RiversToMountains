@@ -5,12 +5,36 @@
   // 只隐藏横向溢出，防止竖排文字被切
   overflow-x: hidden;
   overflow-y: visible;
+  position: relative; // 为了定位背景连线
+}
+
+// 〰️ 连线 SVG 的容器
+.connectionSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0; // 放在最底层
+  pointer-events: none; // 防止挡住鼠标交互
+
+  path {
+
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.35); // 淡淡的白色
+    //stroke: #b92b27;
+    stroke-width: 4;
+    vector-effect: non-scaling-stroke; // 防止缩放时线条变粗
+    //stroke-dasharray: 1 1;
+    stroke-linecap: round; // 线头变圆
+  }
 }
 
 .contentWrapper {
   max-width: 1600px; // 稍微宽一点
   margin: 0 auto;
-  position: relative
+  position: relative;
+  z-index: 1; // 保证内容在线的上面
 }
 
 .storyRow {
@@ -62,8 +86,8 @@
   .subtitle {
     display: flex;
     flex-direction: column; /* 竖着排 */
-    max-width: 300px;         /* 限制最大宽度 */
-    flex-grow: 1;           /* 占满印章右侧空间 */
+    max-width: 300px; /* 限制最大宽度 */
+    flex-grow: 1; /* 占满印章右侧空间 */
   }
 
   .subtitle span:first-child {
@@ -95,6 +119,27 @@
   flex: 1.4; // 图片占比大一点
   position: relative; // 为了定位那行竖排的字
 
+  // 使用伪元素制作“错位画框”
+  &::after {
+    content: '';
+    position: absolute;
+    // 框的大小和位置：向右下偏移 20px
+    top: 20px;
+    left: 20px;
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.2); // 细细的边框
+    z-index: -1; // 放在图片后面
+    transition: all 0.6s ease; // 动起来更丝滑
+  }
+
+  // 鼠标悬停时的微交互：框和图片反向移动，产生立体感
+  &:hover::after {
+    top: 10px;
+    left: 10px;
+    border-color: rgba(185, 43, 39, 0.4); // 悬停时框微微变红，呼应印章
+  }
+
   img {
     width: 100%;
     display: block;
@@ -104,8 +149,8 @@
 
 
     &:hover {
-      transform: scale(1.03); // 鼠标放上去缓慢放大
-      filter: brightness(1);
+      transform: scale(1.02); // 鼠标放上去缓慢放大
+      //filter: brightness(1);
     }
   }
 }
