@@ -13,7 +13,6 @@ import FeedbackPage from './sections/FeedbackPage';
 
 // 区域 (Sections)
 import HeroSection from './sections/HeroSection';
-// import { CardCarousel } from './sections/CardCarousel';
 import {HorizontalStorySection} from './sections/HorizontalStorySection/HorizontalStorySection';
 import {StoryHeaderSection} from './sections/StoryHeaderSection';
 import { IntroSection } from './sections/IntroSection';
@@ -106,6 +105,10 @@ function HomePage() {
         subtitle="A sanctuary nestled in the classic landscapes of China"
         buttonLink="/bpco"
       />
+      <IntroSection />
+      <StatsSection />
+      <FeatureSection />
+      <TextMaskSection />
       <StoryHeaderSection />
       <div ref={storySectionRef}>
         <HorizontalStorySection />
