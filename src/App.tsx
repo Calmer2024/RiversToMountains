@@ -23,6 +23,7 @@ import { StatsSection } from './sections/StatsSection';
 
 import TestPlayground from "./TestPlayground.tsx";
 import {FeatureSection} from "./sections/FeatureSection.tsx";
+import {TextMaskSection} from "./sections/TextMaskSection.tsx";
 
 /**
  * 主页组件
@@ -55,6 +56,7 @@ function HomePage() {
       {/* <CardCarousel />  */}
       <StoryHeaderSection/>
       <IntroSection/>
+      <TextMaskSection/>
       <FeatureSection/>
       <HorizontalStorySection/>
       <CompanionSystem/>
