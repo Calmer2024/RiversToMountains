@@ -17,7 +17,6 @@ interface BackgroundImage {
 }
 
 const CompanionSystem: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
   const [pendingTheme, setPendingTheme] = useState<string | null>(null);
   const [timerActive, setTimerActive] = useState(false);
@@ -94,14 +93,14 @@ const CompanionSystem: React.FC = () => {
 
   // 主题选择界面的背景图片轮播
   useEffect(() => {
-    if (isOpen && !selectedTheme && !pendingTheme) {
+    if (!selectedTheme && !pendingTheme) {
       const imageInterval = window.setInterval(() => {
         setCurrentImageIndex(prev => (prev + 1) % backgroundImages.length);
       }, 10000); // 每10秒切换一张图片
 
       return () => clearInterval(imageInterval);
     }
-  }, [isOpen, selectedTheme, pendingTheme, backgroundImages.length]);
+  }, [selectedTheme, pendingTheme, backgroundImages.length]);
 
   // 视频加载控制
   useEffect(() => {
@@ -203,20 +202,6 @@ const CompanionSystem: React.FC = () => {
     }
   };
 
-  const closeCompanion = () => {
-    setIsOpen(false);
-    setSelectedTheme(null);
-    setPendingTheme(null);
-    setTimerActive(false);
-    setWhiteNoisePlaying(false);
-    if (videoRef.current) {
-      videoRef.current.pause();
-    }
-    if (audioRef.current) {
-      audioRef.current.pause();
-    }
-  };
-
   return (
     <>
       {/* 隐藏的音频元素 - 用于白噪声 */}
@@ -226,63 +211,49 @@ const CompanionSystem: React.FC = () => {
         preload="metadata"
       />
 
-      {/* 触发按钮 */}
-      <button 
-        className="companion-trigger"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        {isOpen ? '关闭陪伴' : '开启陪伴'}
-      </button>
-
-      {/* 全屏陪伴系统 */}
-      {isOpen && (
-        <div className="companion-fullscreen">
-          {/* 主题选择界面 - 当没有选中主题或正在加载主题时显示 */}
-          {(!selectedTheme || pendingTheme) && (
-            <div className="theme-selection-fullscreen">
-              <div className="theme-background-fullscreen">
-                <img 
-                  src={backgroundImages[currentImageIndex].src} 
-                  alt={backgroundImages[currentImageIndex].alt}
-                />
-              </div>
-              <div className="theme-content-fullscreen">
-                {pendingTheme ? (
-                  <>
-                    <h2>正在加载 {pendingThemeData?.name} 主题...</h2>
-                    <div className="loading-indicator">
-                      <div className="loading-spinner"></div>
-                      <p>请稍候，正在准备沉浸式体验</p>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <h2>选择陪伴主题</h2>
-                    <div className="theme-buttons-fullscreen">
-                      {themes.map(theme => (
-                        <button
-                          key={theme.id}
-                          className="theme-button"
-                          onClick={() => selectTheme(theme.id)}
-                        >
-                          {theme.name}
-                        </button>
-                      ))}
-                    </div>
-                    <div className="image-info-fullscreen">
-                      <span>{backgroundImages[currentImageIndex].alt}</span>
-                    </div>
-                  </>
-                )}
-                <button 
-                  className="close-companion-btn"
-                  onClick={closeCompanion}
-                >
-                  关闭陪伴系统
-                </button>
-              </div>
+      <div className="companion-fullscreen">
+        {/* 主题选择界面 - 当没有选中主题或正在加载主题时显示 */}
+        {(!selectedTheme || pendingTheme) && (
+          <div className="theme-selection-fullscreen">
+            <div className="theme-background-fullscreen">
+              <img 
+                src={backgroundImages[currentImageIndex].src} 
+                alt={backgroundImages[currentImageIndex].alt}
+              />
             </div>
-          )}
+            <div className="theme-content-fullscreen">
+              {pendingTheme ? (
+                <>
+                  <h2>正在加载 {pendingThemeData?.name} 主题...</h2>
+                  <div className="loading-indicator">
+                    <div className="loading-spinner"></div>
+                    <p>请稍候，正在准备沉浸式体验</p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <h2>选择陪伴主题</h2>
+                  <div className="theme-buttons-fullscreen">
+                    {themes.map(theme => (
+                      <button
+                        key={theme.id}
+                        className="theme-button"
+                        onClick={() => selectTheme(theme.id)}
+                      >
+                        {theme.name}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="image-info-fullscreen">
+                    <span>{backgroundImages[currentImageIndex].alt}</span>
+                  </div>
+                </>
+              )}
+              {/* 关闭按钮 <-- 移除 */}
+              {/* <button className="close-companion-btn" ... </button> */}
+            </div>
+          </div>
+        )}
 
           {/* 主题内容界面 - 只有当主题完全加载好后才显示 */}
           {selectedTheme && currentTheme && !pendingTheme && (
@@ -352,7 +323,6 @@ const CompanionSystem: React.FC = () => {
             </div>
           )}
         </div>
-      )}
     </>
   );
 };
