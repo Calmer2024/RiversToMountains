@@ -1,25 +1,23 @@
-// @ts-ignore
-import React from 'react';
-import { motion } from 'framer-motion';
+import {motion} from 'framer-motion';
 import styles from './IntroSection.module.scss';
 
 // 定义一个简单的“向上浮现”动画配置
 const fadeUp = {
-  hidden: { opacity: 0, y: 40 }, // 初始状态：透明，在下方 50px
+  hidden: {opacity: 0, y: 40}, // 初始状态：透明，在下方 50px
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 2, ease: "easeOut" } // 慢慢浮上来，耗时2秒
+    transition: {duration: 2, ease: "easeOut"} // 慢慢浮上来，耗时2秒
   }
 };
 
 // 动画配置：图片容器遮罩
 const imageReveal = {
-  hidden: { opacity: 0, scale: 0.95 },
+  hidden: {opacity: 0, scale: 0.95},
   visible: {
     opacity: 1,
     scale: 1,
-    transition: { duration: 2, ease: "easeOut" }
+    transition: {duration: 2, ease: "easeOut"}
   }
 };
 
@@ -36,13 +34,16 @@ export const IntroSection = () => {
             className={styles.textContent}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{once: true, amount: 0.3}}
             // @ts-ignore
             variants={fadeUp}
           >
             <h3>
               <span className={styles.seal}>山河</span> {/* 🏮 红色印章 */}
-              古韵 · 数字化新生
+              <span className={styles.subtitle}>
+                <span>古韵</span>
+                <span>数字化新生</span>
+              </span>
             </h3>
             <p>
               我们致力于挖掘中华大地被遗忘的绝美风景。
@@ -55,11 +56,14 @@ export const IntroSection = () => {
             className={styles.imageWrapper}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{once: true, amount: 0.3}}
             // @ts-ignore
             variants={imageReveal}
           >
-            <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Mountain" />
+            {/*TODO：改一个合适的图片*/}
+            <img
+              src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80"
+              alt="Mountain"/>
 
             {/* 📜 装饰：竖排文字 (放在图片边缘) */}
             <div className={styles.verticalDeco}>
@@ -75,13 +79,16 @@ export const IntroSection = () => {
             className={styles.textContent}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{once: true, amount: 0.3}}
             // @ts-ignore
             variants={fadeUp}
           >
             <h3>
               <span className={styles.seal}>寻迹</span>
-              沉浸体验 · 指尖触达
+              <span className={styles.subtitle}>
+                <span>沉浸体验</span>
+                <span>指尖触达</span>
+              </span>
             </h3>
             <p>
               这是一幅流动的画卷。
@@ -93,11 +100,14 @@ export const IntroSection = () => {
             className={styles.imageWrapper}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{once: true, amount: 0.3}}
             // @ts-ignore
             variants={imageReveal}
           >
-            <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Nature" />
+            {/*TODO：改一个合适的图片*/}
+            <img
+              src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80"
+              alt="Nature"/>
             {/* 📜 装饰：竖排文字 */}
             <div className={`${styles.verticalDeco} ${styles.left}`}>
               万物有成理而不说

@@ -18,6 +18,8 @@ import HeroSection from './sections/HeroSection';
 import {HorizontalStorySection} from './sections/HorizontalStorySection/HorizontalStorySection';
 import {StoryHeaderSection} from './sections/StoryHeaderSection';
 import { IntroSection } from './sections/IntroSection';
+import { StatsSection } from './sections/StatsSection';
+
 
 import TestPlayground from "./TestPlayground.tsx";
 
@@ -54,6 +56,7 @@ function HomePage() {
       <IntroSection/>
       <HorizontalStorySection/>
       <CompanionSystem/>
+      <StatsSection/>
     </div>
   );
 }

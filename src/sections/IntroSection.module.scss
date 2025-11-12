@@ -57,6 +57,22 @@
     font-weight: 300;
     max-width: 90%; // 稍微限制宽度，不让文字太长
   }
+
+
+  .subtitle {
+    display: flex;
+    flex-direction: column; /* 竖着排 */
+    max-width: 300px;         /* 限制最大宽度 */
+    flex-grow: 1;           /* 占满印章右侧空间 */
+  }
+
+  .subtitle span:first-child {
+    text-align: left;
+  }
+
+  .subtitle span:last-child {
+    text-align: right;
+  }
 }
 
 // 🏮 红色印章样式
@@ -76,15 +92,16 @@
 
 // --- 图片区域 ---
 .imageWrapper {
-  flex: 1.3; // 图片占比大一点
+  flex: 1.4; // 图片占比大一点
   position: relative; // 为了定位那行竖排的字
 
   img {
     width: 100%;
     display: block;
-    border-radius: 2px;
+    border-radius: 12px;
     filter: brightness(0.9) contrast(1.1); // 稍微调色，更有质感
     transition: transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); // 极其平滑的缓慢缩放
+
 
     &:hover {
       transform: scale(1.03); // 鼠标放上去缓慢放大
