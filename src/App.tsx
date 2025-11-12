@@ -13,7 +13,6 @@ import FeedbackPage from './sections/FeedbackPage';
 
 // 区域 (Sections)
 import HeroSection from './sections/HeroSection';
-// import { CardCarousel } from './sections/CardCarousel';
 import { HorizontalStorySection } from './sections/HorizontalStorySection/HorizontalStorySection';
 import { StoryHeaderSection } from './sections/StoryHeaderSection';
 
@@ -45,11 +44,19 @@ function HomePage() {
         subtitle="A sanctuary nestled in the classic landscapes of China"
         buttonLink="/bpco"
       />
-      {/* <CardCarousel />  */}
       <StoryHeaderSection />
       <HorizontalStorySection />
-      <CompanionSystem />
+      {/* <CompanionSystem /> */}
     </div>
+  );
+}
+
+function CompanionPage() {
+  return (
+    <>
+      <Header />
+      <CompanionSystem />
+    </>
   );
 }
 
@@ -63,6 +70,9 @@ function App() {
       <Routes>
         {/* 路由：主页 */}
         <Route path="/" element={<HomePage />} />
+
+        {/* 路由：陪伴系统 */}
+        <Route path="/outside" element={<CompanionPage />} />
         
         {/* 路由：Bpco 页面 */}
         <Route path="/bpco" element={<BpcoPage />} />

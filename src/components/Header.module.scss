@@ -10,12 +10,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 2rem 2rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
 
-.headerLeft, .headerRight {
+.headerRight {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -25,7 +25,35 @@
   }
 }
 
-/* ↓↓↓ 在底部追加 ↓↓↓ */
+.headerLeft {
+  display: flex;
+  align-items: center;
+  &.scrolled {
+    background-color: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.iconButton {
+  color: white !important; /* 白色图标 */
+  background: transparent !important;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* 图标大小调整 */
+.iconButton svg {
+  width: 24px !important; /* 调整图标大小 */
+  height: 24px !important;
+}
+
+/* 悬停效果 */
+.iconButton:hover {
+  color: rgba(255, 255, 255, 0.8) !important;
+  transform: scale(1.1);
+}
+
 
 /* 首页完全透明 */
 .homeTransparent {
@@ -36,7 +64,79 @@
 
 /* 毛玻璃 */
 .headerGlass {
-  background-color: rgba(255, 255, 255, 0.3) !important;
+  background-color: transparent !important;
   backdrop-filter: blur(10px) !important;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 1. 左侧 Logo 和文字 */
+.logo {
+  height: 36px;
+  width: auto;
+  margin-right: 0.75rem;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+.logoText {
+  font-size: 1.25rem; /* 调整文字大小 */
+  font-weight: 600;
+  color: white; /* 保持和右侧图标一致 */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.headerCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+}
+
+.toggleContainer {
+  position: relative;
+  display: flex;
+  width: 200px; /* 固定宽度，可调整 */
+  background-color: rgba(0, 0, 0, 0.25); /* 底色 */
+  border-radius: 20px;
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+}
+
+.toggleButton {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  flex: 1; /* 均分宽度 */
+  padding: 6px 16px;
+  cursor: pointer;
+  border-radius: 16px;
+  z-index: 2; /* 在滑块之上 */
+  transition: color 0.3s ease;
+  font-weight: 500;
+  text-align: center;
+  
+  &.active {
+    color: #111; /* 激活时文字变深色 */
+  }
+}
+
+.toggleSlider {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  height: calc(100% - 8px); /* 减去
+  padding */
+  width: calc(50% - 4px); /* 一半宽度，减去
+  padding */
+  background-color: white; /* 滑块是白色 */
+  border-radius: 16px;
+  z-index: 1; /* 在按钮之下 */
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transform: translateX(0);
+  
+  &.sliderRight {
+    /* 移动 100% 自身宽度 + 4px 的右侧 padding */
+    transform: translateX(calc(100% + 4px)); 
+  }
 }
