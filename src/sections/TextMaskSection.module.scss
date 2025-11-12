@@ -1,0 +1,72 @@
+.container {
+  background-color: #0a0a0a; // 纯黑背景
+  height: 60vh; // 不需要全屏，占 60% 屏幕高度即可，作为一个优雅的过渡带
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.textWrapper {
+  text-align: center;
+  position: relative;
+}
+
+.maskedText {
+  // 1. 字体设置：必须够粗、够大，才能看清里面的纹理
+  font-family: "Songti SC", "Noto Serif SC", serif; // 宋体最有韵味
+  font-size: 12vw; // 响应式字体，随着屏幕变宽而变大，极其震撼
+  font-weight: 900; // 最粗
+  letter-spacing: 20px; // 字间距拉开
+  margin: 0;
+  line-height: 1.2;
+
+  // A. 设置背景图 (流动的金色流体纹理)
+  //TODO: 换一个好看的背景
+  background-image: url("https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1000&auto=format&fit=crop");
+  background-size: 200% auto; // 放大背景，为了让它动起来
+
+  // B. 背景只在文字里显示
+  background-clip: text;
+  -webkit-background-clip: text; // 兼容 Safari/Chrome
+
+  // C. 把文字本身变成透明，漏出背景
+  color: transparent;
+
+  // D. 加动画：让背景图缓缓移动，仿佛文字里有水在流
+  animation: flowBackground 15s ease-in-out infinite alternate;
+
+  // 稍微加一点点文字阴影，增加立体感（可选）
+  // text-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
+}
+
+.subtitle {
+  margin-top: 20px;
+  font-family: "Helvetica Neue", sans-serif;
+  font-size: 1.2rem;
+  color: #666;
+  letter-spacing: 10px; // 极宽的字间距，显得非常高级
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+// 🌊 定义流光动画
+@keyframes flowBackground {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%; // 背景左右慢慢平移
+  }
+}
+
+// 📱 手机端适配
+@media (max-width: 768px) {
+  .maskedText {
+    font-size: 18vw; // 手机上字再大一点
+    letter-spacing: 10px;
+  }
+  .container {
+    height: 40vh;
+  }
+}
