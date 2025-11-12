@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React, { useState,useEffect, useRef } from 'react'; 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './styles/global.scss';
 
@@ -21,6 +21,60 @@ import { StoryHeaderSection } from './sections/StoryHeaderSection';
  * 包含了开场动画和主页所有内容
  */
 function HomePage() {
+  // 用于控制 Header 隐藏
+  const [isHeaderHidden, setIsHeaderHidden] = useState(false);
+  // 用于引用 <HorizontalStorySection /> 包装器的 ref
+  const storySectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const HEADER_HEIGHT_PX = 100;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsHeaderHidden(true);
+        }else {
+          // 目标元素不再相交。
+          // 这有两种情况：
+          // 1. 页面刚加载，元素在视口下方 (top > 100px)
+          // 2. 
+          // 用户向上滚动，元素回到了触发区上方 (top > 100px)
+          
+          // 检查元素的顶部是否在触发线 *以下*
+          // (boundingClientRect.top > HEADER_HEIGHT_PX)
+          if (entry.boundingClientRect.top > HEADER_HEIGHT_PX) {
+            // 这适用于 "页面加载" 和 "向上滚动"
+            // 此时应该显示 Header
+            setIsHeaderHidden(false);
+          }
+          
+          // 还有第三种情况：
+          // 3. 用户继续向下滚动，元素完全离开了视口 (top < 0)
+          // 此时, (entry.boundingClientRect.top > HEADER_HEIGHT_PX) 为 false
+          // 所以我们什么也不做，Header 保持隐藏。
+        }
+      },
+      {
+        // 触发线：在视口顶部 向下 70px 的位置。
+        // 当 storySectionRef 的顶部 碰到 这条线时...
+        rootMargin: `-${HEADER_HEIGHT_PX}px 0px 0px 0px`,
+        threshold: 0 // 只要一碰到就触发
+      }
+    );
+
+    const currentRef = storySectionRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []); // 空依赖数组，确保只运行一次
+
+
   const [animationCompleted, setAnimationCompleted] = useState(false);
 
   const handleAnimationComplete = () => {
@@ -35,7 +89,7 @@ function HomePage() {
   // 动画完成后，显示主页内容
   return (
     <div className="app-container">
-      <Header />
+      <Header isHidden={isHeaderHidden} />
       <HeroSection
         videoSrc="/videos/hero-video.mp4"
         posterImage="/images/hero-poster.jpg"
@@ -45,9 +99,11 @@ function HomePage() {
         buttonLink="/bpco"
       />
       <StoryHeaderSection />
-      <HorizontalStorySection />
+      <div ref={storySectionRef}>
+        <HorizontalStorySection />
+      </div>
       {/* <CompanionSystem /> */}
-    </div>
+    </div>  
   );
 }
 

@@ -156,3 +156,12 @@
     transform: translateX(calc(100% + 4px));
   }
 }
+
+.headerHidden {
+  /* 向上滑出视口 */
+  transform: translateY(-100%);
+  /* 增加淡出效果 */
+  opacity: 0;
+  /* 隐藏后禁止点击，防止遮挡 */
+  pointer-events: none;
+}

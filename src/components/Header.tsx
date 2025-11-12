@@ -5,7 +5,11 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { FloatingAssistant } from './FloatingAssistant';
 import styles from './Header.module.scss';
 
-export const Header: FC = () => {
+interface HeaderProps {
+  isHidden?: boolean;
+}
+
+export const Header: FC<HeaderProps> = ({ isHidden = false }) => {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -51,7 +55,8 @@ export const Header: FC = () => {
                         // 只有在 'home' 视图 且未滚动时才透明
                         activeView === 'home' && isRootHome && !scrolled 
                             ? styles.homeTransparent 
-                            : styles.headerGlass
+                            : styles.headerGlass,
+                        isHidden ? styles.headerHidden : ''
                     ].join(' ')
                 }
             >
