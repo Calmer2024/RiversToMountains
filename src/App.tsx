@@ -105,15 +105,14 @@ function HomePage() {
         subtitle="A sanctuary nestled in the classic landscapes of China"
         buttonLink="/bpco"
       />
-      <IntroSection />
       <StatsSection />
+      <IntroSection />
       <FeatureSection />
       <TextMaskSection />
       <StoryHeaderSection />
       <div ref={storySectionRef}>
         <HorizontalStorySection />
       </div>
-      {/* <CompanionSystem /> */}
     </div>  
   );
 }
