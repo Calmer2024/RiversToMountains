@@ -11,17 +11,17 @@ import styles from './StatsSection.module.scss';
  */
 const AnimatedCounter = ({ value, shouldGrow = false }: { value: number, shouldGrow?: boolean }) => {
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isInView = useInView(ref, { once: true, margin: "300px" });
 
   // 不再从 0 开始，而是从目标值的 xx% 开始跑
-  const startValue = value * 0.98;
+  const startValue = value * 0.95;
 
   const motionValue = useMotionValue(startValue);
 
   // 调整物理参数，让刹车更灵敏，不拖泥带水
   const springValue = useSpring(motionValue, {
     damping: 100, // 阻尼 (刹车)：越小晃得越厉害，适中一点停得快
-    stiffness: 500, // 刚度 (动力)：越大跑得越快
+    stiffness: 300, // 刚度 (动力)：越大跑得越快
     mass: 1, // 质量：轻一点，启动和停止都更快
   });
 

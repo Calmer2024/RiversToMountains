@@ -22,6 +22,7 @@ import { StatsSection } from './sections/StatsSection';
 
 
 import TestPlayground from "./TestPlayground.tsx";
+import {FeatureSection} from "./sections/FeatureSection.tsx";
 
 /**
  * 主页组件
@@ -54,6 +55,7 @@ function HomePage() {
       {/* <CardCarousel />  */}
       <StoryHeaderSection/>
       <IntroSection/>
+      <FeatureSection/>
       <HorizontalStorySection/>
       <CompanionSystem/>
       <StatsSection/>

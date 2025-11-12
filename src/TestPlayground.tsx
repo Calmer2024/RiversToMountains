@@ -3,15 +3,11 @@
 import React from 'react';
 // import styles from './styles/global.scss'; // 引入全局样式防止样式崩坏
 
-// 👇 这里引入你要开发的组件
-// 1. 比如你现在要写 IntroSection，就把这行注释解开
-// import { IntroSection } from './sections/IntroSection';
+import { IntroSection } from './sections/IntroSection';
 
-// 2. 等你要写 StatsSection，就解开这行
-import { StatsSection } from './sections/StatsSection';
+// import { StatsSection } from './sections/StatsSection';
 
-// 3. FeatureSection 同理
-// import { FeatureSection } from './sections/FeatureSection';
+import { FeatureSection } from './sections/FeatureSection';
 
 const TestPlayground = () => {
     return (
@@ -35,11 +31,11 @@ const TestPlayground = () => {
 
                 {/*  组件 (解开注释)             */}
 
-                 {/*<IntroSection />*/}
+                 <IntroSection />
 
-                 <StatsSection />
+                 {/*<StatsSection />*/}
 
-                {/* <FeatureSection /> */}
+                 <FeatureSection />
 
                 <p style={{textAlign:'center', padding: '50px', color: '#999'}}>
                     (组件预览完毕)
