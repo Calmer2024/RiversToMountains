@@ -1,8 +1,11 @@
-import type { FC } from 'react';
+import { type FC, useRef } from 'react';
 import parentStyles from '../HorizontalStorySection.module.scss';
 import styles from './SlideChapterStart.module.scss';
+import { useLazyVideo } from '../useLazyVideo';
 
 export const SlideChapterStart: FC = () => {
+    const videoRef = useRef<HTMLVideoElement>(null);
+    useLazyVideo(videoRef);
     return (
         <div className={`${parentStyles.slide} ${parentStyles.slideChapterStart}`}>
             {/* 巨型背景文字 */}
@@ -16,11 +19,11 @@ export const SlideChapterStart: FC = () => {
                 <div className={styles.videoLayoutWrapper} data-animate="text-fade-in">
                     <div className={styles.capsuleVideoContainer}>
                         <video
-                            src="/videos/tibet-loop.mp4"
-                            muted
-                            autoPlay
-                            loop
+                            ref={videoRef}
+                            muted   
                             playsInline
+                            loop
+                            data-src="/videos/tibet-loop.mp4"
                             className={styles.capsuleVideo}
                         />
                     </div>

@@ -2,7 +2,8 @@ import { useLayoutEffect, useRef, type FC } from 'react';
 import { gsap } from 'gsap';
 import { useScroll } from '../ScrollContext';
 import parentStyles from '../HorizontalStorySection.module.scss';
-import styles from './SlideHuangshan.module.scss'; // [!] 导入自己的 SCSS
+import styles from './SlideHuangshan.module.scss'; 
+import { useLazyVideo } from '../useLazyVideo';
 
 export const SlideHuangshan: FC = () => {
     // [!] 逻辑与 SlideSaltLake 完全相同
@@ -13,7 +14,10 @@ export const SlideHuangshan: FC = () => {
     const splitTextRef2 = useRef<HTMLSpanElement>(null);
     const splitEnglishRef1 = useRef<HTMLSpanElement>(null);
     const splitEnglishRef2 = useRef<HTMLSpanElement>(null);
-    const videoContainerRef = useRef<HTMLDivElement>(null); // [!] 重命名 ref
+    const videoContainerRef = useRef<HTMLDivElement>(null);
+
+    const videoRef = useRef<HTMLVideoElement>(null);
+    useLazyVideo(videoRef);
 
     useLayoutEffect(() => {
         if (!horizontalTween) {
@@ -101,9 +105,11 @@ export const SlideHuangshan: FC = () => {
                 ref={videoContainerRef}
             >
                 <video
-                    // [!] 替换视频
-                    src="/videos/huangshan-bg.mp4"
-                    muted autoPlay loop playsInline
+                    ref={videoRef}
+                    muted   
+                    playsInline
+                    loop
+                    data-src="/videos/huangshan-bg.mp4"
                 />
                 <p>
                     {/* [!] 替换文本 */}

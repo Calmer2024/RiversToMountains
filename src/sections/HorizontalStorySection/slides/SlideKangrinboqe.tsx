@@ -1,8 +1,18 @@
-import type { FC } from 'react';
+import { type FC, useRef } from 'react';
 import parentStyles from '../HorizontalStorySection.module.scss';
 import styles from './SlideKangrinboqe.module.scss';
+import { useLazyVideo } from '../useLazyVideo';
+
 
 export const SlideKangrinboqe: FC = () => {
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const videoMainRef = useRef<HTMLVideoElement>(null);
+    const videoDroneRef = useRef<HTMLVideoElement>(null);
+    const videoFlagsRef = useRef<HTMLVideoElement>(null);
+
+    useLazyVideo(videoMainRef);
+    useLazyVideo(videoDroneRef);
+    useLazyVideo(videoFlagsRef);
     return (
         <div className={`${parentStyles.slide} ${styles.slideKangrinboqe}`}>
             {/* 复用父组件的 .backgroundText */}
@@ -15,20 +25,29 @@ export const SlideKangrinboqe: FC = () => {
                 <div className={styles.videoWindowGrid} data-animate="text-fade-in">
                     <div className={`${styles.videoWindow} ${styles.windowLarge}`}>
                         <video
-                            src="/videos/kailash-main.mp4"
-                            muted autoPlay loop playsInline
+                            ref={videoMainRef}
+                            muted   
+                            playsInline
+                            loop
+                            data-src="/videos/kailash-main.mp4"
                         />
                     </div>
                     <div className={`${styles.videoWindow} ${styles.windowSmallTop}`}>
                         <video
-                            src="/videos/kailash-drone.mp4"
-                            muted autoPlay loop playsInline
+                            ref={videoDroneRef}
+                            muted   
+                            playsInline
+                            loop
+                            data-src="/videos/kailash-drone.mp4"
                         />
                     </div>
                     <div className={`${styles.videoWindow} ${styles.windowSmallBottom}`}>
                         <video
-                            src="/videos/kailash-prayer-flags.mp4"
-                            muted autoPlay loop playsInline
+                            ref={videoFlagsRef}
+                            muted   
+                            playsInline
+                            loop
+                            data-src="/videos/kailash-prayer-flags.mp4"
                         />
                     </div>
                 </div>

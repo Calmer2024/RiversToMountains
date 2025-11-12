@@ -3,6 +3,8 @@ import { gsap } from 'gsap';
 import { useScroll } from '../ScrollContext'; // [新] 导入 Context Hook
 import parentStyles from '../HorizontalStorySection.module.scss';
 import styles from './SlideSaltLake.module.scss';
+import { useLazyVideo } from '../useLazyVideo';
+
 
 export const SlideSaltLake: FC = () => {
     // [新] 从 Context 获取父组件的 horizontalTween
@@ -15,6 +17,9 @@ export const SlideSaltLake: FC = () => {
     const splitEnglishRef1 = useRef<HTMLSpanElement>(null);
     const splitEnglishRef2 = useRef<HTMLSpanElement>(null);
     const saltLakeVideoContainerRef = useRef<HTMLDivElement>(null);
+
+    const videoRef = useRef<HTMLVideoElement>(null);
+    useLazyVideo(videoRef);
 
     useLayoutEffect(() => {
         // [新] 等待父组件的 horizontalTween 准备就绪
@@ -100,7 +105,13 @@ export const SlideSaltLake: FC = () => {
                 className={styles.saltLakeVideoContainer}
                 ref={saltLakeVideoContainerRef}
             >
-                <video src="/videos/salt-lake.mp4" muted autoPlay loop playsInline />
+                <video
+                    ref={videoRef}
+                    muted   
+                    playsInline
+                    loop
+                    data-src="/videos/salt-lake.mp4"
+                />
                 <p>
                     当山峰隐去，大地变为镜面。在这里，天空与大地再无分别。
                 </p>

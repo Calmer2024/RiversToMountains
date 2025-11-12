@@ -4,7 +4,7 @@
     overflow: hidden;
 }
 
-/* 1. "钉住"容器 (高) */
+/* 1. "钉住"容器  */
 .pinContainer {
     height: 100vh;
     width: 100%;
@@ -105,7 +105,7 @@
 
 /* 3. "水平"轨道 (horizontalTrack) */
 .horizontalTrack {
-    // [!] 注意：这里的宽度现在由子组件的数量自动决定
+    // 这里的宽度现在由子组件的数量自动决定
     // 你可以在父组件的 JS 中动态设置它
     // 或者简单地在这里设置一个足够大的值
     width: 2000vw; // 假设有 8 张幻灯片
@@ -124,7 +124,7 @@
     height: 100vh;
     padding: 5vw 8vw;
     box-sizing: border-box;
-    flex-shrink: 0; // [!] 确保幻灯片不会被压缩
+    flex-shrink: 0; // 确保幻灯片不会被压缩
 }
 
 /* =====================================================

@@ -1,13 +1,19 @@
-import type { FC } from 'react';
+import { type FC, useRef } from 'react';
 import parentStyles from '../HorizontalStorySection.module.scss';
 import styles from './SlideMuztaghAta.module.scss';
+import { useLazyVideo } from '../useLazyVideo';
 
 export const SlideMuztaghAta: FC = () => {
+    const videoRef = useRef<HTMLVideoElement>(null);
+    useLazyVideo(videoRef);
     return (
         <div className={`${parentStyles.slide} ${styles.slideMuztaghAta}`}>
             <video
-                src="/videos/muztagh-ata-bg.mp4"
-                muted autoPlay loop playsInline
+                ref={videoRef}
+                muted   
+                playsInline
+                loop
+                data-src="/videos/muztagh-ata-bg.mp4"
                 className={styles.fullScreenVideo}
             />
 

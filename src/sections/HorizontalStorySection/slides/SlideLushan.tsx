@@ -1,11 +1,12 @@
-import type { FC } from 'react';
+import { type FC, useRef } from 'react';
 import parentStyles from '../HorizontalStorySection.module.scss';
-// [!] 智能复用: 导入“青藏高原”的 SCSS 来复用胶囊视频样式
 import styles from './SlideChapterStart.module.scss';
+import { useLazyVideo } from '../useLazyVideo';
 
 export const SlideLushan: FC = () => {
+    const videoRef = useRef<HTMLVideoElement>(null);
+    useLazyVideo(videoRef);
     return (
-        // 复用父组件的 .slide 和 .slideChapterStart 布局
         <div className={`${parentStyles.slide} ${parentStyles.slideChapterStart}`}>
 
             {/* 巨型背景文字 */}
@@ -20,12 +21,11 @@ export const SlideLushan: FC = () => {
                 <div className={styles.videoLayoutWrapper} data-animate="text-fade-in">
                     <div className={styles.capsuleVideoContainer}>
                         <video
-                            // [!] 替换视频
-                            src="/videos/lushan-loop.mp4"
-                            muted
-                            autoPlay
-                            loop
+                            ref={videoRef}
+                            muted   
                             playsInline
+                            loop
+                            data-src="/videos/lushan-loop.mp4"
                             className={styles.capsuleVideo}
                         />
                     </div>

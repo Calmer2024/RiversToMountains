@@ -1,15 +1,20 @@
-import type { FC } from 'react';
+import { type FC, useRef } from 'react';
 import parentStyles from '../HorizontalStorySection.module.scss';
-import styles from './SlideZhangjiajie.module.scss'; // [!] 导入自己的 SCSS
+import styles from './SlideZhangjiajie.module.scss'; 
+import { useLazyVideo } from '../useLazyVideo';
 
 export const SlideZhangjiajie: FC = () => {
+    const videoRef = useRef<HTMLVideoElement>(null);
+    useLazyVideo(videoRef);
     return (
         // [!] 修改类名
         <div className={`${parentStyles.slide} ${styles.slideZhangjiajie}`}>
             <video
-                // [!] 替换视频
-                src="/videos/zhangjiajie-bg.mp4"
-                muted autoPlay loop playsInline
+                ref={videoRef}
+                muted   
+                playsInline
+                loop
+                data-src="/videos/zhangjiajie-bg.mp4"
                 className={styles.fullScreenVideo}
             />
 

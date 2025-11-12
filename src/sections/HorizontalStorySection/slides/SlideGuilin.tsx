@@ -1,15 +1,19 @@
-import type { FC } from 'react';
+import { type FC, useRef } from 'react';
 import parentStyles from '../HorizontalStorySection.module.scss';
-import styles from './SlideGuilin.module.scss'; // [!] 导入自己的 SCSS
+import styles from './SlideGuilin.module.scss'; 
+import { useLazyVideo } from '../useLazyVideo';
 
 export const SlideGuilin: FC = () => {
+    const videoRef = useRef<HTMLVideoElement>(null);
+    useLazyVideo(videoRef);
     return (
-        // [!] 修改类名
         <div className={`${parentStyles.slide} ${styles.slideGuilin}`}>
             <video
-                // [!] 替换视频
-                src="/videos/guilin-bg.mp4"
-                muted autoPlay loop playsInline
+                ref={videoRef}
+                muted   
+                playsInline
+                loop
+                data-src="/videos/guilin-bg.mp4"
                 className={styles.fullScreenVideo}
             />
 
