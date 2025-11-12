@@ -1,0 +1,103 @@
+.statsContainer {
+  background-color: #0a0a0a; // 保持纯黑背景
+  color: #fff;
+  padding: 120px 0; // 上下留白
+  border-top: 1px solid rgba(255, 255, 255, 0.05); // 顶部加一条极细的线，分割上下区域
+}
+
+.statsWrapper {
+  max-width: 1400px; // 宽度和 IntroSection 保持协调
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-around; // 平均分布
+  align-items: center;
+  padding: 0 4vw; // 左右留出安全距离
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative; // 为了定位分割线
+  flex: 1; // 每个人占一份
+}
+
+// 🏮 红色图标：视觉焦点
+.iconWrapper {
+  font-size: 2rem;
+  color: #b92b27; // 那个中国红
+  margin-bottom: 20px;
+  opacity: 0.9;
+}
+
+// 🔢 数字：大、细、白
+.numberWrapper {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; // 现代字体
+  color: #f0f0f0;
+  display: flex;
+  align-items: baseline; // 让数字和单位底部对齐
+}
+
+.number {
+  font-size: 4rem; // 超大号数字
+  font-weight: 200; // 极细，显得优雅
+  letter-spacing: -2px; // 紧凑一点
+  line-height: 1;
+}
+
+.unit {
+  font-size: 1.5rem;
+  margin-left: 8px;
+  font-weight: normal;
+  color: #888;
+}
+
+// ✍️ 标签：宋体、灰色
+.label {
+  margin-top: 15px;
+  font-family: "Songti SC", "Noto Serif SC", serif;
+  font-size: 1.1rem;
+  color: #666; // 灰色文字，不抢数字的风头
+  letter-spacing: 2px;
+}
+
+// 📏 竖线分割符
+.divider {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%); // 垂直居中
+  height: 60px; // 线的高度
+  width: 1px;
+  background: linear-gradient(
+                  to bottom,
+                  transparent,
+                  rgba(255, 255, 255, 0.2),
+                  transparent
+  ); // 两头渐隐的线条，非常细节
+
+  // 手机端隐藏分割线
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+// 📱 手机端适配
+@media (max-width: 768px) {
+  .statsWrapper {
+    flex-direction: column; // 变成竖排
+    gap: 60px; // 拉开间距
+  }
+
+  .number {
+    font-size: 4rem;
+    font-weight: 200;
+    letter-spacing: -1px;
+    line-height: 1;
+
+    // 开启“板式数字” (Tabular Nums)
+    // 让每个数字宽度一致，防止滚动时左右抖动
+    font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
+  }
+}
