@@ -1,131 +1,169 @@
-# 🏞️ 山河图鉴 (Rivers & Mountains)
+# README
+
+# 山河图鉴 (The Scroll of Mountains and Rivers)
 
 
 
-`山河图鉴` 是一个旨在以“高级感”和“沉浸式体验”展示中国山水奇景的现代Web项目。
+**「山河图鉴」** 是一个基于 React 和 GSAP 的沉浸式数字体验网站。它将中国的壮丽山河化作一幅流动的交互式画卷，带领用户开启一场从西至东的视觉与诗意之旅。
 
-本项目深受 `Squarespace.com` 设计风格的启发，追求极简的布局、巨型字体排版、高品质的影像素材，以及平滑、富有创意的交互动画。
+项目不仅提供了“画卷”主线叙事，还创新性地加入了“世外”陪伴模式，为用户提供一个集专注、学习与放松于一体的沉浸式空间。
+
+> **项目仓库:** `https://github.com/Calmer2024/RiversToMountains`
 
 ------
 
-[ [此处插入一张网站的精美截图，例如 Hero Section 或 Card Carousel] ]
+## 👥 项目成员 (Team Members)
+
+### 开发团队成员
+
+| 姓名 | 学号 |
+|------|------|
+| 覃宇飞 | 2023302181138 |
+| 潘姝洁 | 2023302181027 |
+| 王卓 | 2023302141184 |
+| 韦祎 | 2025302114214 |
+
+------
+
+## ✨ 核心功能 (Features)
 
 
 
-## ✨ 核心功能 (Key Features)
-
-- **全屏视频主屏 (Hero Section):**
-  - 自动播放、静音的 4K 视频背景。
-  - 使用自定义的 `title.png` 图片Logo，替代标准文本标题，提升品牌感。
-- **浮动头部导航 (Header):**
-  - 采用 `position: absolute` 浮动于主屏之上，实现现代网站的层次感。
-  - 包含 Logo（左）和图标按钮（右）。
-- **2D 倾斜卡片轮播 (Card Carousel):**
-  - 项目的核心交互功能，用于展示山水景点清单。
-  - 使用 `Swiper.js` 的 `onProgress` API **完全自定义**实现。
-  - **中间卡片：** 尺寸最大、水平（`rotate: 0`）。
-  - **两侧卡片：** 尺寸缩小、有轻微的Y轴上移和Z轴倾斜（`rotateZ`）。
-  - 卡片间距由 `spaceBetween` 控制，**互不重叠**，布局干净。
-  - 支持点击两侧卡片平滑切换，点击中间卡片可跳转（已预留 `onClick` 逻辑）。
-  - 支持自动播放和鼠标拖拽。
+本项目包含两大核心模块：“山河画卷”主线和“世外”陪伴模式。
 
 
 
-## 🛠️ 技术栈 (Tech Stack)
+### 1. 📜 “山河画卷” (The Main Scroll)
 
-- **React (v18+)**
-- **TypeScript**
-- **Vite** (作为开发服务器和构建工具)
-- **Swiper.js** (用于实现高度自定义的卡片轮播)
-- **SCSS (CSS Modules)** (用于编写组件化、可维护的样式)
-- **react-icons** (用于头部导航的图标)
-- **Next.js + TypeScipt** (全栈框架)
+
+
+这是项目的主体验，是一个由 GSAP `ScrollTrigger` 驱动的横向滚动叙事画廊。
+
+- **史诗般的画卷叙事：** 引导用户从序章（`StoryHeaderSection`）开始，通过垂直滚动“解锁”一个被固定的（Pinned）横向滚动容器（`HorizontalStorySection`）。
+- **GSAP 驱动的沉浸动画：**
+  - **横向滚动 (Horizontal Scroll):** 整个画卷（包含数十个场景）在一个 `div` 中横向展开，通过 GSAP 将用户的垂直滚动转化为 `transform: translateX`。
+  - **云层转场：** 使用多层云图和 `scale`、`opacity` 动画，实现从“序章”到“画卷”的平滑电影感转场。
+  - **视差与淡入：** 画卷中的每个元素（如文本、背景）都拥有独立的 `ScrollTrigger`，实现视差滚动和动态淡入效果。
+- **情景感应式 UI (Context-Aware UI)：**
+  - 画卷顶部固定一个 UI 工具栏 (`StoryControls`)。
+  - **动态信息：** 顶部“书页”按钮能实时识别用户当前滚动到的幻灯片（如“冈仁波齐”、“张掖丹霞”），并弹出对应的科普文字。
+  - **集成 AI 助手：** 内置可拖拽的 AI 聊天弹窗 (`ChatDialog`)。
+  - **高级音乐控件：** 优化的毛玻璃质感音乐面板，支持播放、暂停和音量条。
+
+
+
+### 2. 🏞️ “世外”陪伴模式 (Companion Mode "Outside")
+
+
+
+这是一个与主线分离的、注重功能性的沉浸式空间，旨在提供一个高效的“数字禅室”。
+
+- **多场景切换：** 提供“崇山”、“天空”、“林间”、“草地”四种不同的动态场景。
+- **沉浸式体验：** 每个场景都配有全屏循环的**背景视频**和定制的**白噪音**（如风声、鸟鸣）。
+- **内置生产力工具：**
+  - **番茄钟 (Pomodoro Timer)：** 用户可设置 5/15/25 分钟的专注时钟。
+  - **诗歌阅读：** 提供一个“暗黑玻璃书房”风格的侧边栏，用于浏览和阅读诗歌。
+  - **沉浸模式：** 可一键隐藏所有 UI，只保留背景视频和白噪音，实现纯粹的“屏保”体验。
+
+
+
+### 3. 🎨 通用 UI / UX 优化
+
+
+
+- **高级加载动画：** 仿 `sketchin.com` 风格，实现 Logo 淡入、多行 Slogan 逐句交替（入场/出场）的高级动画序列，并实现了**真·资源预加载**。
+- **Hero 区域：** `HeroSection` 使用全屏视频背景，以及一个带“呼吸”和“光泽”动画的“开始探索”按钮，点击可平滑滚动至“画卷”序章。
+- **毛玻璃导航栏 (Header)：**
+  - 在首页顶部透明，滚动后变为毛玻璃（`backdrop-filter`）质感。
+  - 在滚动到 `HorizontalStorySection` 时，通过 `IntersectionObserver` 自动收起（隐藏）。
+  - 集成 `React Router`，实现“Home”与“Outside”模式的切换。
+  - 包含指向 GitHub 仓库的链接。
+- **全局样式：** 全局移除了浏览器默认滚动条（但保留滚动功能），提供了更干净的视觉体验。
+
+------
+
+
+
+## 🛠️ 技术栈 (Technology Stack)
+
+
+
+- **前端框架:** React (v18)
+- **语言:** TypeScript
+- **动画库:** GSAP (GreenSock Animation Platform)
+  - `ScrollTrigger` (用于驱动所有滚动动画)
+  - `TextPlugin` (用于文本动画)
+- **路由:** React Router (v6)
+- **样式:** SCSS (Sass) & CSS Modules
+- **图标:** React Icons (Fi)
+- **构建工具:** Vite
+
+------
 
 
 
 ## 🚀 本地运行 (Getting Started)
 
-### 1. 克隆项目
 
-```bash
-git clone https://github.com/your-username/RiversToMountains.git
-cd RiversToMountains
-```
 
-*(请将 `your-username/RiversToMountains.git` 替换为你们的实际仓库地址)*
+1. **克隆仓库**
 
-### 2. 安装依赖
+   Bash
 
-```bash
-npm install
-```
+   ```
+   git clone https://github.com/Calmer2024/RiversToMountains.git
+   cd RiversToMountains
+   ```
 
-### 3. 准备静态资源
+2. **安装依赖**
 
-本项目的视觉效果**高度依赖**本地静态资源。请在 `public/` 目录下创建并放置以下文件，否则应用将无法正常显示：
+   Bash
 
-```
-/public
-|-- /videos/
-|   `-- hero-video.mp4      # 主屏的背景视频
-|
-|-- /images/
-|   |-- hero-poster.jpg     # 视频加载前的封面图
-|   |-- title.png           # Hero Section 的 Logo 图片
-|   |-- /cards/
-|   |   |-- huangshan.jpg   # 卡片轮播 - 黄山
-|   |   |-- zhangjiajie.jpg # 卡片轮播 - 张家界
-|   |   |-- ... (其他所有景点图片)
-```
+   ```
+   npm install
+   # 或者
+   # yarn install
+   ```
 
-### 4. 运行开发服务器
+3. **运行开发服务器**
 
-```bash
-npm run dev
-```
+   Bash
 
-应用将在 `http://localhost:5173` (或Vite指定的其他端口) 上运行。
+   ```
+   npm run dev
+   # 或者
+   # yarn dev
+   ```
+
+   项目将在 `http://localhost:5173` (或 Vite 指定的端口) 上运行。
+
+4. **构建生产版本**
+
+   Bash
+
+   ```
+   npm run build
+   ```
+
+------
 
 
 
 ## 📁 项目结构 (Project Structure)
 
+
+
 ```
-/src
-|
-|-- /components     # 全局可复用的小组件 (e.g., Button.tsx, Header.tsx)
-|-- /data           # 数据源 (e.g., scenicSpots.ts)
-|-- /sections       # 构成页面的"版块" (e.g., HeroSection.tsx, CardCarousel.tsx)
-|-- /styles         # 全局样式 (e.g., global.scss, _variables.scss)
-|-- /assets         # 需要被 Vite 打包处理的静态资源 (e.g., UI图标)
-|
-|-- App.tsx         # 应用主组件 (负责页面版块布局)
-|-- main.tsx        # 应用入口 (启动 React, 导入全局 CSS)
-|-- types.d.ts      # TypeScript 全局类型声明 (e.g., for swiper/css)
-|
-/public
-|-- /videos         # 静态视频资源 (Vite 不处理)
-|-- /images         # 静态图片资源 (Vite 不处理)
+/public/
+  /images/        # 静态图片 (logo, posters, clouds)
+  /videos/        # 背景视频 (hero, companion, slides)
+  /music/         # 音频文件 (story-theme.mp3)
+/src/
+  /components/    # 可复用组件 (Header, Button, StoryControls, ChatDialog...)
+  /data/          # 静态数据 (slideInfo.ts)
+  /sections/      # 构成页面的主要“区域” (HeroSection, StatsSection...)
+    /slides/      # HorizontalStorySection 专用的所有幻灯片子组件
+  /styles/        # 全局 SCSS (global.scss, variables.scss)
+  App.tsx         # 根组件和路由
+  main.tsx        # 入口文件
 ```
-
-
-
-## 🤝 团队分工 (Team Contribution)
-
-为了高效协作，我们按以下职责划分：
-
-- **UI/UX & 视觉 (Designer):**
-  - **职责:** 负责定义 `src/styles/_variables.scss` 中的所有设计规范（颜色、字体、间距）。
-  - **职责:** 筛选、压缩并管理 `public/` 目录中的所有视觉素材（视频、图片）。
-- **React 组件工程师 (Component Logic):**
-  - **职责:** 负责 `components/` 和 `sections/` 中组件的 `props` 定义、状态管理和业务逻辑 (e.g., `handleCardClick`, `spot.map(...)`)。
-  - **职责:** 负责 `App.tsx` 中的页面布局和组件编排。
-- **前端动效/样式工程师 (Style & Motion):**
-  - **职责:** 负责所有 `.module.scss` 文件的编写，将设计稿高保真还原。
-  - **职责:** **(核心)** 负责实现高级交互动画，例如 `CardCarousel.tsx` 中的 `onProgress` 和 `onSetTransition` 回调，以实现 `Squarespace` 风格的动画。
-
-
-
-## 📄 许可证 (License)
-
-本项目采用 [MIT License](https://opensource.org/licenses/MIT) 授权。
