@@ -61,6 +61,7 @@ const textAnim = {
 
 export const FeatureSection = () => {
   const features = [
+    // TODO：改四个合适的图片
     {
       id: 1, title: "寻山", subtitle: "Mount.", desc: "云深不知处，只缘身在此山中",
       img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1000&auto=format&fit=crop"

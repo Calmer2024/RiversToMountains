@@ -7,6 +7,42 @@
   overflow-x: hidden;
   position: relative;
   padding: 40px 60px;
+  // ✨ 添加一个黑色遮罩，让背景更暗，文字更清晰
+  &::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 0;
+  }
+}
+
+// ✨ 新增：返回按钮
+.backButton {
+  position: absolute;
+  top: 40px;
+  left: 60px;
+  z-index: 10;
+  background: rgba(10, 10, 10, 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  font-size: 1.1rem;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+
+  &:hover {
+    transform: scale(1.1);
+    background: rgba(10, 10, 10, 0.7);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
 }
 
 /* 标题 */
@@ -15,37 +51,50 @@
   color: rgba(255, 255, 255, 0.95);
   margin-bottom: 40px;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+  position: relative;
+  z-index: 1;
 }
 .titleMain {
-  font-size: 38px;
+  font-size: 3rem; // ✨ 加大
   font-weight: 700;
+  font-family: "Songti SC", serif; // ✨ 字体
+  letter-spacing: 5px; // ✨ 间距
 }
 .titleSub {
-  font-size: 18px;
-  opacity: 0.85;
-  margin-top: 6px;
+  font-size: 1.1rem; // ✨ 加大
+  color: #aaa; // ✨ 改色
+  margin-top: 10px;
+  font-family: "Songti SC", serif; // ✨ 字体
+  letter-spacing: 2px;
 }
 
 /* 主体布局 */
 .contentWrapper {
   display: grid;
-  grid-template-columns: 1.2fr 3fr;
+  grid-template-columns: 380px 1fr; // ✨ 调整比例
   gap: 40px;
   align-items: start;
+  position: relative;
+  z-index: 1;
 }
 
 /* 左侧表单 */
 .newMessageCard {
-  background: rgba(255, 255, 255, 0.18);
+  // ✨ 换肤：暗黑玻璃
+  background: rgba(10, 10, 10, 0.5);
   backdrop-filter: blur(20px);
-  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px; // ✨ 圆角
   padding: 30px;
   color: white;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
 }
 .sectionTitle {
-  font-size: 26px;
-  margin-bottom: 16px;
+  font-size: 2rem; // ✨ 加大
+  margin-bottom: 20px;
+  font-family: "Songti SC", serif; // ✨ 字体
+  font-weight: 600;
+  letter-spacing: 2px;
 }
 .form {
   display: flex;
@@ -54,140 +103,195 @@
 }
 .input,
 .textarea {
-  background: rgba(255, 255, 255, 0.25);
-  border: none;
+  // ✨ 换肤：暗黑输入框
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  padding: 10px;
+  padding: 12px 16px; // ✨ 加大
   color: white;
   resize: none;
   font-size: 15px;
+  transition: all 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: #b92b27; // ✨ 红色高亮
+  }
 }
 .input::placeholder,
 .textarea::placeholder {
-  color: rgba(255, 255, 255, 0.7);
+  color: #888; // ✨ 改色
 }
+
 .submitButton {
-  background: rgba(255, 255, 255, 0.35);
+  // ✨ 换肤：主题红
+  background: #b92b27;
   border: none;
   border-radius: 12px;
-  padding: 10px 16px;
+  padding: 12px 16px; // ✨ 加大
   cursor: pointer;
-  color: black;
+  color: white; // ✨ 改色
   font-weight: 600;
+  font-size: 1rem;
   transition: all 0.25s ease;
-}
-.submitButton:hover {
-  background: rgba(255, 255, 255, 0.6);
+
+  &:hover:not(:disabled) {
+    background: #a0201c; // ✨ 红色
+    transform: translateY(-2px);
+  }
+
+  &:disabled {
+    background: #444;
+    color: #888;
+    cursor: not-allowed;
+  }
 }
 
 /* 留言墙 */
 .messageWallWrapper {
   position: relative;
   overflow: hidden;
+  height: 100%;
 }
 .messageWall {
   display: flex;
-  gap: 40px;
+  gap: 30px; // ✨ 减小
   overflow-x: auto;
   scroll-behavior: smooth;
   padding: 10px;
-  scrollbar-width: none;
-}
-.messageWall::-webkit-scrollbar {
-  display: none;
+  // ✨ 添加漂亮的暗黑滚动条
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.4);
+  }
 }
 .messageColumn {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  min-width: 300px;
+  min-width: 320px; // ✨ 加宽
 }
 .messageCard {
-  background: rgba(255, 255, 255, 0.18);
+  // ✨ 换肤：暗黑玻璃
+  background: rgba(10, 10, 10, 0.4);
   backdrop-filter: blur(15px);
-  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px; // ✨ 圆角
   padding: 20px;
   color: white;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
   cursor: pointer;
   transition: all 0.25s ease;
-}
-.messageCard:hover {
-  transform: translateY(-4px);
-  background: rgba(255, 255, 255, 0.25);
+
+  &:hover {
+    transform: translateY(-4px);
+    background: rgba(10, 10, 10, 0.7);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
 }
 .messageHeader {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
+  gap: 12px; // ✨ 加大
+  margin-bottom: 12px; // ✨ 加大
 }
+
+// ✨ 优雅 Avatar
 .avatar {
-  font-size: 22px;
+  font-size: 1.1rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #b92b27; // ✨ 主题红
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  flex-shrink: 0; // 防止变形
 }
+
 .userName {
   font-weight: 600;
+  font-size: 1.1rem; // ✨ 加大
 }
 .timestamp {
-  font-size: 13px;
-  opacity: 0.8;
+  font-size: 0.8rem; // ✨ 减小
+  color: #999; // ✨ 改色
 }
 .messageContent {
   font-size: 15px;
-  line-height: 1.5;
+  line-height: 1.6;
+  color: #ddd;
+  // ✨ 修复 1: 添加自动换行
+  overflow-wrap: break-word;
+  word-break: break-word; // 确保长单词/URL能断开
 }
 
-/* 左右切换按钮（改小 + 外移） */
+/* 左右切换按钮 */
 .navButton {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   z-index: 5;
-  background: rgba(255, 255, 255, 0.18);
+  // ✨ 换肤：暗黑玻璃
+  background: rgba(10, 10, 10, 0.4);
   backdrop-filter: blur(12px);
-  border: none;
-  width: 32px;
-  height: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 40px; // ✨ 加大
+  height: 40px; // ✨ 加大
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   color: white;
-  font-size: 16px;
+  font-size: 1.1rem; // ✨ 加大
   transition: all 0.25s ease;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   opacity: 0.8;
 }
 .navButton:hover {
   transform: translateY(-50%) scale(1.15);
-  background: rgba(255, 255, 255, 0.35);
+  background: rgba(10, 10, 10, 0.7);
   opacity: 1;
 }
 .leftBtn {
-  left: -20px;
+  left: 0px; // ✨ 内移
 }
 .rightBtn {
-  right: -20px;
+  right: 0px; // ✨ 内移
 }
 
 /* 模态框 */
 .modalOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(0, 0, 0, 0.6); // ✨ 加深
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 100;
+  backdrop-filter: blur(5px); // ✨ 模态框背景也模糊
 }
 .modalCard {
-  background: rgba(255, 255, 255, 0.2);
+  // ✨ 换肤：暗黑玻璃
+  background: rgba(20, 20, 20, 0.7); // ✨ 更暗
   backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 24px;
   width: 600px;
   max-width: 90vw;
-  padding: 30px;
+  padding: 30px 35px; // ✨ 加大
   color: white;
   box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
   animation: fadeInUp 0.3s ease;
@@ -195,50 +299,70 @@
 .modalHeader {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 16px; // ✨ 加大
+  margin-bottom: 20px; // ✨ 加大
 }
+// ✨ 优雅 Avatar (模态框)
 .avatarLarge {
-  font-size: 36px;
+  font-size: 2rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #b92b27;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  flex-shrink: 0;
 }
 .modalUserName {
-  font-size: 20px;
+  font-size: 1.5rem; // ✨ 加大
   font-weight: 600;
+  font-family: "Songti SC", serif; // ✨ 字体
+  letter-spacing: 2px;
 }
 .modalTimestamp {
-  font-size: 14px;
-  opacity: 0.8;
+  font-size: 0.9rem; // ✨ 加大
+  color: #999; // ✨ 改色
 }
 .modalContent {
-  font-size: 16px;
-  line-height: 1.6;
+  font-size: 1.1rem; // ✨ 加大
+  line-height: 1.7; // ✨ 加大
   margin-top: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 30px; // ✨ 加大
+  color: #ddd;
+  // ✨ 修复 3: 添加自动换行
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 .closeButton {
   display: block;
   margin: 0 auto;
-  background: rgba(255, 255, 255, 0.35);
+  // ✨ 换肤：主题红
+  background: #b92b27;
   border: none;
   border-radius: 12px;
-  padding: 8px 20px;
+  padding: 10px 24px; // ✨ 加大
   cursor: pointer;
-  color: black;
+  color: white; // ✨ 改色
   font-weight: 600;
+  font-size: 1rem;
   transition: all 0.25s ease;
 }
 .closeButton:hover {
-  background: rgba(255, 255, 255, 0.6);
+  background: #a0201c;
+  transform: scale(1.05);
 }
 
 /* 动画 */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(20px) scale(0.98); // ✨ 动画
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
