@@ -3,7 +3,6 @@ import { gsap } from 'gsap';
 import { useScroll } from '../ScrollContext'; 
 import parentStyles from '../HorizontalStorySection.module.scss';
 import styles from './SlideSaltLake.module.scss';
-import { useLazyVideo } from '../useLazyVideo';
 
 
 export const SlideSaltLake: FC = () => {

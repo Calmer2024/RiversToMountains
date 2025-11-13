@@ -1,4 +1,5 @@
-import { useLayoutEffect, useRef, useState, type FC } from 'react';
+// src/sections/HorizontalStorySection.tsx
+import React, { useLayoutEffect, useRef, useState, type FC } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextPlugin } from 'gsap/TextPlugin';
@@ -29,42 +30,48 @@ import { SlideHongcun } from './slides/SlideHongcun';
 import { SlideXiapu } from './slides/SlideXiapu';
 import { SlideFinale } from './slides/SlideFinale';
 
+// 导入新加的控件和数据
+import { StoryControls } from '../../components/StoryControls'; 
+import { SLIDE_INFO_MAP, type SlideInfo } from '../../data/slideInfo';
+
 // 注册 GSAP 插件
 gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
 export const HorizontalStorySection: FC = () => {
-    // 全局 Refs
+    // Refs (不变)
     const pinContainerRef = useRef<HTMLDivElement>(null);
     const horizontalTrackRef = useRef<HTMLDivElement>(null);
     const introCanvasRef = useRef<HTMLDivElement>(null);
     const cloudContainerRef = useRef<HTMLDivElement>(null);
 
-    // 使用 State 存储 horizontalTween 以传递给 Context
+    // State (不变)
     const [horizontalTween, setHorizontalTween] = useState<gsap.core.Tween | null>(null);
+
+    // State (不变)
+    const [activeSlideInfo, setActiveSlideInfo] = useState<SlideInfo | null>(
+      SLIDE_INFO_MAP['intro']
+    );
 
 
     useLayoutEffect(() => {
-        // --- 1. 获取所有元素 ---
+        // (所有 GSAP 设置、时间轴、Tween 和跟踪器逻辑... 保持不变)
+        // ...
         const pinContainer = pinContainerRef.current;
         const horizontalTrack = horizontalTrackRef.current;
         const introCanvas = introCanvasRef.current;
         const cloudContainer = cloudContainerRef.current;
 
-        // 只检查全局 Refs
         if (!pinContainer || !horizontalTrack || !introCanvas || !cloudContainer) {
             console.warn("GSAP (Main): 缺少关键全局元素。");
             return;
         }
 
-        // --- 获取动画元素 ---
         const trackWidth = horizontalTrack.scrollWidth;
         const viewportWidth = window.innerWidth;
         const scrollDistance = trackWidth - viewportWidth;
         if (scrollDistance <= 0) return;
 
         const introGroup2 = pinContainer.querySelector("[data-animate='intro-group-2']");
-
-        // 通用淡入动画
         const otherAnimatedElements = gsap.utils.toArray("[data-animate='text-fade-in']");
 
         if (!introGroup2) {
@@ -72,7 +79,6 @@ export const HorizontalStorySection: FC = () => {
             return;
         }
 
-        // --- 创建 "主时间轴"  ---
         let ctx = gsap.context(() => {
             const clouds = gsap.utils.toArray(cloudContainer.querySelectorAll("img"));
             if (clouds.length === 0) {
@@ -91,60 +97,27 @@ export const HorizontalStorySection: FC = () => {
                 }
             });
 
-            // --- Phase 1: “电影开场”和“云层”转场 ---
-            masterTimeline.fromTo(introGroup2,
-                { autoAlpha: 0, y: 20 },
-                { autoAlpha: 1, y: 0, duration: 3 }
-            );
+            // (Phase 1... 保持不变)
+            masterTimeline.fromTo(introGroup2, { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 3 });
             masterTimeline.to(introGroup2, { duration: 1 });
             masterTimeline.add("startCloudCover");
-            masterTimeline.to(introGroup2,
-                { autoAlpha: 0, duration: 3 },
-                "startCloudCover"
-            );
-            masterTimeline.fromTo(clouds,
-                {
-                    autoAlpha: 0,
-                    scale: 1.5,
-                    xPercent: (i) => [-150, 0, 150][i],
-                    yPercent: (i) => [20, -10, 20][i],
-                },
-                {
-                    autoAlpha: 1,
-                    scale: 2.0,
-                    xPercent: (i) => [-20, 0, 20][i],
-                    yPercent: 0,
-                    duration: 5,
-                    stagger: 0.1
-                },
-                "startCloudCover"
-            );
+            masterTimeline.to(introGroup2, { autoAlpha: 0, duration: 3 }, "startCloudCover");
+            masterTimeline.fromTo(clouds, { autoAlpha: 0, scale: 1.5, xPercent: (i) => [-150, 0, 150][i], yPercent: (i) => [20, -10, 20][i], }, { autoAlpha: 1, scale: 2.0, xPercent: (i) => [-20, 0, 20][i], yPercent: 0, duration: 5, stagger: 0.1 }, "startCloudCover");
             masterTimeline.set(introCanvas, { autoAlpha: 0, pointerEvents: 'none' });
-
-            // --- Phase 4: 云层拨开 & 画卷开始  ---
             masterTimeline.add("startScroll");
-            masterTimeline.to(clouds, {
-                autoAlpha: 0,
-                scale: 3,
-                xPercent: (i) => (i - 1) * 150,
-                duration: 7,
-                stagger: 0.1
-            }, "startScroll");
+            masterTimeline.to(clouds, { autoAlpha: 0, scale: 3, xPercent: (i) => (i - 1) * 150, duration: 7, stagger: 0.1 }, "startScroll");
 
-            // 1. **单独创建** 水平滚动的 Tween
+            
+            // (水平滚动 Tween... 保持不变)
             const tween = gsap.to(horizontalTrack, {
                 x: `-=${scrollDistance}px`,
                 ease: "none",
                 duration: 100,
             });
-
-            // 2. 将这个 **已创建的 Tween** 添加到主时间轴
             masterTimeline.add(tween, "startScroll");
-
-            // 3. 将 Tween 存储在 State 中，以传递给 Context
             setHorizontalTween(tween);
 
-            // Phase 2: “其他幻灯片”的淡入动画 
+            // (其他幻灯片淡入... 保持不变)
             otherAnimatedElements.forEach((el: any) => {
                 gsap.fromTo(el,
                     { autoAlpha: 0, y: 50 },
@@ -162,20 +135,43 @@ export const HorizontalStorySection: FC = () => {
                 );
             });
 
-        }, pinContainer); // 绑定 GSAP 上下文
+            // (信息跟踪器... 保持不变, 因为它现在会正确读取到 wrapper div)
+            const slides = gsap.utils.toArray(horizontalTrack.children) as HTMLElement[];
+            
+            slides.forEach((slide) => {
+                const slideId = slide.dataset.slideId; 
+                const info = slideId ? SLIDE_INFO_MAP[slideId] : null;
+
+                ScrollTrigger.create({
+                    trigger: slide,
+                    containerAnimation: tween, 
+                    start: "left 75%", 
+                    end: "right 25%",
+                    onToggle: (self) => {
+                        if (self.isActive) {
+                            setActiveSlideInfo(info || null);
+                        }
+                    },
+                });
+            });
+
+        }, pinContainer);
 
         return () => ctx.revert();
     }, []);
 
     return (
-        // 1. 使用 Context.Provider 包裹所有内容
         <ScrollContext.Provider value={{ horizontalTween }}>
             <section className={styles.storySection}>
                 <div className={styles.pinContainer} ref={pinContainerRef}>
+                
+                    {/* UI 控件 (不变) */}
+                    <StoryControls activeSlideInfo={activeSlideInfo} />
 
-                    {/* “序章”画布  */}
+                    {/* “序章”画布 (不变) */}
                     <div className={styles.introCanvas} ref={introCanvasRef}>
-                        <div className={styles.subTitleGroup} data-animate="intro-group-2">
+                         {/* ... (序章内容不变) ... */}
+                         <div className={styles.subTitleGroup} data-animate="intro-group-2">
                             <div className={styles.chapterTitleWrapper}>
                                 <h2>山河伊始</h2>
                                 <img
@@ -190,37 +186,40 @@ export const HorizontalStorySection: FC = () => {
                         </div>
                     </div>
 
-                    {/* “云层” */}
+                    {/* “云层” (不变) */}
                     <div className={styles.cloudTransitionContainer} ref={cloudContainerRef}>
-                        <img src="/images/clouds/cloud1.png" alt="转场云" className={styles.cloudImage} />
-                        <img src="/images/clouds/cloud2.png" alt="转场云" className={styles.cloudImage} />
-                        <img src="/images/clouds/cloud3.png" alt="转场云" className={styles.cloudImage} />
+                         <img src="/images/clouds/cloud1.png" alt="转场云" className={styles.cloudImage} />
+                         <img src="/images/clouds/cloud2.png" alt="转场云" className={styles.cloudImage} />
+                         <img src="/images/clouds/cloud3.png" alt="转场云" className={styles.cloudImage} />
                     </div>
 
-                    {/* 轨道只包含子组件 */}
+                    {/* ✨ --- 轨道 (已修正) --- ✨ */}
+                    {/* * 修正：我们将每个 <Slide... /> 组件包裹在一个 <div> 中
+                      * 并将 data-slide-id 放在这个 wrapper <div> 上。
+                    */}
                     <div className={styles.horizontalTrack} ref={horizontalTrackRef}>
-                        <SlideIntro />
-                        <SlideChapterStart />
-                        <SlideFullBgTibet />
-                        <SlideChapterTitle />
-                        <SlideKangrinboqe />
-                        <SlideProgressBar />
-                        <SlideMuztaghAta />
-                        <SlideSaltLake />
-                        <SlideZhangyeDanxia />
-                        <SlideChapterCarved />
-                        <SlideDualVideos />
-                        <SlideFanjingshan />
-                        <SlideZhangjiajie />
-                        <SlideWaterInk />
-                        <SlideGuilin />
-                        <SlideHuangshan />
-                        <SlideLushan />
-                        <SlideEpilogue />
-                        <SlideHongcun />
-                        <SlideYuanyangTerraces />
-                        <SlideXiapu />
-                        <SlideFinale />
+                        <div data-slide-id="intro"><SlideIntro /></div>
+                        <div data-slide-id="chapter_tibet"><SlideChapterStart /></div>
+                        <div data-slide-id="tibet_main"><SlideFullBgTibet /></div>
+                        <div data-slide-id="chapter_title_tibet"><SlideChapterTitle /></div>
+                        <div data-slide-id="kangrinboqe"><SlideKangrinboqe /></div>
+                        <div data-slide-id="progress"><SlideProgressBar /></div>
+                        <div data-slide-id="muztaghata"><SlideMuztaghAta /></div>
+                        <div data-slide-id="saltlake"><SlideSaltLake /></div>
+                        <div data-slide-id="zhangye_danxia"><SlideZhangyeDanxia /></div>
+                        <div data-slide-id="chapter_carved"><SlideChapterCarved /></div>
+                        <div data-slide-id="dual_videos"><SlideDualVideos /></div>
+                        <div data-slide-id="fanjingshan"><SlideFanjingshan /></div>
+                        <div data-slide-id="zhangjiajie"><SlideZhangjiajie /></div>
+                        <div data-slide-id="water_ink"><SlideWaterInk /></div>
+                        <div data-slide-id="guilin"><SlideGuilin /></div>
+                        <div data-slide-id="huangshan"><SlideHuangshan /></div>
+                        <div data-slide-id="lushan"><SlideLushan /></div>
+                        <div data-slide-id="epilogue"><SlideEpilogue /></div>
+                        <div data-slide-id="hongcun"><SlideHongcun /></div>
+                        <div data-slide-id="yuanyang"><SlideYuanyangTerraces /></div>
+                        <div data-slide-id="xiapu"><SlideXiapu /></div>
+                        <div data-slide-id="finale"><SlideFinale /></div>
                     </div>
                 </div>
             </section>

@@ -144,51 +144,6 @@ export const StoryHeaderSection: FC = () => {
 
     return (
         <section className={styles.headerSection} ref={sectionRef}>
-
-            {/* --- 音乐播放器 UI --- */}
-            <div className={styles.musicPlayer}>
-
-                {/* 音乐图标  */}
-                <button
-                    onClick={toggleExpand}
-                    className={`${styles.toggleExpandButton} ${isPlaying ? styles.isPlaying : ''}`}
-                    aria-label="控制音乐播放器"
-                >
-                    <IconMusic />
-                </button>
-
-                {/* 可折叠的控制器 */}
-                <div
-                    className={`${styles.controlsContainer} ${isExpanded ? styles.isExpanded : ''}`}
-                >
-                    <button onClick={togglePlayPause} className={styles.playPauseButton} aria-label={isPlaying ? "暂停" : "播放"}>
-                        {isPlaying ? <IconPause /> : <IconPlay />}
-                    </button>
-                    <div className={styles.volumeControl}>
-                        <IconVolume />
-                        <input
-                            type="range"
-                            min="0"
-                            max="1"
-                            step="0.01"
-                            value={volume}
-                            onChange={handleVolumeChange}
-                            className={styles.volumeSlider}
-                            aria-label="音量"
-                        />
-                    </div>
-                </div>
-
-            </div>
-
-            {/* --- <audio> 元素 --- */}
-            <audio
-                ref={audioRef}
-                src="/music/story-theme.mp3"
-                loop
-                preload="auto"
-            />
-
             {/* --- 视频背景 --- */}
             <video
                 className={styles.introBackgroundVideo}

@@ -56,6 +56,27 @@
     font-display: swap;
 }
 
+/* --- 全局：隐藏滚动条但保留滚动功能 --- */
+
+/* 1. 针对 Firefox */
+html {
+  scrollbar-width: none;
+}
+
+/* 2. 针对 IE 和 Edge (旧版) */
+body {
+  -ms-overflow-style: none;
+}
+
+/* 3. 针对 WebKit (Chrome, Safari, 新版 Edge) */
+/* 我们同时定位 html 和 body 以确保覆盖所有情况 */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none; /* 隐藏滚动条 */
+  width: 0;      /* 确保宽度为0 */
+  height: 0;     /* 确保高度为0 */
+}
+
 /* 现代 CSS 重置 (Reset)
    ------------------------------------------------------------------------ */
 
