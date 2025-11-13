@@ -121,7 +121,7 @@ export const SlideHongcun: FC = () => {
                         <img
                             src="/images/电动自行车-侧面.svg" 
                             alt="当前位置"
-                            className={styles.carIcon} // [!] 新增类名
+                            className={styles.carIcon} 
                         />
                     </div>
                 </div>

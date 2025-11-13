@@ -1,6 +1,5 @@
-// components/OpeningAnimation.tsx
 import { useEffect, useRef, useState } from 'react';
-import './OpeningAnimation.css';
+import styles from './Header.module.scss';
 
 interface OpeningAnimationProps {
   onAnimationComplete?: () => void;

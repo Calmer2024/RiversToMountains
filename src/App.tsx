@@ -88,10 +88,10 @@ function HomePage() {
     setAnimationCompleted(true);
   };
 
-  // // 动画未完成时，只显示动画
-  // if (!animationCompleted) {
-  //   return <OpeningAnimation onAnimationComplete={handleAnimationComplete} />;
-  // }
+  // 动画未完成时，只显示动画
+  if (!animationCompleted) {
+    return <OpeningAnimation onAnimationComplete={handleAnimationComplete} />;
+  }
 
   // 动画完成后，显示主页内容
   return (

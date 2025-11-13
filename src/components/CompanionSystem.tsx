@@ -52,7 +52,7 @@ interface CompanionSystemProps {
   onStateChange?: (isCompanionActive: boolean) => void
 }
 
-const CompanionSystem: React.FC = ({onStateChange}: CompanionSystemProps) => {
+const CompanionSystem: React.FC<CompanionSystemProps> = ({ onStateChange }) => {
   const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
   const [pendingTheme, setPendingTheme] = useState<string | null>(null);
   const [timerActive, setTimerActive] = useState(false);
