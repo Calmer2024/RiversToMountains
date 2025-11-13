@@ -1,0 +1,114 @@
+/* 定义变量 */
+$bg-color: #000000;
+$text-color: #ffffff;
+$exit-transition-duration: 0.7s;
+
+// --- 动画时长 (Sass 变量) ---
+$logo-in-duration: 1.0s;
+$text-in-duration: 0.8s;
+$text-out-duration: 0.5s;
+
+.container {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: $bg-color;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity $exit-transition-duration ease-out, visibility 0s linear $exit-transition-duration;
+  cursor: wait;
+}
+
+.container.exiting {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity $exit-transition-duration ease-out, visibility 0s linear $exit-transition-duration;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  max-width: 90%;
+
+  gap:30px
+}
+
+// Logo 动画
+.logo {
+  max-width: 250px;
+  height: auto;
+  // 初始状态 (OUT)
+  opacity: 0;
+  transform: scale(0.9) translateY(10px);
+  filter: blur(5px);
+  transition: opacity $logo-in-duration ease-out, 
+              transform $logo-in-duration ease-out, 
+              filter $logo-in-duration ease-out;
+  
+  // 激活状态 (IN)
+  &.visible {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
+}
+
+// 文本容器，用于实现交替动画
+.textContainer {
+  margin-top: 20px;
+  // 基础样式
+  transition: opacity $text-out-duration ease-in, 
+              transform $text-out-duration ease-in, 
+              filter $text-out-duration ease-in,
+              clip-path $text-out-duration ease-in;
+  
+  // 初始/出场状态 (OUT)
+  opacity: 0;
+  transform: translateY(15px);
+  filter: blur(5px);
+  // 从底部裁剪
+  clip-path: inset(0 0 100% 0);
+
+  // 激活状态 (IN)
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+    // 完全显示
+    clip-path: inset(0 0 0 0);
+    // 入场动画使用不同的过渡曲线和时长
+    transition: opacity $text-in-duration ease-out, 
+                transform $text-in-duration ease-out, 
+                filter $text-in-duration ease-out,
+                clip-path $text-in-duration ease-out;
+  }
+}
+
+// 文本行样式 (无动画)
+.textLine {
+  font-family: '汉仪全唐诗简', serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: $text-color;
+  
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
+}
+
+// 英文文本样式 (无动画)
+.englishText {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: #a0a0a0;
+}
+
