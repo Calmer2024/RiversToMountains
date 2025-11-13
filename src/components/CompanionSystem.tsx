@@ -80,28 +80,28 @@ const CompanionSystem: React.FC<CompanionSystemProps> = ({ onStateChange }) => {
       posterImage: '/images/companion/bg-1.jpg'
     },
     {
-      id: 'lake',
-      name: '湖泊',
-      videoSrc: '/videos/companion/lake.mp4',
+      id: 'sky',
+      name: '天空',
+      videoSrc: '/videos/companion/sky.mp4',
       whiteNoiseSrc: '/audio/white-noise/lake.mp3',
-      posterImage: '/images/companion/bg-4.jpg'
+      posterImage: '/images/companion/bg-5.jpg'
     },
     {
       id: 'forest',
       name: '林间',
       videoSrc: '/videos/companion/forest.mp4',
       whiteNoiseSrc: '/audio/white-noise/forest.mp3',
-      posterImage: '/images/companion/bg-2.jpg'
+      posterImage: '/images/companion/bg-6.jpg'
     },
     {
       id: 'grassland',
       name: '草地',
       videoSrc: '/videos/companion/grassland.mp4',
       whiteNoiseSrc: '/audio/white-noise/grassland.mp3',
-      posterImage: '/images/companion/bg-21.jpg'
+      posterImage: '/images/companion/bg-7.jpg'
     }
   ];
-  const backgroundImages: BackgroundImage[] = Array.from({length: 20}, (_, i) => ({
+  const backgroundImages: BackgroundImage[] = Array.from({length: 7}, (_, i) => ({
     id: i + 1,
     src: `/images/companion/bg-${i + 1}.jpg`,
     alt: `风景背景图 ${i + 1}`

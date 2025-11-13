@@ -72,13 +72,14 @@ export const IntroSection = () => {
             <h3>
               <span className={styles.seal}>山河</span> {/* 🏮 红色印章 */}
               <span className={styles.subtitle}>
-                <span>古韵</span>
-                <span>数字化新生</span>
+                <span>山水诗卷</span>
+                <span>与君一观</span>
               </span>
             </h3>
             <p>
-              我们致力于挖掘中华大地被遗忘的绝美风景。
-              不仅仅是看风景，更是通过数字化的方式，永久珍藏这些瞬间。
+              我们相信，每一寸山河都承载着千年的回响。
+    我们不只是记录风景，而是通过这幅交互式的数字画卷，
+    邀请您亲历山河。
             </p>
           </motion.div>
 
@@ -91,9 +92,8 @@ export const IntroSection = () => {
             // @ts-ignore
             variants={imageReveal}
           >
-            {/*TODO：改一个合适的图片*/}
             <img
-              src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80"
+              src="./images/summer-palace.jpg"
               alt="Mountain"/>
 
             {/* 📜 装饰：竖排文字 (放在图片边缘) */}
@@ -123,7 +123,7 @@ export const IntroSection = () => {
             </h3>
             <p>
               这是一幅流动的画卷。
-              请向下滑动，开启一场西东之旅，见证大地的奇迹。
+              我们会为你开启一场西东之旅，见证这大地的奇迹。
             </p>
           </motion.div>
 
@@ -135,9 +135,8 @@ export const IntroSection = () => {
             // @ts-ignore
             variants={imageReveal}
           >
-            {/*TODO：改一个合适的图片*/}
             <img
-              src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80"
+              src="./images/china.jpg"
               alt="Nature"/>
             {/* 📜 装饰：竖排文字 */}
             <div className={`${styles.verticalDeco} ${styles.left}`}>

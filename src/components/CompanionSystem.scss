@@ -36,7 +36,7 @@
       height: 100%;
       object-fit: cover;
       // ✨ 默认调暗，并加模糊，突出前景
-      filter: brightness(0.6) blur(5px);
+      filter: brightness(0.8) blur(3px);
       transform: scale(1.1);
       transition: filter 10s ease, transform 10s ease;
     }

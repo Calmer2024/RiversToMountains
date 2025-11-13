@@ -64,19 +64,19 @@ export const FeatureSection = () => {
     // TODO：改四个合适的图片
     {
       id: 1, title: "寻山", subtitle: "Mount.", desc: "云深不知处，只缘身在此山中",
-      img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1000&auto=format&fit=crop"
+      img: "./images/feature/mountains.jpg"
     },
     {
       id: 2, title: "问水", subtitle: "River.", desc: "君不见黄河之水天上来",
-      img: "https://images.unsplash.com/photo-1518098268026-4e89f1a2cd8e?q=80&w=1000&auto=format&fit=crop"
+      img: "./images/feature/water.jpg"
     },
     {
       id: 3, title: "探楼", subtitle: "Tower.", desc: "危楼高百尺，手可摘星辰",
-      img: "https://images.unsplash.com/photo-1542640244-7e672d6cef4e?q=80&w=1000&auto=format&fit=crop"
+      img: "./images/feature/building.jpg"
     },
     {
       id: 4, title: "访古", subtitle: "History.", desc: "古人今人若流水，共看明月皆如此",
-      img: "https://images.unsplash.com/photo-1526481280693-3bfa7568e0f3?q=80&w=1000&auto=format&fit=crop"
+      img: "./images/feature/lamp.jpg"
     },
   ];
 
