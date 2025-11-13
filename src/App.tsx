@@ -91,7 +91,7 @@ function HomePage() {
   const logoPath = '/images/logo.png'; 
 
   const introTextLines = [
-    { chinese: "山河画卷，一场视觉的盛宴", english: "A visual feast of mountains and rivers" },
+    // { chinese: "山河画卷，一场视觉的盛宴", english: "A visual feast of mountains and rivers" },
     { chinese: "云深不知处，山水有相逢", english: "Where clouds veil the peaks, landscapes await our encounter" },
   ];
 
@@ -116,7 +116,8 @@ function HomePage() {
         logoImageSrc="/images/title.png"
         logoAlt="山河奇景 网站 Logo"
         subtitle="A sanctuary nestled in the classic landscapes of China"
-        buttonLink="/bpco"
+        scrollTargetRef={storySectionRef}
+        // buttonLink="/bpco"
       />
       <StatsSection />
       <IntroSection />
