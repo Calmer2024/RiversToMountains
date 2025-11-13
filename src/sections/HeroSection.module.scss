@@ -1,3 +1,7 @@
+/* HeroSection.module.scss
+  (包含您原有的样式 + 新增的动画样式)
+*/
+
 // 英雄版块容器
 .heroSection {
   height: 100vh;
@@ -20,9 +24,6 @@
 .videoBackground {
   width: 100%;
   height: 100%;
-  // 核心！
-  // 像 background-size: cover 一样
-  // 填充整个容器，保持宽高比，多余部分裁切掉
   object-fit: cover;
 }
 
@@ -43,10 +44,8 @@
   width: 100%;
   position: relative;
   z-index: 3; // 叠在遮罩层之上
-
   display: grid;
   place-items: center;
-
   text-align: center;
   color: white;
   padding: 2rem; // 边缘留白，防止文字贴边
@@ -58,22 +57,19 @@
   width: 90%;
   height: auto;
   margin-bottom: 2rem;
-
-  // 确保它在文字颜色方案下也能清晰可见 ，如果是白色Logo
   filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.3));
 
-  // 响应式调整大小
   @media (max-width: 768px) {
     max-width: 90%;
     margin-bottom: 1.5rem;
   }
 }
 
-// 标题
+// 标题 (您原有的 .title，虽然在 tsx 中没用，但保留)
 .title {
   font-size: 6rem;
   font-weight: 300;
-  margin-bottom: 2rem; // 与 .logoTitle 保持一致
+  margin-bottom: 2rem;
   line-height: 1.1;
 
   @media (max-width: 768px) {
@@ -88,9 +84,90 @@
   font-size: 1rem;
   font-weight: 400;
   margin-top: -1.5rem;
-  max-width: 600px; // 限制最大宽度，防止文字太长
+  max-width: 600px;
 
   @media (max-width: 768px) {
     font-size: 1.2rem;
+  }
+}
+
+/*
+  ✨ --- 以下是新增的动画样式 --- ✨
+*/
+
+// 静止时的“呼吸”动画
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+  }
+  70% {
+    transform: scale(1.03); // 稍微变大
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); // 光晕扩散
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
+
+// 悬停时的“光泽”动画
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) skew(-20deg);
+  }
+  100% {
+    transform: translateX(200%) skew(-20deg); // 移动到完全划过
+  }
+}
+
+// 按钮的容器
+.buttonContainer {
+  position: relative; // 用于定位伪元素
+  margin-top: 1.5rem; // 与 .subtitle 的间距
+  
+  /*
+    使用 :global(button) 来穿透 CSS 模块
+    并选中由 <Button> 组件渲染的实际 <button> 元素
+  */
+  :global(button) {
+    // --- 静止状态动画 ---
+    animation: pulse 2.5s infinite ease-out;
+    
+    // --- 悬停动画准备 ---
+    position: relative; // 必须是 relative 才能容纳 ::after
+    overflow: hidden;   // 隐藏溢出的光泽
+    z-index: 1;         // 确保按钮内容在光泽之上
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    
+    // --- 光泽伪元素 (默认隐藏) ---
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 50%; // 光泽的宽度
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.4), // 光泽的颜色
+        transparent
+      );
+      transform: translateX(-100%) skew(-20deg); // 初始在左侧外
+      z-index: 2; // 在按钮背景之上，但在文字之下
+      opacity: 0; // 默认不可见
+    }
+
+    // --- 悬停状态 ---
+    &:hover {
+      animation-play-state: paused; // 悬停时停止“呼吸”
+      transform: scale(1.05); // 稍微放大
+      
+      &::after {
+        opacity: 1; // 显示光泽
+        animation: shine 1s ease-out; // 播放光泽动画
+      }
+    }
   }
 }

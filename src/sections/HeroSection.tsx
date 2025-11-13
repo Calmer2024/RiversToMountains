@@ -1,6 +1,5 @@
 // src/sections/HeroSection.tsx
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import styles from './HeroSection.module.scss';
 import { Button } from '../components/Button';
 
@@ -10,7 +9,11 @@ interface HeroSectionProps {
     subtitle: string;
     logoImageSrc?: string;
     logoAlt?: string;
-    buttonLink?: string;
+    
+    // ✨ 最终修正：
+    // 类型必须与 `useRef<HTMLDivElement>(null)` 的返回类型完全一致
+    // 即 React.RefObject<HTMLDivElement | null>
+    scrollTargetRef?: React.RefObject<HTMLDivElement | null>;
 }
 
 const HeroSection: React.FC<HeroSectionProps> = ({
@@ -19,17 +22,17 @@ const HeroSection: React.FC<HeroSectionProps> = ({
     subtitle,
     logoImageSrc,
     logoAlt = '标题 Logo',
-    buttonLink = ""
+    scrollTargetRef
 }) => {
-    const navigate = useNavigate();
     
     const handleButtonClick = () => {
-        if (buttonLink.startsWith('http')) {
-            // 外部链接
-            window.location.href = buttonLink;
-        } else {
-            // 内部路由
-            navigate(buttonLink);
+        // 这个检查逻辑 (scrollTargetRef && scrollTargetRef.current)
+        // 已经正确处理了 .current 可能为 null 的情况，所以无需更改。
+        if (scrollTargetRef && scrollTargetRef.current) {
+            scrollTargetRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start' 
+            });
         }
     };
 
@@ -52,11 +55,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                 <img src={logoImageSrc} alt={logoAlt} className={styles.logoTitle} />
                 <p className={styles.subtitle}>{subtitle}</p>
 
-                <Button 
-                    variant="secondary" 
-                >
-                    开始探索
-                </Button>
+                <div className={styles.buttonContainer}>
+                    <Button 
+                        variant="secondary"
+                        onClick={handleButtonClick}
+                    >
+                        开始探索
+                    </Button>
+                </div>
             </div>
         </section>
     );
