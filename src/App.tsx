@@ -4,14 +4,14 @@ import './styles/global.scss';
 
 // 组件
 import {Header} from './components/Header';
-import OpeningAnimation from './components/OpeningAnimation';
+import OpeningAnimation from './components/OpeningAnimation/OpeningAnimation';
 import CompanionSystem from './components/CompanionSystem';
 
 // 页面
 import BpcoPage from './sections/BpcoPage';
 import FeedbackPage from './sections/FeedbackPage';
 
-// 区域 (Sections)
+// 区域 (Sections)  
 import HeroSection from './sections/HeroSection';
 import {HorizontalStorySection} from './sections/HorizontalStorySection/HorizontalStorySection';
 import {StoryHeaderSection} from './sections/StoryHeaderSection';
@@ -84,14 +84,33 @@ function HomePage() {
 
   const [animationCompleted, setAnimationCompleted] = useState(false);
 
-  const handleAnimationComplete = () => {
-    setAnimationCompleted(true);
-  };
+  const criticalAssets = [
+    '/videos/hero-video.mp4',
+    '/images/hero-poster.jpg',
+    '/images/title.png',
+    '/videos/story.mp4',
+    '/videos/tibet-loop.mp4',
+    '/videos/muztagh-ata-bg.mp4',
+    '/videos/zhangye-danxia-bg.mp4',
+  ];
 
-  // // 动画未完成时，只显示动画
-  // if (!animationCompleted) {
-  //   return <OpeningAnimation onAnimationComplete={handleAnimationComplete} />;
-  // }
+  const logoPath = '/images/logo.png'; 
+
+  const introTextLines = [
+    { chinese: "山河画卷，一场视觉的盛宴", english: "A visual feast of mountains and rivers" },
+    { chinese: "云深不知处，山水有相逢", english: "Where clouds veil the peaks, landscapes await our encounter" },
+  ];
+
+  if (!animationCompleted) {
+    return (
+      <OpeningAnimation 
+        assetsToLoad={criticalAssets} 
+        logoSrc={logoPath} // 传递 Logo 路径
+        introductionLines={introTextLines} // 传递介绍文本
+        onAnimationComplete={() => setAnimationCompleted(true)} 
+      />
+    );
+  }
 
   // 动画完成后，显示主页内容
   return (
