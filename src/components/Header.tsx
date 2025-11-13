@@ -1,5 +1,7 @@
 import { type FC, useEffect, useState } from 'react';
-import { FiSearch, FiUser, FiMenu } from 'react-icons/fi';
+import { FiUser, FiMenu, FiGithub } from 'react-icons/fi';
+import { IoMdClipboard } from "react-icons/io";
+import { FaGithub } from "react-icons/fa6";
 import { IconButton } from './iconButton';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FloatingAssistant } from './FloatingAssistant';
@@ -62,9 +64,7 @@ export const Header: FC<HeaderProps> = ({ isHidden = false }) => {
             >
                 {/* 左侧 Logo 和文字 */}
                 <div className={styles.headerLeft}>
-                    {/* 假设 logo 路径，与你 HeroSection 中的 posterImage 路径结构一致 */}
                     <img src="/images/logo.png" alt="Logo" className={styles.logo} />
-                    {/* 你可以修改这里的文字 */}
                     <span className={styles.logoText}>CREATIVEPAGE</span> 
                 </div>
 
@@ -95,16 +95,26 @@ export const Header: FC<HeaderProps> = ({ isHidden = false }) => {
                     </div>
                 </div>
 
-                {/* 3. 右侧按钮  */}
+                {/* 3. 右侧按钮 */}
                 <div className={styles.headerRight}>
-                    <IconButton icon={<FiUser />} ariaLabel="用户中心" className={styles.iconButton} onClick={() => navigate('/bpco')} />
+                    
+                    <a
+                        href="https://github.com/Calmer2024/RiversToMountains"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="GitHub Repository"
+                        className={styles.iconButton} 
+                    >
+                        <FaGithub />
+                    </a>
+
+                    {/* 原始按钮 */}
+                    <IconButton icon={<IoMdClipboard />} ariaLabel="用户中心" className={styles.iconButton} onClick={() => navigate('/bpco')} />
                     <IconButton icon={<FiMenu />} ariaLabel="意见反馈" className={`${styles.iconButton} ${styles.menuButton}`} onClick={() => navigate('/developer')} />
                 </div>
             </header>
             
-            {/* 浮动助手
-              注意：如果 CompanionPage 默认全屏，你可能希望在 /outside 路由下隐藏 FloatingAssistant
-            */}
+            {/* 浮动助手 */}
             {activeView === 'home' && <FloatingAssistant />}
         </>
     );
