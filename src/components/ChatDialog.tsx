@@ -1,15 +1,41 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styles from './ChatDialog.module.scss';
-import { FaPaperPlane, FaTrash, FaTimes, FaCog, FaSave } from 'react-icons/fa';
+import { FaPaintBrush , FaSave, FaScroll } from 'react-icons/fa';
+import { FiSettings } from "react-icons/fi";
+import { MdOutlinePowerSettingsNew,MdCleaningServices  } from "react-icons/md";
+const AVATAR_SRC = "/images/avatar.png";
 
+// --- 类型定义 ---
 interface Message {
   id: string;
   text: string;
   isUser: boolean;
   timestamp: Date;
+  isTyping?: boolean; // 用于标记是否正在输出
 }
 
-// ... SettingsModal 组件保持不变 (和上次一样) ...
+// --- 打字机效果组件 (实现流式感) ---
+const TypewriterText: React.FC<{ text: string; onComplete?: () => void }> = ({ text, onComplete }) => {
+  const [displayedText, setDisplayedText] = useState('');
+  
+  useEffect(() => {
+    let index = 0;
+    const timer = setInterval(() => {
+      if (index < text.length) {
+        setDisplayedText((prev) => prev + text.charAt(index));
+        index++;
+      } else {
+        clearInterval(timer);
+        onComplete && onComplete();
+      }
+    }, 50); // 打字速度，越小越快
+    return () => clearInterval(timer);
+  }, [text]);
+
+  return <>{displayedText}</>;
+};
+
+// --- SettingsModal (保持简单，样式更新) ---
 interface SettingsModalProps {
   onClose: () => void;
   onSave: (key: string) => void;
@@ -17,299 +43,246 @@ interface SettingsModalProps {
 }
 const SettingsModal: React.FC<SettingsModalProps> = ({ onClose, onSave, currentKey }) => {
   const [key, setKey] = useState(currentKey);
-  const handleSave = () => { onSave(key); };
-
   return (
-    <div className={styles.settingsOverlay} onClick={onClose}>
-      <div className={styles.settingsDialog} onClick={(e) => e.stopPropagation()}>
-        <div className={styles.settingsHeader}>
-          <h4>助手设置</h4>
-          <button onClick={onClose} className={styles.settingsCloseButton}><FaTimes /></button>
-        </div>
-        <div className={styles.settingsBody}>
-          <label htmlFor="apiKeyInput">DeepSeek API Key</label>
-          <p>API Key 将安全地存储在您的浏览器本地。</p>
-          <input
-            id="apiKeyInput" type="password" value={key}
-            onChange={(e) => setKey(e.target.value)}
-            placeholder="sk-..." className={styles.settingsInput}
-          />
-          <button onClick={handleSave} className={styles.settingsSaveButton}>
-            <FaSave /> 保存
-          </button>
-        </div>
+    <div className={styles.settingsPanel}>
+      <div className={styles.settingsHeader}>
+        <h4><FiSettings/> 灵力之源 (API Key)</h4>
+        <button onClick={onClose} className={styles.closeBtn}><MdOutlinePowerSettingsNew /></button>
+      </div>
+      <div className={styles.settingsBody}>
+        <input
+          type="password"
+          value={key}
+          onChange={(e) => setKey(e.target.value)}
+          placeholder="请输入 DeepSeek Key..."
+          className={styles.inkInput}
+        />
+        <button onClick={() => onSave(key)} className={styles.inkBtn}>
+          <FaSave /> 铭刻
+        </button>
       </div>
     </div>
   );
 };
 
+// --- 主组件 ---
+interface ChatDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
 
-// -----------------------------------------------------
-// 主聊天对话框 (核心修改区)
-// -----------------------------------------------------
 export const ChatDialog: React.FC<ChatDialogProps> = ({ isOpen, onClose }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // 正在请求 API
+  const [isTyping, setIsTyping] = useState(false);   // 正在打字输出
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [apiKey, setApiKey] = useState('');
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  // ⭐️ 修复 2: 创建一个 ref 来引用 textarea
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // 自动滚动到底部
+  // 自动滚动
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages, isTyping]);
 
-  // 组件加载时，尝试从 localStorage 读取 API Key
+  // 读取 Key
   useEffect(() => {
     const storedKey = localStorage.getItem('deepseek_api_key');
-    if (storedKey) {
-      setApiKey(storedKey);
-    }
+    if (storedKey) setApiKey(storedKey);
   }, []);
 
-  // ⭐️ 修复 2: 监听输入框文字变化，自动调整高度
+  // 输入框高度自适应
   useEffect(() => {
     if (textareaRef.current) {
-      // 1. 先重置高度，让它能正确缩小
       textareaRef.current.style.height = 'auto';
-      // 2. 再设置成滚动高度 (即内容高度)
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 120)}px`;
     }
-  }, [inputText]); // 依赖 inputText
+  }, [inputText]);
 
-  // 保存 API Key
-  const handleSaveApiKey = (key: string) => {
-    localStorage.setItem('deepseek_api_key', key);
-    setApiKey(key);
-    setIsSettingsOpen(false);
-  };
-
-  // 发送消息
   const sendMessage = async () => {
-    if (!inputText.trim() || isLoading) return;
-    if (!apiKey) {
-      setIsSettingsOpen(true);
-      return;
-    }
+    if (!inputText.trim() || isLoading || isTyping) return;
+    if (!apiKey) { setIsSettingsOpen(true); return; }
 
-    const userMessage: Message = {
+    const userText = inputText;
+    setInputText('');
+    
+    // 1. 添加用户消息
+    const userMsg: Message = {
       id: Date.now().toString(),
-      text: inputText,
+      text: userText,
       isUser: true,
       timestamp: new Date()
     };
-
-    // ⭐️ 修复 3: 捕获当前的聊天记录 (不包括新消息)
-    const currentMessages = [...messages];
-
-    // 更新UI (加上用户的新消息)
-    setMessages(prev => [...prev, userMessage]);
-    setInputText('');
+    setMessages(prev => [...prev, userMsg]);
     setIsLoading(true);
 
     try {
-      // ⭐️ 修复 3: 把历史记录和新消息一起发给 API
-      const response = await callLanguageModelAPI(inputText, apiKey, currentMessages);
-
-      const botMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: response,
-        isUser: false,
-        timestamp: new Date()
-      };
-
-      setMessages(prev => [...prev, botMessage]);
-    } catch (error) {
-      console.error('API调用失败:', error);
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: '抱歉，我暂时无法回应。请检查您的 API Key 或稍后再试。',
-        isUser: false,
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, errorMessage]);
-    } finally {
+      // 2. 请求 API
+      const responseText = await callLanguageModelAPI(userText, apiKey, messages);
+      
+      // 3. 准备机器人消息 (标记为打字中)
       setIsLoading(false);
+      setIsTyping(true);
+      
+      const botMsg: Message = {
+        id: (Date.now() + 1).toString(),
+        text: responseText,
+        isUser: false,
+        timestamp: new Date(),
+        isTyping: true 
+      };
+      setMessages(prev => [...prev, botMsg]);
+
+    } catch (error) {
+      setIsLoading(false);
+      setMessages(prev => [...prev, {
+        id: Date.now().toString(),
+        text: "灵力紊乱，无法连接彼岸... (请检查API Key)",
+        isUser: false,
+        timestamp: new Date()
+      }]);
     }
   };
 
+  const handleTypingComplete = (id: string) => {
+    setIsTyping(false);
+    setMessages(prev => prev.map(m => m.id === id ? { ...m, isTyping: false } : m));
+  };
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey && !isLoading) { // 加上 !isLoading
+    if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
   };
 
-  const clearChat = () => {
-    setMessages([]);
-  };
-
-  if (!isOpen) return null;
-
   return (
-    <>
+    <div className={`${styles.chatContainer} ${isOpen ? styles.open : ''}`}>
+      
+      {/* 顶部栏 */}
+      <div className={styles.header}>
+        <div className={styles.titleBlock}>
+          <div className={styles.avatar}>
+            <img src={AVATAR_SRC} alt="avatar" />
+          </div>
+          <div className={styles.info}>
+            <h3>墨灵</h3>
+            <span>书卷有灵，伴君同行</span>
+          </div>
+        </div>
+        <div className={styles.controls}>
+          <button onClick={() => setIsSettingsOpen(!isSettingsOpen)} title="设置"><FiSettings /></button>
+          <button onClick={() => setMessages([])} title="清空"><MdCleaningServices /></button>
+          <button onClick={onClose} title="收起"><MdOutlinePowerSettingsNew /></button>
+        </div>
+      </div>
+
+      {/* 设置面板 (嵌入式，不遮挡) */}
       {isSettingsOpen && (
-        <SettingsModal
-          currentKey={apiKey}
+        <SettingsModal 
+          currentKey={apiKey} 
           onClose={() => setIsSettingsOpen(false)}
-          onSave={handleSaveApiKey}
+          onSave={(k) => { 
+            localStorage.setItem('deepseek_api_key', k); 
+            setApiKey(k); 
+            setIsSettingsOpen(false); 
+          }} 
         />
       )}
 
-      <div className={styles.overlay} onClick={onClose}>
-        <div className={styles.dialog} onClick={(e) => e.stopPropagation()}>
-          <div className={styles.header}>
-            <h3>图鉴助手</h3>
-            <div className={styles.actions}>
-              <button onClick={() => setIsSettingsOpen(true)} className={styles.iconButton} title="设置">
-                <FaCog />
-              </button>
-              <button onClick={clearChat} className={styles.iconButton} title="清空对话">
-                <FaTrash />
-              </button>
-              <button onClick={onClose} className={styles.iconButton} title="关闭">
-                <FaTimes />
-              </button>
+      {/* 消息流 */}
+      <div className={styles.messageList}>
+        {messages.length === 0 && (
+          <div className={styles.emptyState}>
+            <FaScroll className={styles.emptyIcon} />
+            <p>展信舒颜，见字如面。</p>
+            <p>吾乃《山河图鉴》之书灵，<br/>知晓天文地理，愿为君解惑。</p>
+          </div>
+        )}
+
+        {messages.map((msg) => (
+          <div key={msg.id} className={`${styles.messageRow} ${msg.isUser ? styles.rowUser : styles.rowBot}`}>
+            <div className={styles.bubble}>
+              {msg.isUser ? (
+                msg.text
+              ) : (
+                // 如果是机器人且正在打字，使用 Typewriter 组件
+                msg.isTyping ? (
+                  <TypewriterText text={msg.text} onComplete={() => handleTypingComplete(msg.id)} />
+                ) : (
+                  msg.text
+                )
+              )}
             </div>
           </div>
-
-          {/* 消息区域 (滚动条样式会在这里生效) */}
-          <div className={styles.messages}>
-            {messages.length === 0 ? (
-              <div className={styles.welcome}>
-                <p>您好！我是图鉴助手，可以问我关于山河图鉴的任何问题。</p>
-              </div>
-            ) : (
-              messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={`${styles.message} ${
-                    message.isUser ? styles.userMessage : styles.botMessage
-                  }`}
-                >
-                  <div className={styles.messageContent}>
-                    {message.text}
-                  </div>
-                  <div className={styles.timestamp}>
-                    {message.timestamp.toLocaleTimeString([], {
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
-                  </div>
-                </div>
-              ))
-            )}
-            {isLoading && (
-              <div className={`${styles.message} ${styles.botMessage}`}>
-                <div className={styles.typingIndicator}>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </div>
-              </div>
-            )}
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* 输入区域 */}
-          <div className={styles.inputArea}>
-            <div className={styles.inputContainer}>
-              <textarea
-                ref={textareaRef} // ⭐️ 修复 2: 绑定 ref
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="输入您的问题 (Shift+Enter 换行)..."
-                rows={1} // 始终从1行开始
-                className={styles.textInput}
-                disabled={isLoading}
-              />
-              <button
-                onClick={sendMessage}
-                disabled={!inputText.trim() || isLoading}
-                className={styles.sendButton}
-              >
-                <FaPaperPlane />
-              </button>
+        ))}
+        
+        {/* 加载动画 (研磨效果) */}
+        {isLoading && (
+          <div className={`${styles.messageRow} ${styles.rowBot}`}>
+            <div className={styles.loadingInk}>
+              <span></span><span></span><span></span>
             </div>
           </div>
-        </div>
+        )}
+        <div ref={messagesEndRef} />
       </div>
-    </>
+
+      {/* 输入区 */}
+      <div className={styles.inputArea}>
+        <textarea
+          ref={textareaRef}
+          value={inputText}
+          onChange={(e) => setInputText(e.target.value)}
+          onKeyPress={handleKeyPress}
+          placeholder="请小主赐教"
+          rows={1}
+          disabled={isLoading || isTyping}
+        />
+        <button onClick={sendMessage} disabled={!inputText.trim() || isLoading || isTyping} className={styles.sendBtn}>
+          <FaPaintBrush />
+        </button>
+      </div>
+    </div>
   );
 };
 
-// -----------------------------------------------------
-// 大语言模型 API (支持上下文)
-// -----------------------------------------------------
-async function callLanguageModelAPI(
-  message: string,
-  apiKey: string,
-  history: Message[] // ⭐️ 修复 3: 接收历史记录
-): Promise<string> {
+// --- API 调用 (Prompt 优化) ---
+async function callLanguageModelAPI(message: string, apiKey: string, history: Message[]): Promise<string> {
+  // 系统设定：古风全知书灵
+  const systemPrompt = `
+    你名为“墨灵”，是《山河图鉴》的守护书灵。
+    【人设】你的性格沉稳典雅，博古通今，语气谦和，带有一丝古代文人的风骨。
+    【语言风格】请使用半文半白的风格（古风白话），用词优美，多用四字成语，富有画面感和诗意。避免使用过于现代的互联网用语或Markdown格式。
+    【任务】回答用户关于中国山川地理、历史文化的问题。
+    【示例】
+    用户：你好。
+    回复：道友有礼了。吾乃书灵，居于这山河图卷之中。不知今日造访，可是有何不解之谜？
+  `;
 
-  const API_URL = 'https://api.deepseek.com/chat/completions';
-  if (!apiKey) throw new Error('API Key is missing.');
-
-  // 1. 定义系统提示
-  const systemMessage = {
-    role: 'system',
-    content: '你是一个专业的图鉴助手，帮助用户了解山河图鉴的相关信息。回答要简洁专业，风格要匹配中国古典美学，沉稳而富有诗意，输出不要包含任何markdown标记。'
-  };
-
-  // 2. 转换历史记录 (只取最后10条)
-  const historyMessages = history.slice(-10).map(msg => ({
-    role: msg.isUser ? 'user' : 'assistant',
-    content: msg.text
+  const historyPayload = history.slice(-6).map(m => ({
+    role: m.isUser ? 'user' : 'assistant',
+    content: m.text
   }));
 
-  // 3. 组装新的用户消息
-  const userMessage = {
-    role: 'user',
-    content: message
-  };
-
-  // 4. 拼接最终的消息数组
-  const messagesPayload = [
-    systemMessage,
-    ...historyMessages,
-    userMessage
-  ];
-
   try {
-    const response = await fetch(API_URL, {
+    const res = await fetch('https://api.deepseek.com/chat/completions', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
-      },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
       body: JSON.stringify({
         model: 'deepseek-chat',
-        messages: messagesPayload, // ⭐️ 修复 3: 发送完整的上下文
-        max_tokens: 500,
-        temperature: 0.7,
-        stream: false
+        messages: [{ role: 'system', content: systemPrompt }, ...historyPayload, { role: 'user', content: message }],
+        max_tokens: 800,
+        temperature: 0.8, 
+        stream: false 
       })
     });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('API错误详情:', errorText);
-      throw new Error(`API请求失败: ${response.status}`);
-    }
-
-    const data = await response.json();
-    if (!data.choices || !data.choices[0]) {
-      throw new Error('API返回数据格式错误');
-    }
-
-    return data.choices[0].message.content;
-  } catch (error) {
-    console.error('API调用错误:', error);
-    return '抱歉，山河入梦，思绪暂断... 请稍后再试。';
+    const data = await res.json();
+    return data.choices?.[0]?.message?.content || "墨迹未干，天机难测...";
+  } catch (e) {
+    console.error(e);
+    throw e;
   }
 }
