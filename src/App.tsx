@@ -1,4 +1,4 @@
-import React, { useState,useEffect, useRef } from 'react'; 
+import React, { useState, useEffect, useRef } from 'react'; 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './styles/global.scss';
 
@@ -11,29 +11,30 @@ import CompanionSystem from './components/CompanionSystem';
 import BpcoPage from './sections/BpcoPage';
 import FeedbackPage from './sections/FeedbackPage';
 
-// 区域 (Sections)  
+// 区域 
 import HeroSection from './sections/HeroSection';
 import {HorizontalStorySection} from './sections/HorizontalStorySection/HorizontalStorySection';
 import {StoryHeaderSection} from './sections/StoryHeaderSection';
 import { IntroSection } from './sections/IntroSection';
 import { StatsSection } from './sections/StatsSection';
 
-
 import TestPlayground from "./TestPlayground.tsx";
 import {FeatureSection} from "./sections/FeatureSection.tsx";
 import {TextMaskSection} from "./sections/TextMaskSection.tsx";
 
-/**
- * 主页组件
- * 包含了开场动画和主页所有内容
- */
-function HomePage() {
+interface HomePageProps {
+  hasPlayed: boolean;           // 全局是否已经播放过动画
+  onAnimationFinish: () => void; // 动画播放完成的回调
+}
+
+function HomePage({ hasPlayed, onAnimationFinish }: HomePageProps) {
   // 用于控制 Header 隐藏
   const [isHeaderHidden, setIsHeaderHidden] = useState(false);
   // 用于引用 <HorizontalStorySection /> 包装器的 ref
   const storySectionRef = useRef<HTMLDivElement>(null);
 
-  const [animationCompleted, setAnimationCompleted] = useState(false);
+  // 如果 App 告诉我们已经播过了 (hasPlayed为true)，这里直接初始化为 true (跳过动画)
+  const [animationCompleted, setAnimationCompleted] = useState(hasPlayed);
 
   useEffect(() => {
     
@@ -49,7 +50,6 @@ function HomePage() {
         if (entry.isIntersecting) {
           setIsHeaderHidden(true);
         } else {
-          // (逻辑不变)
           if (entry.boundingClientRect.top > HEADER_HEIGHT_PX) {
             setIsHeaderHidden(false);
           }
@@ -75,7 +75,7 @@ function HomePage() {
       }
     };
     
-  // 4. ✨ 关键修改：添加 animationCompleted 作为依赖项
+  // 4. 添加 animationCompleted 作为依赖项
   }, [animationCompleted]);
 
   const criticalAssets = [
@@ -91,7 +91,6 @@ function HomePage() {
   const logoPath = '/images/logo.png'; 
 
   const introTextLines = [
-    // { chinese: "山河画卷，一场视觉的盛宴", english: "A visual feast of mountains and rivers" },
     { chinese: "云深不知处，山水有相逢", english: "Where clouds veil the peaks, landscapes await our encounter" },
   ];
 
@@ -101,7 +100,11 @@ function HomePage() {
         assetsToLoad={criticalAssets} 
         logoSrc={logoPath} // 传递 Logo 路径
         introductionLines={introTextLines} // 传递介绍文本
-        onAnimationComplete={() => setAnimationCompleted(true)} 
+        onAnimationComplete={() => {
+            // 动画完成后，不仅更新本地状态，还要通知 App 组件
+            setAnimationCompleted(true);
+            onAnimationFinish();
+        }} 
       />
     );
   }
@@ -117,7 +120,6 @@ function HomePage() {
         logoAlt="山河奇景 网站 Logo"
         subtitle="A sanctuary nestled in the classic landscapes of China"
         scrollTargetRef={storySectionRef}
-        // buttonLink="/bpco"
       />
       <StatsSection />
       <IntroSection />
@@ -160,11 +162,25 @@ function CompanionPage() {
  * 负责处理应用级路由
  */
 function App() {
+  // 在 App 层级维护“是否已播放过动画”的状态
+  // 默认 false，表示刷新网页或首次进入时需要播放
+  const [hasIntroPlayed, setHasIntroPlayed] = useState(false);
+
   return (
     <Router>
       <Routes>
-        {/* 路由：主页 */}
-        <Route path="/" element={<HomePage />} />
+        {/* 路由：主页 
+            （将状态和回调传递给 HomePage）
+        */}
+        <Route 
+            path="/" 
+            element={
+                <HomePage 
+                    hasPlayed={hasIntroPlayed} 
+                    onAnimationFinish={() => setHasIntroPlayed(true)} 
+                />
+            } 
+        />
 
         {/* 路由：陪伴系统 */}
         <Route path="/outside" element={<CompanionPage />} />
