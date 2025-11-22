@@ -118,7 +118,7 @@ function HomePage({ hasPlayed, onAnimationFinish }: HomePageProps) {
         posterImage="/images/hero-poster.jpg"
         logoImageSrc="/images/title.png"
         logoAlt="山河奇景 网站 Logo"
-        subtitle="A sanctuary nestled in the classic landscapes of China"
+        subtitle="A retreat from classic China"
         scrollTargetRef={storySectionRef}
       />
       <StatsSection />

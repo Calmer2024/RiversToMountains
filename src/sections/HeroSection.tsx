@@ -107,7 +107,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
         {/* 按钮区域 */}
         <div className={styles.buttonWrapper}>
           <MagneticButton onClick={handleButtonClick}>
-            开启旅程
+            START
           </MagneticButton>
         </div>
       </div>
