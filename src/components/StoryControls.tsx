@@ -20,7 +20,7 @@ export const StoryControls: React.FC<StoryControlsProps> = ({activeSlideInfo}) =
 
   // --- ⏲️ 自动隐藏计时器 Ref ---
   // 使用 useRef 保存 timer ID，这样在组件的任何地方都能清除它
-  const hideTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // --- 核心工具函数：倒计时控制 ---
 
