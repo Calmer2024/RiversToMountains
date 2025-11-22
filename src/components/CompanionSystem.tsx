@@ -239,7 +239,7 @@ const CompanionSystem: React.FC<CompanionSystemProps> = ({ onStateChange }) => {
             ) : (
               <>
                 <div className="header-area">
-                    <div className="chapter-mark">世外桃源</div>
+                    <div className="chapter-mark">世外静域</div>
                     <h1 className="main-title">清风欲引君何去</h1>
                     <div className="deco-line"></div>
                   </div>  

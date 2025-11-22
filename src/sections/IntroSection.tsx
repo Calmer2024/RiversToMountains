@@ -70,16 +70,16 @@ export const IntroSection = () => {
             variants={fadeUp}
           >
             <h3>
-              <span className={styles.seal}>山河</span> {/* 🏮 红色印章 */}
+              <span className={styles.seal}>画卷</span> 
               <span className={styles.subtitle}>
-                <span>山水诗卷</span>
-                <span>与君一观</span>
+                <span>西东万里</span>
+                <span>一览山河</span>
               </span>
             </h3>
             <p>
-              我们相信，每一寸山河都承载着千年的回响。
-    我们不只是记录风景，而是通过这幅交互式的数字画卷，
-    邀请您亲历山河。
+              这是一幅横贯东西的数字长卷。
+              我们以技术为笔，重绘从西域苍茫雪原到东海浩渺波涛的地理跨越。
+              指尖轻触间，不仅是视觉的游历，更是对中华大地经纬脉络的深情注视。
             </p>
           </motion.div>
 
@@ -98,7 +98,7 @@ export const IntroSection = () => {
 
             {/* 📜 装饰：竖排文字 (放在图片边缘) */}
             <div className={styles.verticalDeco}>
-              天地有大美而不言
+              行遍江南塞北路
             </div>
           </motion.div>
         </div>
@@ -115,15 +115,16 @@ export const IntroSection = () => {
             variants={fadeUp}
           >
             <h3>
-              <span className={styles.seal}>寻迹</span>
+              <span className={styles.seal}>静域</span>
               <span className={styles.subtitle}>
-                <span>沉浸体验</span>
-                <span>指尖触达</span>
+                <span>喧嚣之外</span>
+                <span>择处栖息</span>
               </span>
             </h3>
             <p>
-              这是一幅流动的画卷。
-              我们会为你开启一场西东之旅，见证这大地的奇迹。
+              不仅是看客，更是归人。
+              我们特辟一方“世外静域”，引山川白噪为伴，融专注机制于景。
+              于松涛雨夜中安放焦虑，在数字山水中寻回久违的内心秩序。
             </p>
           </motion.div>
 
@@ -140,7 +141,7 @@ export const IntroSection = () => {
               alt="Nature"/>
             {/* 📜 装饰：竖排文字 */}
             <div className={`${styles.verticalDeco} ${styles.left}`}>
-              万物有成理而不说
+              偷得浮生半日闲
             </div>
           </motion.div>
         </div>
