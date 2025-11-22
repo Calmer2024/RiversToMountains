@@ -21,7 +21,7 @@ export const SlideYuanyangTerraces: FC = () => {
                     trigger: slide,
                     containerAnimation: horizontalTween,
                     start: "left 70%", // 当幻灯片进入视口30%时开始动画
-                    end: "left 0%",    // 当幻灯片左边缘到达视口左边缘时动画结束
+                    end: "left -50%",    // 当幻灯片左边缘到达视口左边缘时动画结束
                     toggleActions: "play reverse play reverse", // 进入播放，离开反向
                     // scrub: true, // [可选] 如果想让动画与滚动条联动，可以取消注释
                 }
