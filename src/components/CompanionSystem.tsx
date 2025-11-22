@@ -99,7 +99,7 @@ const CompanionSystem: React.FC<CompanionSystemProps> = ({ onStateChange }) => {
       name: '草地',
       videoSrc: '/videos/companion/grassland.mp4',
       whiteNoiseSrc: '/audio/white-noise/grassland.mp3',
-      posterImage: '/images/companion/bg-7.jpg'
+      posterImage: '/images/companion/bg-1.jpg'
     }
   ];
 

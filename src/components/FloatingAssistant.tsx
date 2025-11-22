@@ -5,7 +5,7 @@ import styles from './FloatingAssistant.module.scss';
 
 // --- 常量定义 ---
 const SHOW_DURATION = 10000;  // 显示 10 秒
-const HIDE_DURATION = 10000; // 消失 10 秒
+const HIDE_DURATION = 20000; // 消失 10 秒
 
 export const FloatingAssistant: React.FC = () => {
   const [isMounted, setIsMounted] = useState(false);

@@ -19,8 +19,6 @@
   transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-// --- 状态修饰类 ---
-
 /* 首页顶部完全透明 (无背景/无模糊) */
 .homeTransparent {
   background-color: transparent !important;
@@ -71,7 +69,7 @@
   letter-spacing: 1px;
 }
 
-// --- 2. 中间滑动开关 (保持原有逻辑) ---
+// --- 2. 中间滑动开关  ---
 .headerCenter {
   position: absolute;
   top: 50%;
@@ -135,7 +133,7 @@
   }
 }
 
-// --- 3. 右侧菜单区域 (全新设计) ---
+// --- 3. 右侧菜单区域  ---
 .headerRight {
   position: relative; // 作为下拉菜单的定位锚点
   display: flex;
@@ -143,7 +141,7 @@
   z-index: 10; // 确保层级最高
 }
 
-// 菜单触发按钮 (圆形玻璃)
+// 菜单触发按钮 
 .menuTrigger {
   width: 48px;
   height: 48px;
@@ -184,7 +182,7 @@
   }
 }
 
-// 下拉菜单面板 (深色高级感)
+// 下拉菜单面板 
 .dropdownMenu {
   position: absolute;
   top: 65px; // 按钮正下方
