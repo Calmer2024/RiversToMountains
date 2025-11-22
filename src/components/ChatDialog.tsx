@@ -35,7 +35,6 @@ const TypewriterText: React.FC<{ text: string; onComplete?: () => void }> = ({ t
   return <>{displayedText}</>;
 };
 
-// --- SettingsModal (保持简单，样式更新) ---
 interface SettingsModalProps {
   onClose: () => void;
   onSave: (key: string) => void;

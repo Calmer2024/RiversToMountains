@@ -7,7 +7,7 @@ import styles from './FloatingAssistant.module.scss';
 export const FloatingAssistant: React.FC = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [showBubble, setShowBubble] = useState(true); // 控制气泡显示
+  const [showBubble, setShowBubble] = useState(true); 
 
   useEffect(() => {
     setIsMounted(true);
@@ -41,10 +41,9 @@ export const FloatingAssistant: React.FC = () => {
           className={`${styles.assistantButton} ${isChatOpen ? styles.active : ''}`}
           onClick={handleClick}
           aria-label="呼唤墨灵"
-          style={{ cursor: 'pointer' }} // 明确改为手指样式，不再是 grab
+          style={{ cursor: 'pointer' }} 
         >
           <GiInkSwirl className={styles.icon} />
-          {/* 保持原有的呼吸动画 */}
           {!isChatOpen && <div className={styles.inkPulse}></div>}
         </button>
       </div>
