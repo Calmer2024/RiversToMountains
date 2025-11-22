@@ -32,6 +32,8 @@ function HomePage({ hasPlayed, onAnimationFinish }: HomePageProps) {
   const [isHeaderHidden, setIsHeaderHidden] = useState(false);
   // 用于引用 <HorizontalStorySection /> 包装器的 ref
   const storySectionRef = useRef<HTMLDivElement>(null);
+  // 专门用于 START 按钮跳转定位的 ref
+  const storyHeaderRef = useRef<HTMLDivElement>(null);
 
   // 如果 App 告诉我们已经播过了 (hasPlayed为true)，这里直接初始化为 true (跳过动画)
   const [animationCompleted, setAnimationCompleted] = useState(hasPlayed);
@@ -119,13 +121,15 @@ function HomePage({ hasPlayed, onAnimationFinish }: HomePageProps) {
         logoImageSrc="/images/title.png"
         logoAlt="山河奇景 网站 Logo"
         subtitle="A retreat from classic China"
-        scrollTargetRef={storySectionRef}
+        scrollTargetRef={storyHeaderRef}
       />
       <StatsSection />
       <IntroSection />
       <FeatureSection />
       <TextMaskSection />
-      <StoryHeaderSection />
+      <div ref={storyHeaderRef}>
+        <StoryHeaderSection />
+      </div>
       <div ref={storySectionRef}>
         <HorizontalStorySection />
       </div>

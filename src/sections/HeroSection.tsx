@@ -62,7 +62,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({
 
   const handleButtonClick = () => {
     if (scrollTargetRef && scrollTargetRef.current) {
-      scrollTargetRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      scrollTargetRef.current.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'center' 
+      });
     }
   };
 
