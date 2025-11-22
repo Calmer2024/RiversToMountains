@@ -1,48 +1,43 @@
-import React, { useState, useEffect, useRef, type FC, type ChangeEvent } from 'react';
+import React, { 
+  useState, 
+  useEffect, 
+  useRef, 
+  type FC 
+} from 'react';
 import styles from './StoryHeaderSection.module.scss';
+import { useStoryMusic } from '../context/StoryMusicContext';
 
-// --- SVG 图标 ---
+// --- 图标组件 ---
 const IconMusic = () => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
         <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
     </svg>
 );
 
-const IconPlay = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-        <path d="M8 5v14l11-7z" />
-    </svg>
+const IconMusicOff = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+      <path d="M4.27 3L3 4.27l9 9v.28c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4v-1.73L19.73 21 21 19.73 4.27 3zM14 7h4V3h-6v5.18l2 2z" />
+  </svg>
 );
-
-const IconPause = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-    </svg>
-);
-
-const IconVolume = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
-    </svg>
-);
-
 
 export const StoryHeaderSection: FC = () => {
-    // --- 现有 Ref 和 State ---
     const sectionRef = useRef<HTMLDivElement>(null);
     const titleGroupRef = useRef<HTMLDivElement>(null);
     const [isVisible, setIsVisible] = useState(false);
+    
+    const { isPlaying, togglePlay, setIsPlaying } = useStoryMusic();
+    
+    // --- 记录用户是否点击过 ---
+    // 默认为 false，只有点击后才变为 true
+    const [hasInteracted, setHasInteracted] = useState(false);
 
-    // --- 音乐播放器 Ref 和 State ---
-    const audioRef = useRef<HTMLAudioElement>(null);
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [volume, setVolume] = useState(0.7);
-    const [isManuallyPaused, setIsManuallyPaused] = useState(true);
+    const handleMusicClick = () => {
+        togglePlay();
+        // 用户点击了，气泡永久消失
+        setHasInteracted(true);
+    };
 
-    // --- 播放器展开状态 ---
-    const [isExpanded, setIsExpanded] = useState(false);
-
-    // --- 现有 IntersectionObserver ---
+    // --- IntersectionObserver 逻辑 ---
     useEffect(() => {
         const section = sectionRef.current;
         if (!section) return;
@@ -52,119 +47,54 @@ export const StoryHeaderSection: FC = () => {
                 const newVisibility = entry.isIntersecting;
                 setIsVisible(newVisibility);
 
-                // 控制音乐播放 
-                if (newVisibility) {
-                    // --- 用户在区域内 ---
-                    // 播放, 除非他们手动暂停了
-                    if (!isManuallyPaused) {
-                        setIsPlaying(true);
-                    }
-                } else {
-                    // --- 用户已离开区域 ---
-                    // 我们需要判断他们是向上还是向下离开的
-
-                    // entry.boundingClientRect.top < 0 意味着
-                    // 元素的顶部已经移动到了视口的顶部 *之上*
-                    // = 用户向下滚动，离开了此区域
-                    if (entry.boundingClientRect.top < 0) {
-                        // 用户向下了，音乐继续播放
-                        // 我们什么都不做，'isPlaying' 状态保持
-                    } else {
-                        // 否则，元素就是从视口底部离开的
-                        // = 用户向上滚动，离开了此区域
-                        setIsPlaying(false);
-                        setIsExpanded(false); // 自动折叠播放器
-                    }
+                if (!newVisibility && entry.boundingClientRect.top >= 0) {
+                     // 向上离开，停止播放
+                     setIsPlaying(false);
                 }
             },
-            {
-                threshold: 0.0,
-            }
+            { threshold: 0.0 }
         );
 
         observer.observe(section);
-
         return () => {
-            if (section) {
-                observer.unobserve(section);
-            }
+            if (section) observer.unobserve(section);
         };
-    }, [isManuallyPaused]);
+    }, [setIsPlaying]);
 
-    // --- 同步 React 状态到 <audio> 元素 ---
-    useEffect(() => {
-        const audio = audioRef.current;
-        if (!audio) return;
-        if (isPlaying) {
-            audio.play().catch(error => {
-                console.warn("音乐播放失败:", error);
-                setIsPlaying(false);
-            });
-        } else {
-            audio.pause();
-        }
-    }, [isPlaying]);
-
-    useEffect(() => {
-        const audio = audioRef.current;
-        if (audio) {
-            audio.volume = volume;
-        }
-    }, [volume]);
-
-    // --- 播放器控制函数 ---
-
-    // [!code focus:start]
-    // 1. 切换展开/折叠
-    const toggleExpand = () => {
-        setIsExpanded(prev => !prev);
-    };
-
-    // 2. 切换播放/暂停 
-    const togglePlayPause = () => {
-        if (isPlaying) {
-            setIsPlaying(false);
-            setIsManuallyPaused(true);
-        } else {
-            setIsPlaying(true);
-            setIsManuallyPaused(false);
-        }
-    };
-
-
-    // 3. 调整音量 
-    const handleVolumeChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const newVolume = parseFloat(e.target.value);
-        setVolume(newVolume);
-    };
-
-    // --- 现有标题动画 ---
-    const titleGroupClassName = `${styles.titleGroup} ${isVisible ? styles.isVisible : ''
-        }`;
+    const titleGroupClassName = `${styles.titleGroup} ${isVisible ? styles.isVisible : ''}`;
 
     return (
         <section className={styles.headerSection} ref={sectionRef}>
-            {/* --- 视频背景 --- */}
             <video
                 className={styles.introBackgroundVideo}
-                muted
-                playsInline
-                preload="auto"
-                loop
-                autoPlay
+                muted playsInline preload="auto" loop autoPlay
             >
                 <source src="/videos/story.mp4" type="video/mp4" />
             </video>
 
-            {/* --- 标题组 --- */}
+            <div className={styles.musicControlWrapper}>
+                {/* 逻辑修改：只要没点击过 (hasInteracted 为 false)，气泡就一直存在 */}
+                {!hasInteracted && (
+                    <div className={styles.speechBubble}>
+                        开启背景音乐体验更佳
+                        <div className={styles.arrow} />
+                    </div>
+                )}
+                
+                {/* 按钮样式：styles.playing 会触发旋转动画 */}
+                <button 
+                    className={`${styles.musicToggleBtn} ${isPlaying ? styles.playing : ''}`}
+                    onClick={handleMusicClick}
+                    aria-label="切换背景音乐"
+                >
+                    {isPlaying ? <IconMusic /> : <IconMusicOff />}
+                </button>
+            </div>
+
             <div className={titleGroupClassName} data-animate="intro-group-1" ref={titleGroupRef}>
                 <div className={styles.mainTitleWrapper}>
                     <h2>山河之旅</h2>
-                    <img
-                        src="/images/山河之旅.png"
-                        alt="山河之旅"
-                        className={styles.titleIcon}
-                    />
+                    <img src="/images/山河之旅.png" alt="山河之旅" className={styles.titleIcon} />
                 </div>
                 <p>这是一幅流动的画卷。请向下滚动，开启一场西东之旅，见证大地的奇迹</p>
             </div>

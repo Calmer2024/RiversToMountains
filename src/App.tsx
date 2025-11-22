@@ -22,6 +22,9 @@ import TestPlayground from "./TestPlayground.tsx";
 import {FeatureSection} from "./sections/FeatureSection.tsx";
 import {TextMaskSection} from "./sections/TextMaskSection.tsx";
 
+// 上下文
+import { StoryMusicProvider } from './context/StoryMusicContext';
+
 interface HomePageProps {
   hasPlayed: boolean;           // 全局是否已经播放过动画
   onAnimationFinish: () => void; // 动画播放完成的回调
@@ -127,12 +130,14 @@ function HomePage({ hasPlayed, onAnimationFinish }: HomePageProps) {
       <IntroSection />
       <FeatureSection />
       <TextMaskSection />
-      <div ref={storyHeaderRef}>
-        <StoryHeaderSection />
-      </div>
-      <div ref={storySectionRef}>
-        <HorizontalStorySection />
-      </div>
+      <StoryMusicProvider>
+        <div ref={storyHeaderRef}>
+          <StoryHeaderSection />
+        </div>
+        <div ref={storySectionRef}>
+          <HorizontalStorySection />
+        </div>
+      </StoryMusicProvider>
     </div>  
   );
 }

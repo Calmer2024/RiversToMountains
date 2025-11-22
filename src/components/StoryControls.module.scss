@@ -1,44 +1,39 @@
+/* --- 布局容器 --- */
 .controlsContainer {
   position: absolute;
-  /* ✨ 修改 1：定位移到右下角，远离视觉中心 */
   bottom: 40px;
   right: 40px;
   z-index: 100;
-
   display: flex;
-  /* ✨ 修改 2：反向列布局。
-     DOM 中写在后面的元素（如弹窗），视觉上会堆叠在按钮上方。
-     这样新弹出的气泡就像是从按钮里“长”出来的。 */
   flex-direction: column-reverse;
-  align-items: flex-end; /* 右对齐 */
+  align-items: flex-end;
   gap: 16px;
-
-  /* 容器本身不阻挡鼠标点击，只让内部的按钮和弹窗阻挡 */
   pointer-events: none;
 }
 
-/* 让子元素恢复鼠标交互 */
 .buttonGroup, .popup {
   pointer-events: auto;
 }
 
+/* --- 按钮组 --- */
 .buttonGroup {
   display: flex;
   gap: 12px;
-  background-color: rgba(20, 20, 20, 0.6); /* 深色磨砂背景 */
+  background-color: rgba(20, 20, 20, 0.6);
   backdrop-filter: blur(12px);
   padding: 10px;
-  border-radius: 50px; /* 更圆润的胶囊形状 */
+  border-radius: 50px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease, background-color 0.3s ease;
 
   &:hover {
     background-color: rgba(30, 30, 30, 0.8);
-    transform: scale(1.02); /* 微微放大 */
+    transform: scale(1.02);
   }
 }
 
+/* --- 按钮基础样式 --- */
 .iconButton {
   background: transparent;
   border: none;
@@ -49,22 +44,47 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 
   svg {
-    width: 22px; /* 图标稍大一点点 */
+    width: 22px;
     height: 22px;
+    transition: transform 0.3s ease; /* 让图标变换也平滑 */
   }
 
   &:hover:not(:disabled) {
     background-color: rgba(255, 255, 255, 0.15);
-    transform: translateY(-2px); /* 小跳动 */
+    transform: translateY(-2px);
   }
 
+  /* 面板打开状态 (Active) */
   &.active {
     background-color: #ffffff;
     color: #111111;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  }
+
+  /* ✨ 核心修改：音乐播放状态 (Playing) */
+  /* 当其播放时按钮为白色，背景为红色 */
+  &.playing {
+    background-color: #ff3b30; /* 红色背景 */
+    color: #ffffff;            /* 白色图标 */
+    border-color: transparent;
+    
+    // 1. 呼吸光晕效果 (调整为淡红色光晕)
+    box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.7);
+    animation: pulseRed 2s infinite;
+
+    // 2. 仅旋转内部图标，按钮不动
+    svg {
+      animation: musicSpin 3s linear infinite;
+    }
+    
+    // 播放时覆盖 hover 的位移，防止旋转时跳动，保持红色
+    &:hover {
+      transform: none;
+      background-color: #ff5247; /* Hover 时稍微变亮一点的红 */
+    }
   }
 
   &:disabled {
@@ -73,34 +93,49 @@
   }
 }
 
-/* --- 通用弹出面板基础样式 --- */
+/* --- 动画关键帧 --- */
+
+/* 图标旋转动画 */
+@keyframes musicSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 按钮呼吸光效 - 修改为红色系 */
+@keyframes pulseRed {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(255, 59, 48, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 59, 48, 0);
+  }
+}
+
+/* --- 弹出面板通用 --- */
 .popup {
-  background-color: rgba(30, 30, 30, 0.65); /* 默认稍微暗一点、透一点 */
+  background-color: rgba(30, 30, 30, 0.65);
   backdrop-filter: blur(16px);
   border-radius: 16px;
   padding: 16px 20px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-
-  /* 动画原点设为右下角 */
   transform-origin: bottom right;
-
-  /* 关键：平滑过渡所有状态 */
   transition:
-          opacity 0.4s cubic-bezier(0.19, 1, 0.22, 1),
-          transform 0.4s cubic-bezier(0.19, 1, 0.22, 1),
-          background-color 0.3s ease;
+    opacity 0.4s cubic-bezier(0.19, 1, 0.22, 1),
+    transform 0.4s cubic-bezier(0.19, 1, 0.22, 1),
+    background-color 0.3s ease;
 }
 
-/* --- 音乐面板特定样式 --- */
+/* --- 音乐面板 --- */
 .musicPopup {
   display: flex;
   align-items: center;
   gap: 12px;
   color: #f0f0f0;
   min-width: 240px;
-
-  /* 音乐面板不需要太强的交互反馈，保持稳定即可 */
   opacity: 1;
 
   & > svg {
@@ -110,7 +145,6 @@
     opacity: 0.8;
   }
 
-  /* 自定义音量滑块 */
   .volumeSlider {
     flex: 1;
     cursor: pointer;
@@ -141,22 +175,19 @@
   }
 }
 
-/* --- 信息介绍面板特定样式 --- */
+/* --- 景点信息面板 --- */
 .bookPopup {
   min-width: 300px;
-  max-width: 380px; /* 限制最大宽度，防止文字太长 */
-
-  /* 默认状态：稍微“收敛”一点 */
+  max-width: 380px;
   opacity: 0.85;
   transform: translateY(0) scale(0.98);
   cursor: default;
 
-  /* ✨ 核心交互：鼠标放上去时，变成完全激活状态 */
   &:hover {
     opacity: 1;
-    background-color: rgba(40, 40, 40, 0.9); /* 变实 */
-    backdrop-filter: blur(24px); /* 模糊加重 */
-    transform: translateY(-8px) scale(1); /* 微微上浮并恢复原大小，暗示“被拿起” */
+    background-color: rgba(40, 40, 40, 0.9);
+    backdrop-filter: blur(24px);
+    transform: translateY(-8px) scale(1);
     border-color: rgba(255, 255, 255, 0.2);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
   }
@@ -177,16 +208,24 @@
     letter-spacing: 0.02em;
   }
 
-  /* 关闭按钮：默认隐藏，hover时才出现，保持界面清爽 */
   .closeButton {
-    @extend .iconButton;
+    /* 继承 iconButton 样式 */
+    background: transparent;
+    border: none;
+    color: #f0f0f0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
     position: absolute;
     top: 6px;
     right: 6px;
     padding: 6px;
     opacity: 0;
-    transition: opacity 0.2s ease;
-
+    
     svg { width: 16px; height: 16px; }
   }
 
@@ -195,9 +234,7 @@
   }
 }
 
-/* --- 动画关键帧 --- */
-
-/* 1. 面板入场动画 */
+/* --- 面板入场 --- */
 .popupEnter {
   animation: popupEnterAnim 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -205,7 +242,7 @@
 @keyframes popupEnterAnim {
   from {
     opacity: 0;
-    transform: translateY(20px) scale(0.8); /* 从下方缩小状态弹出来 */
+    transform: translateY(20px) scale(0.8);
   }
   to {
     opacity: 0.85;
@@ -213,7 +250,7 @@
   }
 }
 
-/* 2. 内部文字切换动画 (上浮淡入) */
+/* --- 文字淡入 --- */
 .contentFadeIn {
   animation: slideUpFade 0.6s cubic-bezier(0.19, 1, 0.22, 1) forwards;
 }
