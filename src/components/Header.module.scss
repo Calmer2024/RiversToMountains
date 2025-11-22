@@ -5,64 +5,27 @@
   right: 0;
   width: 100%;
   z-index: 1000;
+  
   background-color: rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2rem 2rem;
+  padding: 1.5rem 2rem;
+  
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-.headerRight {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+// --- 状态修饰类 ---
 
-  &.scrolled {
-    background-color: rgba(255, 255, 255, 0.98);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  }
-}
-
-.headerLeft {
-  display: flex;
-  align-items: center;
-
-  &.scrolled {
-    background-color: rgba(255, 255, 255, 0.98);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  }
-}
-
-.iconButton {
-  color: white !important;
-  /* 白色图标 */
-  background: transparent !important;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-/* 图标大小调整 */
-.iconButton svg {
-  width: 24px !important;
-  /* 调整图标大小 */
-  height: 24px !important;
-}
-
-/* 悬停效果 */
-.iconButton:hover {
-  color: rgba(255, 255, 255, 0.8) !important;
-  transform: scale(1.1);
-}
-
-
-/* 首页完全透明 */
+/* 首页顶部完全透明 (无背景/无模糊) */
 .homeTransparent {
   background-color: transparent !important;
   backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
   box-shadow: none !important;
 }
 
@@ -73,63 +36,84 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* 1. 左侧 Logo 和文字 */
+/* 隐藏 Header */
+.headerHidden {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+// --- 1. 左侧 Logo 区域 ---
+.headerLeft {
+  display: flex;
+  align-items: center;
+  z-index: 2; // 确保在滑块之上
+}
+
 .logo {
   height: 36px;
   width: auto;
   margin-right: 0.75rem;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: rotate(-5deg) scale(1.05);
+  }
 }
 
 .logoText {
   font-size: 1.25rem;
-  /* 调整文字大小 */
-  font-family: "HOOG0555", serif;
+  font-family: "HOOG0555", serif; /* 保持你原有的字体 */
   font-weight: 600;
-  color: white;
-  /* 保持和右侧图标一致 */
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  letter-spacing: 1px;
 }
 
+// --- 2. 中间滑动开关 (保持原有逻辑) ---
 .headerCenter {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-
+  z-index: 2;
 }
 
 .toggleContainer {
   position: relative;
   display: flex;
   width: 200px;
-  /* 固定宽度，可调整 */
-  background-color: rgba(0, 0, 0, 0.25);
-  /* 底色 */
-  border-radius: 20px;
+  background-color: rgba(0, 0, 0, 0.3); // 加深底色对比度
+  border-radius: 24px; // 更圆润
   padding: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .toggleButton {
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.7);
   flex: 1;
-  /* 均分宽度 */
-  padding: 6px 16px;
+  padding: 8px 16px;
   cursor: pointer;
-  border-radius: 16px;
+  border-radius: 20px;
   z-index: 2;
-  /* 在滑块之上 */
   transition: color 0.3s ease;
   font-weight: 500;
+  font-size: 0.9rem;
   text-align: center;
+  font-family: "Noto Serif SC", serif; // 统一字体风格
+
+  &:hover {
+    color: #fff;
+  }
 
   &.active {
-    color: #111;
-    /* 激活时文字变深色 */
+    color: #222; // 激活时文字变深
+    font-weight: 600;
   }
 }
 
@@ -138,30 +122,152 @@
   top: 4px;
   left: 4px;
   height: calc(100% - 8px);
-  /* 减去
-  padding */
   width: calc(50% - 4px);
-  /* 一半宽度，减去
-  padding */
-  background-color: white;
-  /* 滑块是白色 */
-  border-radius: 16px;
+  background-color: #fff;
+  border-radius: 20px;
   z-index: 1;
-  /* 在按钮之下 */
-  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); // 更有弹性的动画
   transform: translateX(0);
 
   &.sliderRight {
-    /* 移动 100% 自身宽度 + 4px 的右侧 padding */
     transform: translateX(calc(100% + 4px));
   }
 }
 
-.headerHidden {
-  /* 向上滑出视口 */
-  transform: translateY(-100%);
-  /* 增加淡出效果 */
+// --- 3. 右侧菜单区域 (全新设计) ---
+.headerRight {
+  position: relative; // 作为下拉菜单的定位锚点
+  display: flex;
+  align-items: center;
+  z-index: 10; // 确保层级最高
+}
+
+// 菜单触发按钮 (圆形玻璃)
+.menuTrigger {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+
+  // 悬停效果
+  &:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    border-color: #fff;
+  }
+
+  // 打开状态：变白、旋转
+  &.open {
+    background: #fff;
+    color: #1a1a1a;
+    transform: rotate(90deg);
+    border-color: #fff;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+  }
+
+  .iconWrapper {
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+// 下拉菜单面板 (深色高级感)
+.dropdownMenu {
+  position: absolute;
+  top: 65px; // 按钮正下方
+  right: 0;
+  width: 240px; // 稍微宽一点，大气
+  
+  // 初始状态：隐藏
   opacity: 0;
-  /* 隐藏后禁止点击，防止遮挡 */
+  transform: translateY(-10px) scale(0.95);
+  transform-origin: top right;
   pointer-events: none;
+  
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  
+  // 深色磨砂玻璃背景
+  background: rgba(20, 20, 20, 0.9); 
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  box-shadow: 
+    0 10px 40px rgba(0, 0, 0, 0.4),
+    inset 0 0 20px rgba(255, 255, 255, 0.05); // 内部微光
+  
+  overflow: hidden;
+  padding: 8px;
+
+  // 激活状态：显示
+  &.menuVisible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: all;
+  }
+}
+
+.menuContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+// 菜单单项样式
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  
+  // 字体设置
+  font-family: "Noto Serif SC", serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+
+  // 图标颜色
+  .menuIcon {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.5);
+    transition: all 0.2s;
+  }
+
+  // 悬停交互
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    padding-left: 24px; // 经典的右移交互
+
+    .menuIcon {
+      color: #fff;
+      transform: scale(1.1);
+    }
+  }
+  
+  // 点击反馈
+  &:active {
+    background: rgba(255, 255, 255, 0.05);
+    transform: scale(0.98);
+  }
 }
