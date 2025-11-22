@@ -18,9 +18,9 @@ export const TextMaskSection = () => {
           山河入梦
         </h1>
 
-        <p className={styles.subtitle}>
+        <span className={styles.subtitle}>
           A Dream of Mountains and Rivers
-        </p>
+        </span>
       </motion.div>
     </section>
   );
