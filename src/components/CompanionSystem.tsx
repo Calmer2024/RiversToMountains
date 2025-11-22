@@ -1,12 +1,13 @@
 import React, {useState, useEffect, useRef} from 'react';
 import './CompanionSystem.scss';
-// 引入图标
+// 引入图标 (确保你的项目中安装了 react-icons)
 import {
   FaPlay, FaPause, FaRedo, FaVolumeUp, FaVolumeMute,
-  FaBookOpen, FaTimes, FaAngleLeft, FaEye, FaEyeSlash
+  FaBookOpen, FaTimes, FaAngleLeft, FaEye, FaEyeSlash,
+  FaClock, FaImage
 } from 'react-icons/fa';
 
-// ... (Theme 和 BackgroundImage 接口定义不变) ...
+// --- 类型定义 ---
 interface Theme {
   id: string;
   name: string;
@@ -21,9 +22,7 @@ interface BackgroundImage {
   alt: string;
 }
 
-// ----------------------------------------------------
-// 假的文章数据
-// ----------------------------------------------------
+// --- 假数据 ---
 const articles = [
   {
     id: '1',
@@ -45,9 +44,6 @@ const articles = [
   },
 ];
 
-// ----------------------------------------------------
-// 陪伴系统主组件
-// ----------------------------------------------------
 interface CompanionSystemProps {
   onStateChange?: (isCompanionActive: boolean) => void
 }
@@ -55,22 +51,27 @@ interface CompanionSystemProps {
 const CompanionSystem: React.FC<CompanionSystemProps> = ({ onStateChange }) => {
   const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
   const [pendingTheme, setPendingTheme] = useState<string | null>(null);
+
+  // 番茄钟状态
   const [timerActive, setTimerActive] = useState(false);
   const [timerMinutes, setTimerMinutes] = useState(25);
   const [timeLeft, setTimeLeft] = useState(25 * 60);
+
+  // 媒体状态
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [whiteNoisePlaying, setWhiteNoisePlaying] = useState(false);
 
-  // ✨ 新增状态：阅读模式 和 屏保模式
+  // 界面状态
   const [isReading, setIsReading] = useState(false);
-  const [isUiHidden, setIsUiHidden] = useState(false);
+  const [isUiHidden, setIsUiHidden] = useState(false); // 沉浸模式/屏保
   const [currentArticle, setCurrentArticle] = useState(articles[0]);
 
+  // Refs
   const videoRef = useRef<HTMLVideoElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const timerRef = useRef<number | null>(null);
 
-  // ... (themes 和 backgroundImages 数据不变) ...
+  // --- 配置数据 ---
   const themes: Theme[] = [
     {
       id: 'mountain',
@@ -101,16 +102,19 @@ const CompanionSystem: React.FC<CompanionSystemProps> = ({ onStateChange }) => {
       posterImage: '/images/companion/bg-7.jpg'
     }
   ];
+
   const backgroundImages: BackgroundImage[] = Array.from({length: 7}, (_, i) => ({
     id: i + 1,
     src: `/images/companion/bg-${i + 1}.jpg`,
-    alt: `风景背景图 ${i + 1}`
+    alt: `风景 · ${i + 1}`
   }));
 
   const currentTheme = themes.find(theme => theme.id === selectedTheme);
   const pendingThemeData = themes.find(theme => theme.id === pendingTheme);
 
-  // ... (番茄钟 useEffect 不变) ...
+  // --- Effects ---
+
+  // 1. 番茄钟逻辑
   useEffect(() => {
     if (timerActive && timeLeft > 0) {
       timerRef.current = window.setInterval(() => {
@@ -118,62 +122,72 @@ const CompanionSystem: React.FC<CompanionSystemProps> = ({ onStateChange }) => {
       }, 1000);
     } else if (timeLeft === 0) {
       setTimerActive(false);
-      // 提醒可以更优雅，但暂时保留
-      alert('番茄钟时间到！');
+      // 播放一个提示音或者柔和的提醒会更好，这里暂时保留逻辑
+      console.log('Time is up');
     }
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
   }, [timerActive, timeLeft]);
 
-  // ... (背景图轮播 useEffect 不变) ...
+  // 2. 背景图轮播 (在选择界面)
   useEffect(() => {
     if (!selectedTheme && !pendingTheme) {
       const imageInterval = window.setInterval(() => {
         setCurrentImageIndex(prev => (prev + 1) % backgroundImages.length);
-      }, 10000);
+      }, 8000); // 稍微慢一点，8秒
       return () => clearInterval(imageInterval);
     }
   }, [selectedTheme, pendingTheme, backgroundImages.length]);
 
-  // ... (视频加载控制 useEffect 不变) ...
+  // 3. 视频预加载逻辑
   useEffect(() => {
     if (pendingTheme && pendingThemeData) {
       const video = document.createElement('video');
       video.src = pendingThemeData.videoSrc;
       video.preload = 'auto';
+
       const handleLoadedData = () => {
-        setSelectedTheme(pendingTheme);
-        setPendingTheme(null);
+        // 给人一点缓冲时间的假象，避免闪烁
+        setTimeout(() => {
+          setSelectedTheme(pendingTheme);
+          setPendingTheme(null);
+        }, 800);
       };
+
       const handleError = () => {
+        console.error("Video load failed");
         setPendingTheme(null);
       };
+
       video.addEventListener('loadeddata', handleLoadedData);
-      video.addEventListener('canplay', handleLoadedData);
       video.addEventListener('error', handleError);
       return () => {
         video.removeEventListener('loadeddata', handleLoadedData);
-        video.removeEventListener('canplay', handleLoadedData);
         video.removeEventListener('error', handleError);
       };
     }
   }, [pendingTheme, pendingThemeData]);
 
-  // ... (视频控制 useEffect 不变) ...
+  // 4. 视频播放控制
   useEffect(() => {
     if (videoRef.current && selectedTheme && currentTheme) {
       videoRef.current.muted = true;
-      videoRef.current.play().catch(console.error);
+      videoRef.current.play().catch(e => console.log("Autoplay prevented", e));
     }
   }, [selectedTheme, currentTheme]);
 
-  // ... (白噪声控制 useEffect 不变) ...
+  // 5. 白噪音控制
   useEffect(() => {
     if (audioRef.current && currentTheme) {
-      audioRef.current.src = currentTheme.whiteNoiseSrc;
+      // 如果切主题了，换源
+      if (audioRef.current.src !== window.location.origin + currentTheme.whiteNoiseSrc) {
+        audioRef.current.src = currentTheme.whiteNoiseSrc;
+      }
+
       if (whiteNoisePlaying) {
         audioRef.current.play().catch(console.error);
+        // 淡入效果可以后续加
       } else {
         audioRef.current.pause();
       }
@@ -181,227 +195,218 @@ const CompanionSystem: React.FC<CompanionSystemProps> = ({ onStateChange }) => {
   }, [whiteNoisePlaying, currentTheme]);
 
 
+  // --- 交互函数 ---
   const startTimer = () => setTimerActive(true);
   const pauseTimer = () => setTimerActive(false);
   const resetTimer = () => {
     setTimerActive(false);
     setTimeLeft(timerMinutes * 60);
   };
+
   const setPresetTime = (minutes: number) => {
     setTimerMinutes(minutes);
     setTimeLeft(minutes * 60);
     setTimerActive(false);
   };
+
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
-  const toggleWhiteNoise = () => setWhiteNoisePlaying(!whiteNoisePlaying);
+
   const selectTheme = (themeId: string) => {
     setPendingTheme(themeId);
-    setWhiteNoisePlaying(false);
+    setWhiteNoisePlaying(false); // 默认先关声音，让用户自己开，或者保持之前状态
     onStateChange?.(true);
-
   };
+
   const backToThemeSelection = () => {
     setSelectedTheme(null);
     setPendingTheme(null);
     setTimerActive(false);
     setWhiteNoisePlaying(false);
-    setIsReading(false); // 重置阅读状态
-    setIsUiHidden(false); // 重置UI隐藏状态
-    if (videoRef.current) videoRef.current.pause();
-    if (audioRef.current) audioRef.current.pause();
+    setIsReading(false);
+    setIsUiHidden(false);
     onStateChange?.(false);
-
   };
 
   return (
-    <>
+    <div className="companion-app">
       <audio ref={audioRef} loop preload="metadata"/>
 
-      <div className="companion-fullscreen">
-        {/* 主题选择界面 */}
-        {(!selectedTheme || pendingTheme) && (
-          <div className="theme-selection-fullscreen">
-            {/* 黑暗遮罩层，让背景变暗，凸显文字 */}
-            <div className="theme-background-overlay"/>
-            <div className="theme-background-fullscreen">
-              <img
-                src={backgroundImages[currentImageIndex].src}
-                alt={backgroundImages[currentImageIndex].alt}
+      {/* ================= 主题选择层 (Theme Selection) ================= */}
+      {(!selectedTheme || pendingTheme) && (
+        <div className={`selection-layer ${pendingTheme ? 'loading-mode' : ''}`}>
+          {/* 背景轮播 */}
+          <div className="bg-slideshow">
+            {backgroundImages.map((img, idx) => (
+              <div
+                key={img.id}
+                className={`bg-slide ${idx === currentImageIndex ? 'active' : ''}`}
+                style={{backgroundImage: `url(${img.src})`}}
               />
-            </div>
-            <div className="theme-content-fullscreen">
-              {pendingTheme ? (
-                <>
-                  <h2>{pendingThemeData?.name}</h2>
-                  <div className="loading-indicator">
-                    <div className="loading-spinner"></div>
-                    <p>加载山河中...</p>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <h2>选择一处宁静</h2>
-                  <div className="theme-buttons-fullscreen">
-                    {themes.map(theme => (
-                      <button
-                        key={theme.id}
-                        className="theme-button"
-                        // ✨ 用海报做背景
-                        style={{backgroundImage: `url(${theme.posterImage})`}}
-                        onClick={() => selectTheme(theme.id)}
-                      >
-                        <span>{theme.name}</span>
-                      </button>
-                    ))}
-                  </div>
-                  <div className="image-info-fullscreen">
-                    <span>{backgroundImages[currentImageIndex].alt}</span>
-                  </div>
-                </>
-              )}
-            </div>
+            ))}
+            <div className="bg-overlay" />
           </div>
-        )}
 
-        {/* 主题内容界面 */}
-        {selectedTheme && currentTheme && !pendingTheme && (
-          <div className="theme-content-wrapper">
-            <video
-              ref={videoRef}
-              className="theme-video-fullscreen"
-              src={currentTheme.videoSrc}
-              poster={currentTheme.posterImage}
-              loop
-              autoPlay
-              playsInline
-              muted // 视频始终静音
-            />
-
-            {/* 视频上的暗色渐变，确保UI在亮色视频上也清晰 */}
-            <div className="video-overlay-gradient"/>
-
-            {/* ✨ 整体UI容器 (方便“屏保模式”一键隐藏) */}
-            <div className={`companion-ui-container ${isUiHidden ? 'hidden' : ''}`}>
-
-              {/* 左上角返回按钮 */}
-              <button
-                className="control-button top-left"
-                onClick={backToThemeSelection}
-                title="返回主题选择"
-              >
-                <FaAngleLeft/>
-              </button>
-
-              {/* 右上角控制按钮 */}
-              <div className="top-right-controls">
-                <button
-                  className="control-button"
-                  onClick={() => setIsReading(!isReading)}
-                  title="阅读"
-                >
-                  {isReading ? <FaTimes/> : <FaBookOpen/>}
-                </button>
-                <button
-                  className="control-button"
-                  onClick={() => setIsUiHidden(true)}
-                  title="沉浸模式 (屏保)"
-                >
-                  <FaEyeSlash/>
-                </button>
+          <div className="selection-content">
+            {pendingTheme ? (
+              <div className="loading-container">
+                <div className="spinner-ring"></div>
+                <p className="loading-text">正在潜入{pendingThemeData?.name}...</p>
               </div>
-
-              {/* 番茄钟 (居中) */}
-              <div className="pomodoro-panel-minimal">
-                <div className="timer-display">
-                  {formatTime(timeLeft)}
-                </div>
-                <div className="timer-controls-minimal">
-                  {!timerActive ? (
-                    <button onClick={startTimer} className="control-button start" title="开始">
-                      <FaPlay/>
-                    </button>
-                  ) : (
-                    <button onClick={pauseTimer} className="control-button pause" title="暂停">
-                      <FaPause/>
-                    </button>
-                  )}
-                  <button onClick={resetTimer} className="control-button reset" title="重置">
-                    <FaRedo/>
-                  </button>
-                </div>
-              </div>
-
-              {/* 底部控制栏 */}
-              <div className="bottom-controls">
-                <div className="time-presets-minimal">
-                  <button onClick={() => setPresetTime(25)}>25分</button>
-                  <button onClick={() => setPresetTime(15)}>15分</button>
-                  <button onClick={() => setPresetTime(5)}>5分</button>
-                </div>
-                <div className="white-noise-section-minimal">
-                  <button
-                    onClick={toggleWhiteNoise}
-                    className={`control-button ${whiteNoisePlaying ? 'active' : ''}`}
-                    title="白噪音"
-                  >
-                    {whiteNoisePlaying ? <FaVolumeUp/> : <FaVolumeMute/>}
-                  </button>
-                </div>
-                <div className="theme-info-minimal">
-                  <span>{currentTheme.name}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* ✨ "显示UI" 按钮 (仅在UI隐藏时显示) */}
-            {isUiHidden && (
-              <button
-                className="show-ui-button"
-                onClick={() => setIsUiHidden(false)}
-                title="显示界面"
-              >
-                <FaEye/>
-              </button>
-            )}
-
-            {/* ✨ 阅读面板 (暗黑玻璃书房) */}
-            <div className={`article-panel ${isReading ? 'open' : ''}`}>
-              <div className="article-header">
-                <div className="article-tabs">
-                  {articles.map(a => (
+            ) : (
+              <>
+                <h1 className="main-title">此刻，你想去哪里？</h1>
+                <div className="cards-grid">
+                  {themes.map(theme => (
                     <button
-                      key={a.id}
-                      className={currentArticle.id === a.id ? 'active' : ''}
-                      onClick={() => setCurrentArticle(a)}
+                      key={theme.id}
+                      className="theme-card"
+                      onClick={() => selectTheme(theme.id)}
                     >
-                      {a.title}
+                      <div
+                        className="card-bg"
+                        style={{backgroundImage: `url(${theme.posterImage})`}}
+                      />
+                      <div className="card-content">
+                        <span className="card-name">{theme.name}</span>
+                        <span className="card-action">Enter</span>
+                      </div>
                     </button>
                   ))}
                 </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ================= 沉浸体验层 (Immersive View) ================= */}
+      {selectedTheme && currentTheme && !pendingTheme && (
+        <div className="immersive-layer">
+          {/* 视频背景 */}
+          <video
+            ref={videoRef}
+            className="immersive-video"
+            src={currentTheme.videoSrc}
+            poster={currentTheme.posterImage}
+            loop
+            autoPlay
+            playsInline
+            muted
+          />
+          <div className="video-overlay" />
+
+          {/* 核心 UI 容器 */}
+          <div className={`ui-container ${isUiHidden ? 'hidden' : ''}`}>
+
+            {/* 顶部栏 */}
+            <header className="top-bar">
+              <button className="icon-btn back-btn" onClick={backToThemeSelection} title="离开">
+                <FaAngleLeft /> <span>返回</span>
+              </button>
+
+              <div className="theme-badge">
+                <FaImage className="icon" /> {currentTheme.name}
+              </div>
+
+              <button className="icon-btn hide-ui-btn" onClick={() => setIsUiHidden(true)} title="沉浸模式">
+                <FaEyeSlash />
+              </button>
+            </header>
+
+            {/* 中央番茄钟 */}
+            <main className="timer-section">
+              <div className="timer-ring">
+                <div className="time-text">{formatTime(timeLeft)}</div>
+                <div className="timer-status">{timerActive ? '专注中...' : '准备就绪'}</div>
+              </div>
+
+              <div className="timer-actions">
+                {!timerActive ? (
+                  <button className="action-btn start" onClick={startTimer}><FaPlay /></button>
+                ) : (
+                  <button className="action-btn pause" onClick={pauseTimer}><FaPause /></button>
+                )}
+                <button className="action-btn reset" onClick={resetTimer}><FaRedo /></button>
+              </div>
+            </main>
+
+            {/* 底部 Dock 栏 */}
+            <footer className="bottom-dock">
+              {/* 左侧：时间预设 */}
+              <div className="dock-group presets">
+                <button className={timerMinutes === 5 ? 'active' : ''} onClick={() => setPresetTime(5)}>05</button>
+                <button className={timerMinutes === 25 ? 'active' : ''} onClick={() => setPresetTime(25)}>25</button>
+                <button className={timerMinutes === 45 ? 'active' : ''} onClick={() => setPresetTime(45)}>45</button>
+              </div>
+
+              <div className="divider"></div>
+
+              {/* 右侧：功能开关 */}
+              <div className="dock-group controls">
                 <button
-                  className="control-button close-article"
-                  onClick={() => setIsReading(false)}
+                  className={`dock-btn ${whiteNoisePlaying ? 'active' : ''}`}
+                  onClick={() => setWhiteNoisePlaying(!whiteNoisePlaying)}
+                  title="白噪音"
                 >
-                  <FaTimes/>
+                  {whiteNoisePlaying ? <FaVolumeUp /> : <FaVolumeMute />}
+                </button>
+
+                <button
+                  className={`dock-btn ${isReading ? 'active' : ''}`}
+                  onClick={() => setIsReading(!isReading)}
+                  title="阅读模式"
+                >
+                  <FaBookOpen />
                 </button>
               </div>
-              <div className="article-content">
-                <h3>{currentArticle.title}</h3>
-                <h4>{currentArticle.author}</h4>
-                {currentArticle.content.split('。').map((sentence, i) =>
-                  sentence.trim() && <p key={i}>{sentence.trim()}。</p>
-                )}
-              </div>
+            </footer>
+          </div>
+
+          {/* 唤醒按钮 (仅在 UI 隐藏时显示) */}
+          <div className={`wake-area ${!isUiHidden ? 'inactive' : ''}`} onClick={() => setIsUiHidden(false)}>
+            <div className="wake-hint">点击屏幕唤醒界面</div>
+          </div>
+
+          {/* 阅读侧边栏 (Slide Over) */}
+          <aside className={`reading-panel ${isReading ? 'open' : ''}`}>
+            <div className="panel-header">
+              <h3>伴读诗文</h3>
+              <button className="close-panel-btn" onClick={() => setIsReading(false)}><FaTimes /></button>
             </div>
 
-          </div>
-        )}
-      </div>
-    </>
+            <nav className="article-tabs">
+              {articles.map(a => (
+                <button
+                  key={a.id}
+                  className={currentArticle.id === a.id ? 'active' : ''}
+                  onClick={() => setCurrentArticle(a)}
+                >
+                  {a.title}
+                </button>
+              ))}
+            </nav>
+
+            <article className="article-body">
+              <div className="scroll-content">
+                <h2 className="art-title">{currentArticle.title}</h2>
+                <div className="art-author">{currentArticle.author}</div>
+                <div className="art-divider"></div>
+                <div className="art-text">
+                  {currentArticle.content.split('。').map((sentence, i) =>
+                    sentence.trim() && <p key={i}>{sentence.trim()}。</p>
+                  )}
+                </div>
+              </div>
+            </article>
+          </aside>
+
+        </div>
+      )}
+    </div>
   );
 };
 
