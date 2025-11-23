@@ -22,7 +22,7 @@ export const StoryControls: React.FC<StoryControlsProps> = ({activeSlideInfo}) =
   const autoHideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const debounceOpenTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const AUTO_HIDE_DELAY = 10000;
+  const AUTO_HIDE_DELAY = 5000;
   const SCROLL_SETTLE_DELAY = 600;
 
   const startAutoHide = () => {
@@ -64,10 +64,9 @@ export const StoryControls: React.FC<StoryControlsProps> = ({activeSlideInfo}) =
         
         {/* --- 按钮组 --- */}
         <div className={styles.buttonGroup}>
-          {/* 已删除：自动播放按钮 */}
 
           <button
-            // 修改：拆分 active (面板打开) 和 playing (播放中) 状态
+            // 拆分 active (面板打开) 和 playing (播放中) 状态
             // playing 状态将触发特定的旋转动画和红色背景
             className={`${styles.iconButton} ${isMusicOpen ? styles.active : ''} ${isPlaying ? styles.playing : ''}`}
             title="背景音乐"

@@ -64,7 +64,7 @@
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
   }
 
-  /* ✨ 核心修改：音乐播放状态 (Playing) */
+  /* 音乐播放状态 (Playing) */
   /* 当其播放时按钮为白色，背景为红色 */
   &.playing {
     background-color: #ff3b30; /* 红色背景 */

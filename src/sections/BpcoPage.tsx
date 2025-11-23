@@ -165,6 +165,7 @@ const BpcoPageRefactor: React.FC = () => {
                         className={styles.messageCard}
                         onClick={() => setSelectedMessage(msg)}
                         initial={cardMotion.initial}
+                        // @ts-ignore
                         animate={cardMotion.animate(index)}
                         exit={cardMotion.exit}
                         // 保证长文本换行（若你 CSS 没处理的话）
