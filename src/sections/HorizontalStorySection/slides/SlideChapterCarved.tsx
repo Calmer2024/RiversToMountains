@@ -9,7 +9,7 @@ export const SlideChapterCarved: FC = () => {
                 <div className={styles.chapterTitleWrapper}>
                     <h2>斧凿天工</h2>
                     <img
-                        src="/images/slides/斧凿天工.png"
+                        src="/images/斧凿天工.png"
                         alt="斧凿天工"
                         className={styles.titleIcon}
                     />

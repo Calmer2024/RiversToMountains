@@ -10,7 +10,7 @@ export const SlideWaterInk: FC = () => {
                 <div className={styles.chapterTitleWrapper}>
                     <h2>水墨诗吟</h2>
                     <img
-                        src="/images/slides/水墨诗吟.png"
+                        src="/images/水墨诗吟.png"
                         alt="水墨诗吟"
                         className={styles.titleIcon}
                     />

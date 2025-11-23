@@ -94,7 +94,7 @@ export const StoryHeaderSection: FC = () => {
             <div className={titleGroupClassName} data-animate="intro-group-1" ref={titleGroupRef}>
                 <div className={styles.mainTitleWrapper}>
                     <h2>山河之旅</h2>
-                    <img src="/images/slides/山河之旅.png" alt="山河之旅" className={styles.titleIcon} />
+                    <img src="/images/山河之旅.png" alt="山河之旅" className={styles.titleIcon} />
                 </div>
                 <p>这是一幅流动的画卷。请向下滚动，开启一场西东之旅，见证大地的奇迹</p>
             </div>

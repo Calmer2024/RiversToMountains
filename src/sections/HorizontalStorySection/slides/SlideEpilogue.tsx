@@ -13,7 +13,7 @@ export const SlideEpilogue: FC = () => {
                     <h2>烟火弦歌</h2>
                     <img
                         // [!] 替换图片
-                        src="/images/slides/烟火弦歌.png"
+                        src="/images/烟火弦歌.png"
                         alt="烟火弦歌"
                         className={styles.titleIcon}
                     />

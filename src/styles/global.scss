@@ -91,13 +91,11 @@ body::-webkit-scrollbar {
 html {
     font-size: 16px;
     scroll-behavior: smooth;
-    background-color: #000; 
-    overflow-x: hidden; 
 }
 
 body {
     font-family: $font-primary;
-    background-color: #000;
+    background-color: $color-background;
     color: $color-text;
     line-height: 1.6;
 

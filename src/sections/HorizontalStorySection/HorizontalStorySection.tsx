@@ -175,7 +175,7 @@ export const HorizontalStorySection: FC = () => {
                             <div className={styles.chapterTitleWrapper}>
                                 <h2>山河伊始</h2>
                                 <img
-                                    src="/images/slides/山河伊始.png"
+                                    src="/images/山河伊始.png"
                                     alt="山河伊始"
                                     className={styles.titleIcon}
                                 />
