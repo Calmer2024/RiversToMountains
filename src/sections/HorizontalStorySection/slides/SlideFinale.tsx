@@ -20,7 +20,7 @@ export const SlideFinale: FC = () => {
                 <div className={styles.chapterTitleWrapper}>
                     <h2>山河未尽</h2>
                     <img
-                        src="/images/山河未尽.png" 
+                        src="/images/slides/山河未尽.png" 
                         alt="终章"
                         className={styles.titleIcon}
                     />

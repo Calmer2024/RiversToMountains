@@ -49,7 +49,7 @@
   svg {
     width: 22px;
     height: 22px;
-    transition: transform 0.3s ease; /* 让图标变换也平滑 */
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   &:hover:not(:disabled) {
@@ -57,61 +57,62 @@
     transform: translateY(-2px);
   }
 
-  /* 面板打开状态 (Active) */
+  &:disabled {
+    color: rgba(255, 255, 255, 0.3);
+    cursor: not-allowed;
+  }
+
+  /* --- 默认激活状态 (白色) --- */
   &.active {
     background-color: #ffffff;
     color: #111111;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
   }
 
-  /* ✨ 核心修改：音乐播放状态 (Playing) */
-  /* 当其播放时按钮为白色，背景为红色 */
+  /* --- 🎵 音乐播放状态 (红色律动) --- */
   &.playing {
-    background-color: #ff3b30; /* 红色背景 */
-    color: #ffffff;            /* 白色图标 */
+    background-color: #ff3b30;
+    color: #ffffff;
     border-color: transparent;
-    
-    // 1. 呼吸光晕效果 (调整为淡红色光晕)
     box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.7);
     animation: pulseRed 2s infinite;
-
-    // 2. 仅旋转内部图标，按钮不动
+    
     svg {
       animation: musicSpin 3s linear infinite;
     }
-    
-    // 播放时覆盖 hover 的位移，防止旋转时跳动，保持红色
+
     &:hover {
       transform: none;
-      background-color: #ff5247; /* Hover 时稍微变亮一点的红 */
+      background-color: #ff5247;
     }
   }
 
-  &:disabled {
-    color: rgba(255, 255, 255, 0.3);
-    cursor: not-allowed;
+  /* --- 🖌️ 新增：水墨按钮特色样式 --- */
+  &.inkButton {
+    &.active {
+      /* 激活时：像一滴浓墨 */
+      background-color: #1a1a1a; /* 近乎黑色的墨色 */
+      color: #e0e0e0;            /* 宣纸白的图标 */
+      box-shadow: 0 0 0 4px rgba(200, 200, 200, 0.2); /* 淡墨晕染光圈 */
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      
+      svg {
+        transform: rotate(-45deg) scale(1.1); /* 笔触倾斜 */
+      }
+    }
   }
 }
 
 /* --- 动画关键帧 --- */
-
-/* 图标旋转动画 */
 @keyframes musicSpin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
 
-/* 按钮呼吸光效 - 修改为红色系 */
 @keyframes pulseRed {
-  0% {
-    box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.4);
-  }
-  70% {
-    box-shadow: 0 0 0 6px rgba(255, 59, 48, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(255, 59, 48, 0);
-  }
+  0% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(255, 59, 48, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0); }
 }
 
 /* --- 弹出面板通用 --- */
@@ -129,7 +130,6 @@
     background-color 0.3s ease;
 }
 
-/* --- 音乐面板 --- */
 .musicPopup {
   display: flex;
   align-items: center;
@@ -175,7 +175,6 @@
   }
 }
 
-/* --- 景点信息面板 --- */
 .bookPopup {
   min-width: 300px;
   max-width: 380px;
@@ -209,7 +208,6 @@
   }
 
   .closeButton {
-    /* 继承 iconButton 样式 */
     background: transparent;
     border: none;
     color: #f0f0f0;
@@ -219,13 +217,11 @@
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s ease;
-    
     position: absolute;
     top: 6px;
     right: 6px;
     padding: 6px;
     opacity: 0;
-    
     svg { width: 16px; height: 16px; }
   }
 
@@ -234,34 +230,20 @@
   }
 }
 
-/* --- 面板入场 --- */
 .popupEnter {
   animation: popupEnterAnim 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 @keyframes popupEnterAnim {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.8);
-  }
-  to {
-    opacity: 0.85;
-    transform: translateY(0) scale(0.98);
-  }
+  from { opacity: 0; transform: translateY(20px) scale(0.8); }
+  to { opacity: 0.85; transform: translateY(0) scale(0.98); }
 }
 
-/* --- 文字淡入 --- */
 .contentFadeIn {
   animation: slideUpFade 0.6s cubic-bezier(0.19, 1, 0.22, 1) forwards;
 }
 
 @keyframes slideUpFade {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }

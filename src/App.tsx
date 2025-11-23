@@ -18,7 +18,6 @@ import {StoryHeaderSection} from './sections/StoryHeaderSection';
 import { IntroSection } from './sections/IntroSection';
 import { StatsSection } from './sections/StatsSection';
 
-import TestPlayground from "./TestPlayground.tsx";
 import {FeatureSection} from "./sections/FeatureSection.tsx";
 import {TextMaskSection} from "./sections/TextMaskSection.tsx";
 
@@ -200,8 +199,6 @@ function App() {
         {/* 路由：开发者反馈页面 */}
         <Route path="/developer" element={<FeedbackPage/>}/>
 
-        {/*测试组件用*/}
-        <Route path="/test" element={<TestPlayground/>}/>
       </Routes>
     </Router>
   );

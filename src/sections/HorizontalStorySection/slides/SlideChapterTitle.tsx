@@ -9,7 +9,7 @@ export const SlideChapterTitle: FC = () => {
                 <div className={styles.chapterTitleWrapper}>
                     <h2>雪域天穹</h2>
                     <img
-                        src="/images/雪域天穹.png"
+                        src="/images/slides/雪域天穹.png"
                         alt="雪域天穹"
                         className={styles.titleIcon}
                     />

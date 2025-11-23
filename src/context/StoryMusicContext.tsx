@@ -18,7 +18,7 @@ export const StoryMusicProvider: React.FC<{ children: ReactNode }> = ({ children
 
   // 初始化音频
   useEffect(() => {
-    audioRef.current = new Audio('/music/story-theme.mp3');
+    audioRef.current = new Audio('/audio/story-theme.mp3');
     audioRef.current.loop = true;
     audioRef.current.preload = 'auto';
     
