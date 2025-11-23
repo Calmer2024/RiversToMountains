@@ -218,7 +218,7 @@ export const ChatDialog: React.FC<ChatDialogProps> = ({ isOpen, onClose }) => {
           </div>
         ))}
         
-        {/* 加载动画 (研磨效果) */}
+        {/* 加载动画  */}
         {isLoading && (
           <div className={`${styles.messageRow} ${styles.rowBot}`}>
             <div className={styles.loadingInk}>
@@ -248,7 +248,7 @@ export const ChatDialog: React.FC<ChatDialogProps> = ({ isOpen, onClose }) => {
   );
 };
 
-// --- API 调用 (Prompt 优化) ---
+// --- API 调用  ---
 async function callLanguageModelAPI(message: string, apiKey: string, history: Message[]): Promise<string> {
   // 系统设定：古风全知书灵
   const systemPrompt = `

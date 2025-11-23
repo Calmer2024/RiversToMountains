@@ -5,7 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLayoutEffect } from 'react';
 import parentStyles from '../HorizontalStorySection.module.scss';
 import styles from './SlideYuanyangTerraces.module.scss';
-import { useScroll } from '../ScrollContext'; // 导入 ScrollContext
+import { useScroll } from '../../../context/ScrollContext'; // 导入 ScrollContext
 
 export const SlideYuanyangTerraces: FC = () => {
     const slideRef = useRef<HTMLDivElement>(null);

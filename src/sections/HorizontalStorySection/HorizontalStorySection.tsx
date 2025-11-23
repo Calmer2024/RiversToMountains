@@ -6,7 +6,7 @@ import { TextPlugin } from 'gsap/TextPlugin';
 import styles from './HorizontalStorySection.module.scss';
 
 // 导入 Context 和所有子幻灯片
-import { ScrollContext } from './ScrollContext';
+import { ScrollContext } from '../../context/ScrollContext';
 import { SlideIntro } from './slides/SlideIntro';
 import { SlideChapterStart } from './slides/SlideChapterStart';
 import { SlideFullBgTibet } from './slides/SlideFullBgTibet';
@@ -38,24 +38,23 @@ import { SLIDE_INFO_MAP, type SlideInfo } from '../../data/slideInfo';
 gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
 export const HorizontalStorySection: FC = () => {
-    // Refs (不变)
+    // Refs 
     const pinContainerRef = useRef<HTMLDivElement>(null);
     const horizontalTrackRef = useRef<HTMLDivElement>(null);
     const introCanvasRef = useRef<HTMLDivElement>(null);
     const cloudContainerRef = useRef<HTMLDivElement>(null);
 
-    // State (不变)
+    // State 
     const [horizontalTween, setHorizontalTween] = useState<gsap.core.Tween | null>(null);
 
-    // State (不变)
+    // State 
     const [activeSlideInfo, setActiveSlideInfo] = useState<SlideInfo | null>(
       SLIDE_INFO_MAP['intro']
     );
 
 
     useLayoutEffect(() => {
-        // (所有 GSAP 设置、时间轴、Tween 和跟踪器逻辑... 保持不变)
-        // ...
+        // 所有 GSAP 设置、时间轴、Tween 和跟踪器逻辑
         const pinContainer = pinContainerRef.current;
         const horizontalTrack = horizontalTrackRef.current;
         const introCanvas = introCanvasRef.current;
@@ -97,7 +96,7 @@ export const HorizontalStorySection: FC = () => {
                 }
             });
 
-            // (Phase 1... 保持不变)
+            // Phase 1
             masterTimeline.fromTo(introGroup2, { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 3 });
             masterTimeline.to(introGroup2, { duration: 1 });
             masterTimeline.add("startCloudCover");
@@ -108,7 +107,7 @@ export const HorizontalStorySection: FC = () => {
             masterTimeline.to(clouds, { autoAlpha: 0, scale: 3, xPercent: (i) => (i - 1) * 150, duration: 7, stagger: 0.1 }, "startScroll");
 
             
-            // (水平滚动 Tween... 保持不变)
+            // 水平滚动 Tween
             const tween = gsap.to(horizontalTrack, {
                 x: `-=${scrollDistance}px`,
                 ease: "none",
@@ -117,7 +116,7 @@ export const HorizontalStorySection: FC = () => {
             masterTimeline.add(tween, "startScroll");
             setHorizontalTween(tween);
 
-            // (其他幻灯片淡入... 保持不变)
+            // 其他幻灯片淡入
             otherAnimatedElements.forEach((el: any) => {
                 gsap.fromTo(el,
                     { autoAlpha: 0, y: 50 },
@@ -135,7 +134,6 @@ export const HorizontalStorySection: FC = () => {
                 );
             });
 
-            // (信息跟踪器... 保持不变, 因为它现在会正确读取到 wrapper div)
             const slides = gsap.utils.toArray(horizontalTrack.children) as HTMLElement[];
             
             slides.forEach((slide) => {
@@ -165,12 +163,12 @@ export const HorizontalStorySection: FC = () => {
             <section className={styles.storySection}>
                 <div className={styles.pinContainer} ref={pinContainerRef}>
                 
-                    {/* UI 控件 (不变) */}
+                    {/* UI 控件  */}
                     <StoryControls activeSlideInfo={activeSlideInfo} />
 
-                    {/* “序章”画布 (不变) */}
+                    {/* “序章”画布  */}
                     <div className={styles.introCanvas} ref={introCanvasRef}>
-                         {/* ... (序章内容不变) ... */}
+                         {/* 序章内容不变 */}
                          <div className={styles.subTitleGroup} data-animate="intro-group-2">
                             <div className={styles.chapterTitleWrapper}>
                                 <h2>山河伊始</h2>
@@ -186,15 +184,15 @@ export const HorizontalStorySection: FC = () => {
                         </div>
                     </div>
 
-                    {/* “云层” (不变) */}
+                    {/* “云层”  */}
                     <div className={styles.cloudTransitionContainer} ref={cloudContainerRef}>
                          <img src="/images/clouds/cloud1.png" alt="转场云" className={styles.cloudImage} />
                          <img src="/images/clouds/cloud2.png" alt="转场云" className={styles.cloudImage} />
                          <img src="/images/clouds/cloud3.png" alt="转场云" className={styles.cloudImage} />
                     </div>
 
-                    {/* ✨ --- 轨道 (已修正) --- ✨ */}
-                    {/* * 修正：我们将每个 <Slide... /> 组件包裹在一个 <div> 中
+                    {/*  --- 轨道  ---  */}
+                    {/* 我们将每个 <Slide... /> 组件包裹在一个 <div> 中
                       * 并将 data-slide-id 放在这个 wrapper <div> 上。
                     */}
                     <div className={styles.horizontalTrack} ref={horizontalTrackRef}>

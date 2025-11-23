@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, type FC } from 'react';
 import { gsap } from 'gsap';
-import { useScroll } from '../ScrollContext';
+import { useScroll } from '../../../context/ScrollContext';
 import parentStyles from '../HorizontalStorySection.module.scss';
 import styles from './SlideHuangshan.module.scss'; 
 

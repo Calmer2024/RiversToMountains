@@ -1,7 +1,7 @@
 import { useState, useMemo, type FC, useRef, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useScroll } from '../ScrollContext';
+import { useScroll } from '../../../context/ScrollContext';
 import parentStyles from '../HorizontalStorySection.module.scss';
 import styles from './SlideHongcun.module.scss'; // [!] 导入自己的 SCSS
 

@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, type FC } from 'react';
 import { gsap } from 'gsap';
-import { useScroll } from '../ScrollContext'; // [新] 导入 Context Hook
+import { useScroll } from '../../../context/ScrollContext'; // [新] 导入 Context Hook
 import parentStyles from '../HorizontalStorySection.module.scss';
 import styles from './SlideProgressBar.module.scss';
 
